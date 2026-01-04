@@ -1,619 +1,671 @@
 """
-금융 지표 대시보드 (확장판)
-한미 금리차, 환율, 주가, 원자재, 경제지표 등 종합 투자 지표
+금융 지표 대시보드 Pro v6.0
+모든 기능 탑재: 데이터, 분석, 시각화, 논문용 통계
 """
 
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import requests
 from datetime import datetime, timedelta
+import yfinance as yf
 
-# ============ 페이지 설정 ============
+# ========== 페이지 설정 ==========
 st.set_page_config(
-    page_title="금융 지표 대시보드",
+    page_title="금융 대시보드 Pro",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ============ API 키 설정 ============
+# ========== API 키 ==========
 try:
-    ECOS_API_KEY = st.secrets["ECOS_API_KEY"]
-    FRED_API_KEY = st.secrets["FRED_API_KEY"]
+    ECOS_KEY = st.secrets["ECOS_API_KEY"]
+    FRED_KEY = st.secrets["FRED_API_KEY"]
 except:
-    ECOS_API_KEY = "QZIGLKAE4NXE2AH490NG"
-    FRED_API_KEY = "4fb5dac909861e78d5e76dadeb5cf9d7"
+    ECOS_KEY = "QZIGLKAE4NXE2AH490NG"
+    FRED_KEY = "4fb5dac909861e78d5e76dadeb5cf9d7"
 
 
-# ============ 데이터 수집 함수 ============
-@st.cache_data(ttl=3600)
-def get_fred_data(series_id, name, start_date, end_date):
-    """FRED API에서 데이터 가져오기"""
+# ========== 다크모드 CSS ==========
+def apply_theme(dark_mode):
+    if dark_mode:
+        st.markdown("""
+        <style>
+        .stApp { background-color: #0e1117; color: #fafafa; }
+        .stMetric { background-color: #1e2130; border-radius: 10px; padding: 10px; }
+        .stTabs [data-baseweb="tab"] { background-color: #1e2130; }
+        </style>
+        """, unsafe_allow_html=True)
+
+
+# ========== 데이터 수집 함수 ==========
+def fetch_fred(series_id, start_date, end_date):
+    """FRED 데이터"""
     url = "https://api.stlouisfed.org/fred/series/observations"
     params = {
-        'series_id': series_id,
-        'api_key': FRED_API_KEY,
-        'file_type': 'json',
-        'observation_start': start_date,
-        'observation_end': end_date
+        "series_id": series_id, "api_key": FRED_KEY, "file_type": "json",
+        "observation_start": start_date, "observation_end": end_date
     }
     try:
-        response = requests.get(url, params=params, timeout=10)
-        data = response.json()
-        if 'observations' in data:
-            df = pd.DataFrame(data['observations'])
-            df['date'] = pd.to_datetime(df['date'])
-            df[name] = pd.to_numeric(df['value'], errors='coerce')
-            df = df[['date', name]].dropna()
-            df = df.set_index('date').resample('M').mean().reset_index()
-            return df
+        resp = requests.get(url, params=params, timeout=10)
+        if resp.status_code == 200:
+            obs = resp.json().get("observations", [])
+            if obs:
+                df = pd.DataFrame(obs)
+                df["date"] = pd.to_datetime(df["date"])
+                df["value"] = pd.to_numeric(df["value"], errors="coerce")
+                df = df.dropna(subset=["value"])
+                df["ym"] = df["date"].dt.to_period("M")
+                df = df.groupby("ym")["value"].mean().reset_index()
+                df["date"] = df["ym"].dt.to_timestamp()
+                return df[["date", "value"]]
     except:
         pass
-    return None
+    return pd.DataFrame()
 
 
-@st.cache_data(ttl=3600)
-def get_ecos_data(stat_code, item_code, name, start_date, end_date, cycle="M"):
-    """ECOS API에서 데이터 가져오기"""
+def fetch_ecos(stat_code, item_code, start_date, end_date):
+    """ECOS 데이터"""
     start = start_date.replace("-", "")[:6]
     end = end_date.replace("-", "")[:6]
-    url = f"https://ecos.bok.or.kr/api/StatisticSearch/{ECOS_API_KEY}/json/kr/1/1000/{stat_code}/{cycle}/{start}/{end}/{item_code}"
-
+    url = f"https://ecos.bok.or.kr/api/StatisticSearch/{ECOS_KEY}/json/kr/1/1000/{stat_code}/M/{start}/{end}/{item_code}"
     try:
-        response = requests.get(url, timeout=10)
-        data = response.json()
-        if 'StatisticSearch' in data:
-            rows = data['StatisticSearch']['row']
-            df = pd.DataFrame(rows)
-            df['date'] = pd.to_datetime(df['TIME'] + '01', format='%Y%m%d')
-            df[name] = pd.to_numeric(df['DATA_VALUE'], errors='coerce')
-            return df[['date', name]]
+        resp = requests.get(url, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            if "StatisticSearch" in data:
+                rows = data["StatisticSearch"].get("row", [])
+                if rows:
+                    df = pd.DataFrame(rows)
+                    df["date"] = pd.to_datetime(df["TIME"], format="%Y%m")
+                    df["value"] = pd.to_numeric(df["DATA_VALUE"], errors="coerce")
+                    return df[["date", "value"]].dropna()
     except:
         pass
-    return None
+    return pd.DataFrame()
+
+
+def fetch_yahoo(ticker, start_date, end_date):
+    """Yahoo Finance 데이터"""
+    try:
+        data = yf.download(ticker, start=start_date, end=end_date, progress=False)
+        if not data.empty and len(data) > 0:
+            # 멀티인덱스 처리
+            if isinstance(data.columns, pd.MultiIndex):
+                data = data.droplevel(1, axis=1)
+            df = data[["Close"]].reset_index()
+            df.columns = ["date", "value"]
+            df["date"] = pd.to_datetime(df["date"])
+            df["ym"] = df["date"].dt.to_period("M")
+            df = df.groupby("ym")["value"].mean().reset_index()
+            df["date"] = df["ym"].dt.to_timestamp()
+            return df[["date", "value"]]
+    except Exception as e:
+        pass
+    return pd.DataFrame()
+
+
+def fetch_coinbase_btc(start_date, end_date):
+    """CoinGecko에서 비트코인 가격 가져오기"""
+    try:
+        # 일수 계산
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        days = (end - start).days
+
+        url = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days={days}"
+        resp = requests.get(url, timeout=10)
+        if resp.status_code == 200:
+            prices = resp.json().get("prices", [])
+            if prices:
+                df = pd.DataFrame(prices, columns=["timestamp", "value"])
+                df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
+                df["ym"] = df["date"].dt.to_period("M")
+                df = df.groupby("ym")["value"].mean().reset_index()
+                df["date"] = df["ym"].dt.to_timestamp()
+                return df[["date", "value"]]
+    except:
+        pass
+    return pd.DataFrame()
 
 
 @st.cache_data(ttl=3600)
 def load_all_data(start_date, end_date):
-    """모든 데이터 로드 및 병합"""
-    dataframes = []
+    """모든 데이터 로드"""
+    data = {}
 
-    # ========== FRED 데이터 ==========
-    fred_series = [
-        # 금리
-        ("FEDFUNDS", "미국기준금리"),
-        ("GS10", "미국10년금리"),
-        ("GS2", "미국2년금리"),
-        ("T10Y2Y", "미국장단기스프레드"),
+    # FRED 데이터
+    fred_items = {
+        "미국금리": "FEDFUNDS",
+        "미국10Y": "DGS10",
+        "미국2Y": "DGS2",
+        "원달러": "DEXKOUS",
+        "VIX": "VIXCLS",
+        "SP500": "SP500",
+        "나스닥": "NASDAQCOM",
+        "유가": "DCOILWTICO",
+        "달러인덱스": "DTWEXBGS",
+        "하이일드스프레드": "BAMLH0A0HYM2",
+        "미국CPI": "CPIAUCSL",
+        "미국실업률": "UNRATE",
+        "연준자산": "WALCL",
+        "구리": "PCOPPUSDM",
+    }
 
-        # 환율
-        ("DEXKOUS", "원달러환율"),
-        ("DEXJPUS", "엔달러환율"),
-        ("DEXUSEU", "유로달러환율"),
-        ("DTWEXBGS", "달러인덱스"),
+    for name, code in fred_items.items():
+        df = fetch_fred(code, start_date, end_date)
+        if not df.empty:
+            data[name] = df.set_index("date")["value"]
 
-        # 공포/위험 지표
-        ("VIXCLS", "VIX"),
-        ("BAMLH0A0HYM2", "하이일드스프레드"),
-        ("TEDRATE", "TED스프레드"),
+    # ECOS 데이터
+    df = fetch_ecos("722Y001", "0101000", start_date, end_date)
+    if not df.empty:
+        data["한국금리"] = df.set_index("date")["value"]
 
-        # 주가지수
-        ("SP500", "S&P500"),
-        ("NASDAQCOM", "나스닥"),
+    # Yahoo Finance
+    yahoo_items = {
+        "KOSPI": "^KS11",
+        "금": "GC=F",
+        "은": "SI=F",
+    }
 
-        # 원자재
-        ("GOLDAMGBD228NLBM", "금시세"),
-        ("DCOILWTICO", "WTI유가"),
+    for name, ticker in yahoo_items.items():
+        df = fetch_yahoo(ticker, start_date, end_date)
+        if not df.empty:
+            data[name] = df.set_index("date")["value"]
 
-        # 경제지표
-        ("CPIAUCSL", "미국CPI"),
-        ("UNRATE", "미국실업률"),
-        ("GDPC1", "미국GDP"),
-        ("INDPRO", "미국산업생산"),
+    # 비트코인 - CoinGecko API (SSL 문제 우회)
+    btc_df = fetch_coinbase_btc(start_date, end_date)
+    if not btc_df.empty:
+        data["비트코인"] = btc_df.set_index("date")["value"]
 
-        # 통화/유동성
-        ("M2SL", "미국M2통화량"),
-        ("WALCL", "연준총자산"),
-    ]
+    # DataFrame 합치기
+    if data:
+        result = pd.DataFrame(data)
+        result = result.sort_index()
 
-    progress_bar = st.progress(0)
-    status_text = st.empty()
+        # 파생 지표
+        if "한국금리" in result.columns and "미국금리" in result.columns:
+            result["금리차"] = result["한국금리"] - result["미국금리"]
 
-    total = len(fred_series) + 8  # FRED + ECOS 개수
+        if "미국10Y" in result.columns and "미국2Y" in result.columns:
+            result["미국장단기스프레드"] = result["미국10Y"] - result["미국2Y"]
 
-    for i, (series_id, name) in enumerate(fred_series):
-        status_text.text(f"FRED 데이터 수집중... {name}")
-        df = get_fred_data(series_id, name, start_date, end_date)
-        if df is not None and len(df) > 0:
-            dataframes.append(df)
-        progress_bar.progress((i + 1) / total)
-
-    # ========== ECOS 데이터 ==========
-    ecos_series = [
-        ("722Y001", "0101000", "한국기준금리"),      # 기준금리
-        ("817Y002", "010200000", "국고채3년"),       # 국고채 3년
-        ("817Y002", "010210000", "국고채10년"),      # 국고채 10년
-        ("731Y004", "0000001", "원달러환율종가"),    # 원달러 환율(종가)
-        ("732Y001", "99", "외환보유액"),             # 외환보유액
-        ("901Y014", "*AA", "소비자물가지수"),        # CPI
-        ("902Y015", "I16AA", "경상수지"),            # 경상수지
-        ("028Y015", "1070000", "KOSPI"),             # KOSPI
-    ]
-
-    for i, (stat_code, item_code, name) in enumerate(ecos_series):
-        status_text.text(f"ECOS 데이터 수집중... {name}")
-        df = get_ecos_data(stat_code, item_code, name, start_date, end_date)
-        if df is not None and len(df) > 0:
-            dataframes.append(df)
-        progress_bar.progress((len(fred_series) + i + 1) / total)
-
-    progress_bar.empty()
-    status_text.empty()
-
-    # 데이터 병합
-    if dataframes:
-        result = dataframes[0]
-        for df in dataframes[1:]:
-            result = pd.merge(result, df, on='date', how='outer')
-        result = result.sort_values('date').dropna(subset=['date'])
-
-        # 파생 지표 계산
-        if '한국기준금리' in result.columns and '미국기준금리' in result.columns:
-            result['한미금리차'] = result['한국기준금리'] - result['미국기준금리']
-
-        if '국고채10년' in result.columns and '국고채3년' in result.columns:
-            result['한국장단기스프레드'] = result['국고채10년'] - result['국고채3년']
-
-        if '미국CPI' in result.columns:
-            result['미국CPI_YoY'] = result['미국CPI'].pct_change(12) * 100
-
-        if '소비자물가지수' in result.columns:
-            result['한국CPI_YoY'] = result['소비자물가지수'].pct_change(12) * 100
+        if "미국CPI" in result.columns:
+            result["미국CPI_YoY"] = result["미국CPI"].pct_change(12) * 100
 
         return result
-    return None
+
+    return pd.DataFrame()
 
 
-# ============ 차트 함수들 ============
-def create_dual_axis_chart(df, col1, col2, title, y1_title, y2_title, color1='#FF6B6B', color2='#4ECDC4'):
+# ========== 분석 함수 ==========
+def calc_correlation(df):
+    """상관관계 계산"""
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    return df[numeric_cols].corr()
+
+
+def calc_returns(df, periods=[1, 3, 6, 12]):
+    """기간별 수익률"""
+    returns = {}
+    for col in df.columns:
+        if df[col].notna().sum() > 12:
+            returns[col] = {}
+            for p in periods:
+                if len(df) > p:
+                    current = df[col].dropna().iloc[-1]
+                    past = df[col].dropna().iloc[-p-1] if len(df[col].dropna()) > p else df[col].dropna().iloc[0]
+                    returns[col][f"{p}M"] = ((current - past) / past) * 100 if past != 0 else 0
+    return pd.DataFrame(returns).T
+
+
+def add_moving_averages(series, windows=[20, 60, 120]):
+    """이동평균선 추가"""
+    result = {"원본": series}
+    for w in windows:
+        if len(series) >= w:
+            result[f"MA{w}"] = series.rolling(window=w).mean()
+    return pd.DataFrame(result)
+
+
+def calc_volatility(series, window=20):
+    """변동성 (표준편차)"""
+    return series.pct_change().rolling(window=window).std() * np.sqrt(252) * 100
+
+
+# ========== 차트 함수 ==========
+def make_line_chart(df, col, title, color="#3498db", ma=False):
+    """라인 차트"""
+    fig = go.Figure()
+
+    if col in df.columns:
+        y = df[col].dropna()
+        if not y.empty:
+            fig.add_trace(go.Scatter(
+                x=y.index, y=y.values, name=col,
+                line=dict(color=color, width=2),
+                fill="tozeroy", fillcolor=f"rgba{tuple(list(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4)) + [0.1])}"
+            ))
+
+            # 이동평균선
+            if ma and len(y) > 20:
+                ma20 = y.rolling(20).mean()
+                fig.add_trace(go.Scatter(x=ma20.index, y=ma20.values, name="MA20",
+                                        line=dict(color="#e74c3c", width=1, dash="dash")))
+            if ma and len(y) > 60:
+                ma60 = y.rolling(60).mean()
+                fig.add_trace(go.Scatter(x=ma60.index, y=ma60.values, name="MA60",
+                                        line=dict(color="#f39c12", width=1, dash="dash")))
+
+    fig.update_layout(
+        title=title, height=350, hovermode="x unified",
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=40, r=40, t=50, b=40),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02)
+    )
+    return fig
+
+
+def make_dual_chart(df, col1, col2, title, c1="#e74c3c", c2="#3498db"):
     """듀얼 축 차트"""
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     if col1 in df.columns:
-        fig.add_trace(
-            go.Scatter(x=df['date'], y=df[col1], name=col1,
-                       line=dict(color=color1, width=2)),
-            secondary_y=False
-        )
+        y1 = df[col1].dropna()
+        if not y1.empty:
+            fig.add_trace(go.Scatter(x=y1.index, y=y1.values, name=col1,
+                                    line=dict(color=c1, width=2)), secondary_y=False)
+
     if col2 in df.columns:
-        fig.add_trace(
-            go.Scatter(x=df['date'], y=df[col2], name=col2,
-                       line=dict(color=color2, width=2)),
-            secondary_y=True
-        )
+        y2 = df[col2].dropna()
+        if not y2.empty:
+            fig.add_trace(go.Scatter(x=y2.index, y=y2.values, name=col2,
+                                    line=dict(color=c2, width=2)), secondary_y=True)
 
     fig.update_layout(
-        title=title,
-        hovermode='x unified',
+        title=title, height=400, hovermode="x unified",
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
     )
-    fig.update_yaxes(title_text=y1_title, secondary_y=False)
-    fig.update_yaxes(title_text=y2_title, secondary_y=True)
-
     return fig
 
 
-def create_multi_line_chart(df, columns, title, y_title, colors=None):
-    """멀티 라인 차트"""
-    fig = go.Figure()
-
-    if colors is None:
-        colors = px.colors.qualitative.Set2
-
-    for i, col in enumerate(columns):
-        if col in df.columns:
-            fig.add_trace(
-                go.Scatter(x=df['date'], y=df[col], name=col,
-                           line=dict(color=colors[i % len(colors)], width=2))
-            )
-
-    fig.update_layout(
-        title=title,
-        hovermode='x unified',
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400,
-        yaxis_title=y_title
-    )
-
-    return fig
-
-
-def create_rate_spread_chart(df):
-    """금리차 차트 (바 + 라인)"""
+def make_rate_chart(df, events=None):
+    """금리차 차트 (이벤트 표시 포함)"""
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    if '한국기준금리' in df.columns:
-        fig.add_trace(
-            go.Scatter(x=df['date'], y=df['한국기준금리'], name='한국 기준금리',
-                       line=dict(color='#FF6B6B', width=2)),
-            secondary_y=False
-        )
-    if '미국기준금리' in df.columns:
-        fig.add_trace(
-            go.Scatter(x=df['date'], y=df['미국기준금리'], name='미국 기준금리',
-                       line=dict(color='#4ECDC4', width=2)),
-            secondary_y=False
-        )
-    if '한미금리차' in df.columns:
-        colors = ['#2ECC71' if x >= 0 else '#E74C3C' for x in df['한미금리차']]
-        fig.add_trace(
-            go.Bar(x=df['date'], y=df['한미금리차'], name='한미금리차',
-                   marker_color=colors, opacity=0.5),
-            secondary_y=True
-        )
+    # 한국 금리
+    if "한국금리" in df.columns:
+        y = df["한국금리"].dropna()
+        if not y.empty:
+            fig.add_trace(go.Scatter(x=y.index, y=y.values, name="🇰🇷 한국",
+                                    line=dict(color="#e74c3c", width=3)), secondary_y=False)
+
+    # 미국 금리
+    if "미국금리" in df.columns:
+        y = df["미국금리"].dropna()
+        if not y.empty:
+            fig.add_trace(go.Scatter(x=y.index, y=y.values, name="🇺🇸 미국",
+                                    line=dict(color="#3498db", width=3)), secondary_y=False)
+
+    # 금리차 바
+    if "금리차" in df.columns:
+        y = df["금리차"].dropna()
+        if not y.empty:
+            colors = ["#27ae60" if v >= 0 else "#c0392b" for v in y.values]
+            fig.add_trace(go.Bar(x=y.index, y=y.values, name="금리차",
+                                marker_color=colors, opacity=0.4), secondary_y=True)
+
+    # 이벤트 표시
+    if events and len(df) > 0:
+        min_date = df.index.min()
+        max_date = df.index.max()
+        for date_str, label in events.items():
+            try:
+                event_date = pd.to_datetime(date_str)
+                if min_date <= event_date <= max_date:
+                    fig.add_vline(x=event_date, line_dash="dash", line_color="gray", opacity=0.5)
+                    fig.add_annotation(x=event_date, y=1.05, yref="paper", text=label,
+                                     showarrow=False, textangle=-45, font=dict(size=9))
+            except:
+                pass
 
     fig.update_layout(
-        title='한미 기준금리 및 금리차',
-        hovermode='x unified',
+        title="📊 한미 기준금리 비교", height=500, hovermode="x unified",
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+        yaxis=dict(title="기준금리 (%)"), yaxis2=dict(title="금리차 (%p)")
     )
-    fig.update_yaxes(title_text="기준금리 (%)", secondary_y=False)
-    fig.update_yaxes(title_text="금리차 (%p)", secondary_y=True)
-
     return fig
 
 
-def create_fear_gauge(vix_value):
-    """VIX 게이지 차트"""
+def make_heatmap(corr_df):
+    """상관관계 히트맵"""
+    fig = px.imshow(
+        corr_df.round(2),
+        text_auto=True,
+        color_continuous_scale="RdBu_r",
+        aspect="auto",
+        zmin=-1, zmax=1
+    )
+    fig.update_layout(
+        title="📈 지표 간 상관관계", height=600,
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
+    )
+    return fig
+
+
+def make_returns_chart(returns_df):
+    """수익률 비교 차트"""
+    fig = go.Figure()
+
+    colors = px.colors.qualitative.Set2
+    for i, period in enumerate(returns_df.columns):
+        fig.add_trace(go.Bar(
+            name=period,
+            x=returns_df.index,
+            y=returns_df[period],
+            marker_color=colors[i % len(colors)]
+        ))
+
+    fig.update_layout(
+        title="📊 기간별 수익률 비교", height=400,
+        barmode="group", hovermode="x unified",
+        plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
+    )
+    return fig
+
+
+def make_gauge(value, title, ranges):
+    """게이지 차트"""
     fig = go.Figure(go.Indicator(
-        mode="gauge+number+delta",
-        value=vix_value,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "VIX 공포지수"},
+        mode="gauge+number",
+        value=value if pd.notna(value) else 0,
+        title={"text": title},
         gauge={
-            'axis': {'range': [0, 50]},
-            'bar': {'color': "darkblue"},
-            'steps': [
-                {'range': [0, 15], 'color': '#2ECC71'},
-                {'range': [15, 25], 'color': '#F1C40F'},
-                {'range': [25, 35], 'color': '#E67E22'},
-                {'range': [35, 50], 'color': '#E74C3C'}
-            ],
-            'threshold': {
-                'line': {'color': "red", 'width': 4},
-                'thickness': 0.75,
-                'value': vix_value
-            }
+            "axis": {"range": [ranges[0], ranges[-1]]},
+            "bar": {"color": "#2c3e50"},
+            "steps": [
+                {"range": [ranges[0], ranges[1]], "color": "#27ae60"},
+                {"range": [ranges[1], ranges[2]], "color": "#f1c40f"},
+                {"range": [ranges[2], ranges[3]], "color": "#e67e22"},
+                {"range": [ranges[3], ranges[4]], "color": "#e74c3c"},
+            ]
         }
     ))
-    fig.update_layout(height=300)
+    fig.update_layout(height=250, margin=dict(l=20, r=20, t=50, b=20))
     return fig
 
 
-# ============ 메인 앱 ============
+# ========== 주요 이벤트 데이터 ==========
+RATE_EVENTS = {
+    "2022-03-17": "Fed 인상시작",
+    "2022-05-26": "한은 빅스텝",
+    "2022-09-21": "금리역전",
+    "2023-01-13": "한은 동결시작",
+    "2024-09-18": "Fed 인하시작",
+}
+
+
+# ========== 메인 앱 ==========
 def main():
-    # 헤더
-    st.title("📊 금융 지표 대시보드")
-    st.markdown("**금리 | 환율 | 주가 | 원자재 | 경제지표 - 핵심 투자 지표 종합**")
-    st.markdown("---")
-
     # 사이드바
-    st.sidebar.header("⚙️ 설정")
+    with st.sidebar:
+        st.markdown("## ⚙️ 설정")
 
-    # 기간 선택
-    period = st.sidebar.selectbox(
-        "기간 선택",
-        ["최근 1년", "최근 2년", "최근 3년", "최근 5년", "직접 입력"]
-    )
+        # 다크모드
+        dark_mode = st.toggle("🌙 다크모드", value=False)
+        apply_theme(dark_mode)
 
-    today = datetime.now()
-    if period == "최근 1년":
-        start_date = (today - timedelta(days=365)).strftime("%Y-%m-%d")
-    elif period == "최근 2년":
-        start_date = (today - timedelta(days=730)).strftime("%Y-%m-%d")
-    elif period == "최근 3년":
-        start_date = (today - timedelta(days=1095)).strftime("%Y-%m-%d")
-    elif period == "최근 5년":
-        start_date = (today - timedelta(days=1825)).strftime("%Y-%m-%d")
-    else:
-        start_date = st.sidebar.date_input("시작일", value=datetime(2022, 1, 1)).strftime("%Y-%m-%d")
+        st.divider()
 
-    end_date = today.strftime("%Y-%m-%d")
+        # 기간 선택
+        period_opt = st.selectbox("📅 기간", ["1년", "2년", "3년", "5년", "직접 입력"])
+        today = datetime.now()
 
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("**데이터 출처**")
-    st.sidebar.markdown("- 🇺🇸 FRED (미국 연준)")
-    st.sidebar.markdown("- 🇰🇷 ECOS (한국은행)")
+        if period_opt == "직접 입력":
+            start_date = st.date_input("시작일", value=today - timedelta(days=730))
+            end_date = st.date_input("종료일", value=today)
+            start_str = start_date.strftime("%Y-%m-%d")
+            end_str = end_date.strftime("%Y-%m-%d")
+        else:
+            days = {"1년": 365, "2년": 730, "3년": 1095, "5년": 1825}[period_opt]
+            start_str = (today - timedelta(days=days)).strftime("%Y-%m-%d")
+            end_str = today.strftime("%Y-%m-%d")
+
+        st.divider()
+
+        # 새로고침
+        if st.button("🔄 데이터 새로고침", use_container_width=True):
+            st.cache_data.clear()
+            st.rerun()
+
+        st.divider()
+        st.caption("📡 데이터: FRED, ECOS, Yahoo")
+        st.caption(f"🕐 마지막 갱신: {datetime.now().strftime('%m/%d %H:%M')}")
+
+        with st.expander("ℹ️ 업데이트 주기"):
+            st.markdown("""
+            **앱 캐시**: 1시간
+
+            **FRED** (미국)
+            - 금리, VIX: 매일
+            - CPI, 실업률: 매월
+
+            **ECOS** (한국)
+            - 기준금리: 금통위 후
+
+            **Yahoo**
+            - 주가, 원자재: 실시간
+            """)
+
+    # 제목
+    st.markdown("# 📊 금융 지표 대시보드 Pro")
+    st.caption("한미 금리차 | 환율 | 주가 | 원자재 | 공포지표 | 분석")
+    st.divider()
 
     # 데이터 로드
-    df = load_all_data(start_date, end_date)
+    with st.spinner("📡 데이터 수집중..."):
+        df = load_all_data(start_str, end_str)
 
-    if df is None or len(df) == 0:
-        st.error("데이터를 불러올 수 없습니다.")
-        return
+    if df.empty:
+        st.error("❌ 데이터 로드 실패")
+        st.stop()
 
-    # 수집된 지표 수 표시
-    available_cols = [c for c in df.columns if c != 'date' and df[c].notna().sum() > 0]
-    st.success(f"✅ {len(available_cols)}개 지표 수집 완료 | {len(df)}개월 데이터")
+    # 수집 현황
+    cols_ok = [c for c in df.columns if df[c].notna().any()]
+    st.success(f"✅ **{len(cols_ok)}개** 지표 수집  |  📅 **{len(df)}개월** 데이터")
 
-    # ============ 핵심 지표 카드 ============
-    latest = df.iloc[-1]
-    prev = df.iloc[-2] if len(df) > 1 else latest
+    # ===== 핵심 지표 =====
+    st.markdown("### 📈 핵심 지표")
+    last = df.ffill().iloc[-1] if len(df) > 0 else pd.Series()
 
-    st.subheader("📈 핵심 지표 현황")
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
 
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with c1:
+        v = last.get("금리차")
+        color = "🔴" if pd.notna(v) and v < 0 else "🟢"
+        st.metric(f"{color} 금리차", f"{v:.2f}%p" if pd.notna(v) else "N/A")
 
-    with col1:
-        val = latest.get('한미금리차', 0)
-        delta = val - prev.get('한미금리차', val) if pd.notna(val) else 0
-        st.metric("한미금리차", f"{val:.2f}%p" if pd.notna(val) else "N/A", f"{delta:+.2f}")
+    with c2:
+        v = last.get("원달러")
+        st.metric("💵 원/달러", f"{v:,.0f}원" if pd.notna(v) else "N/A")
 
-    with col2:
-        val = latest.get('원달러환율', latest.get('원달러환율종가', 0))
-        prev_val = prev.get('원달러환율', prev.get('원달러환율종가', val))
-        delta = val - prev_val if pd.notna(val) else 0
-        st.metric("원/달러", f"{val:,.0f}원" if pd.notna(val) else "N/A", f"{delta:+.0f}", delta_color="inverse")
+    with c3:
+        v = last.get("VIX")
+        color = "🔴" if pd.notna(v) and v > 25 else "🟢"
+        st.metric(f"{color} VIX", f"{v:.1f}" if pd.notna(v) else "N/A")
 
-    with col3:
-        val = latest.get('VIX', 0)
-        delta = val - prev.get('VIX', val) if pd.notna(val) else 0
-        st.metric("VIX", f"{val:.1f}" if pd.notna(val) else "N/A", f"{delta:+.1f}", delta_color="inverse")
+    with c4:
+        v = last.get("KOSPI")
+        st.metric("🇰🇷 KOSPI", f"{v:,.0f}" if pd.notna(v) else "N/A")
 
-    with col4:
-        val = latest.get('KOSPI', 0)
-        delta = val - prev.get('KOSPI', val) if pd.notna(val) else 0
-        st.metric("KOSPI", f"{val:,.0f}" if pd.notna(val) else "N/A", f"{delta:+.0f}")
+    with c5:
+        v = last.get("SP500")
+        st.metric("🇺🇸 S&P500", f"{v:,.0f}" if pd.notna(v) else "N/A")
 
-    with col5:
-        val = latest.get('S&P500', 0)
-        delta = val - prev.get('S&P500', val) if pd.notna(val) else 0
-        st.metric("S&P500", f"{val:,.0f}" if pd.notna(val) else "N/A", f"{delta:+.0f}")
+    with c6:
+        v = last.get("비트코인")
+        st.metric("₿ BTC", f"${v:,.0f}" if pd.notna(v) else "N/A")
 
-    with col6:
-        val = latest.get('WTI유가', 0)
-        delta = val - prev.get('WTI유가', val) if pd.notna(val) else 0
-        st.metric("WTI유가", f"${val:.1f}" if pd.notna(val) else "N/A", f"{delta:+.1f}")
+    st.divider()
 
-    st.markdown("---")
-
-    # ============ 차트 탭 ============
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "💰 금리", "💱 환율", "📈 주가", "🛢️ 원자재", "📊 경제지표", "😱 공포지표"
-    ])
+    # ===== 탭 =====
+    tabs = st.tabs(["💰 금리", "💱 환율", "📈 주가", "🛢️ 원자재", "😱 공포지표", "📊 분석", "📑 논문용"])
 
     # 금리 탭
-    with tab1:
-        col1, col2 = st.columns(2)
+    with tabs[0]:
+        show_events = st.checkbox("📌 주요 이벤트 표시", value=True)
+        events = RATE_EVENTS if show_events else None
+        st.plotly_chart(make_rate_chart(df, events), use_container_width=True)
 
-        with col1:
-            st.plotly_chart(create_rate_spread_chart(df), use_container_width=True)
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_dual_chart(df, "미국2Y", "미국10Y", "🇺🇸 미국 국채금리"), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "미국장단기스프레드", "📉 미국 장단기 스프레드", "#9b59b6"), use_container_width=True)
 
-        with col2:
-            st.plotly_chart(
-                create_multi_line_chart(
-                    df, ['국고채3년', '국고채10년', '미국2년금리', '미국10년금리'],
-                    '한미 국채금리 비교', '금리 (%)'
-                ),
-                use_container_width=True
-            )
-
-        # 장단기 스프레드
-        st.plotly_chart(
-            create_dual_axis_chart(
-                df, '한국장단기스프레드', '미국장단기스프레드',
-                '장단기 금리 스프레드 (10년-2/3년)', '한국 (%p)', '미국 (%p)'
-            ),
-            use_container_width=True
-        )
-
-        # 금리 해석
-        rate_diff = latest.get('한미금리차', 0)
-        if pd.notna(rate_diff):
-            if rate_diff < -1.5:
-                st.error("🚨 금리차 역전폭 확대 (-1.5%p 이상) - 자본유출 압력 심화, 원화 약세 지속 우려")
-            elif rate_diff < 0:
-                st.warning("⚠️ 금리차 역전 중 - 외국인 자금 유출 가능성, 환율 상승 압력")
+        # 해석
+        v = last.get("금리차")
+        if pd.notna(v):
+            if v < -1.5:
+                st.error("🚨 **금리차 역전 심화** → 자본유출 압력, 원화약세")
+            elif v < 0:
+                st.warning("⚠️ **금리차 역전** → 외국인 자금 유출 가능성")
             else:
-                st.success("✅ 금리차 정상 - 자본유입 우호적 환경")
+                st.success("✅ **금리차 정상** → 자본유입 우호적")
 
     # 환율 탭
-    with tab2:
-        col1, col2 = st.columns(2)
+    with tabs[1]:
+        show_ma = st.checkbox("📈 이동평균선 표시", value=True, key="fx_ma")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_line_chart(df, "원달러", "💵 원/달러", "#3498db", ma=show_ma), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "달러인덱스", "💪 달러인덱스", "#9b59b6", ma=show_ma), use_container_width=True)
 
-        with col1:
-            usd_col = '원달러환율' if '원달러환율' in df.columns else '원달러환율종가'
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, usd_col, '달러인덱스',
-                    '원/달러 환율 vs 달러인덱스', '원/달러 (KRW)', '달러인덱스 (DXY)'
-                ),
-                use_container_width=True
-            )
-
-        with col2:
-            st.plotly_chart(
-                create_multi_line_chart(
-                    df, ['엔달러환율', '유로달러환율'],
-                    '주요 통화 환율', '환율'
-                ),
-                use_container_width=True
-            )
-
-        # 환율 vs 금리차
-        usd_col = '원달러환율' if '원달러환율' in df.columns else '원달러환율종가'
-        st.plotly_chart(
-            create_dual_axis_chart(
-                df, usd_col, '한미금리차',
-                '원/달러 환율 vs 한미금리차 (상관관계)', '원/달러', '금리차 (%p)',
-                '#3498DB', '#E74C3C'
-            ),
-            use_container_width=True
-        )
+        st.plotly_chart(make_dual_chart(df, "원달러", "금리차", "📉 환율 vs 금리차", "#3498db", "#e74c3c"), use_container_width=True)
 
     # 주가 탭
-    with tab3:
-        col1, col2 = st.columns(2)
+    with tabs[2]:
+        show_ma = st.checkbox("📈 이동평균선 표시", value=True, key="stock_ma")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_line_chart(df, "KOSPI", "🇰🇷 KOSPI", "#e74c3c", ma=show_ma), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "SP500", "🇺🇸 S&P500", "#3498db", ma=show_ma), use_container_width=True)
 
-        with col1:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, 'KOSPI', 'S&P500',
-                    'KOSPI vs S&P500', 'KOSPI', 'S&P500',
-                    '#E74C3C', '#3498DB'
-                ),
-                use_container_width=True
-            )
-
-        with col2:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, '나스닥', 'VIX',
-                    '나스닥 vs VIX', '나스닥', 'VIX',
-                    '#9B59B6', '#E67E22'
-                ),
-                use_container_width=True
-            )
-
-        # 주가 vs 금리
-        st.plotly_chart(
-            create_dual_axis_chart(
-                df, 'S&P500', '미국10년금리',
-                'S&P500 vs 미국 10년 국채금리', 'S&P500', '금리 (%)',
-                '#2ECC71', '#E74C3C'
-            ),
-            use_container_width=True
-        )
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_line_chart(df, "나스닥", "📱 나스닥", "#9b59b6", ma=show_ma), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "비트코인", "₿ 비트코인", "#f39c12", ma=show_ma), use_container_width=True)
 
     # 원자재 탭
-    with tab4:
-        col1, col2 = st.columns(2)
+    with tabs[3]:
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_line_chart(df, "금", "🥇 금", "#f1c40f", ma=True), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "유가", "🛢️ WTI 유가", "#27ae60", ma=True), use_container_width=True)
 
-        with col1:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, '금시세', '달러인덱스',
-                    '금 가격 vs 달러인덱스 (역상관)', '금 ($/oz)', '달러인덱스',
-                    '#F1C40F', '#3498DB'
-                ),
-                use_container_width=True
-            )
-
-        with col2:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, 'WTI유가', 'S&P500',
-                    'WTI 유가 vs S&P500', 'WTI ($/배럴)', 'S&P500',
-                    '#1ABC9C', '#E74C3C'
-                ),
-                use_container_width=True
-            )
-
-    # 경제지표 탭
-    with tab5:
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, '한국CPI_YoY', '미국CPI_YoY',
-                    '소비자물가 상승률 (YoY)', '한국 CPI (%)', '미국 CPI (%)',
-                    '#FF6B6B', '#4ECDC4'
-                ),
-                use_container_width=True
-            )
-
-        with col2:
-            st.plotly_chart(
-                create_dual_axis_chart(
-                    df, '미국실업률', '미국기준금리',
-                    '미국 실업률 vs 기준금리', '실업률 (%)', '기준금리 (%)',
-                    '#9B59B6', '#3498DB'
-                ),
-                use_container_width=True
-            )
-
-        # 외환보유액 & 경상수지
-        st.plotly_chart(
-            create_dual_axis_chart(
-                df, '외환보유액', '경상수지',
-                '한국 외환보유액 vs 경상수지', '외환보유액 (백만$)', '경상수지 (백만$)',
-                '#1ABC9C', '#E67E22'
-            ),
-            use_container_width=True
-        )
+        c1, c2 = st.columns(2)
+        with c1:
+            st.plotly_chart(make_line_chart(df, "구리", "🔶 구리 (경기선행)", "#e67e22", ma=True), use_container_width=True)
+        with c2:
+            st.plotly_chart(make_line_chart(df, "은", "🥈 은", "#95a5a6", ma=True), use_container_width=True)
 
     # 공포지표 탭
-    with tab6:
-        col1, col2 = st.columns([1, 2])
+    with tabs[4]:
+        c1, c2, c3 = st.columns(3)
 
-        with col1:
-            vix_val = latest.get('VIX', 20)
-            if pd.notna(vix_val):
-                st.plotly_chart(create_fear_gauge(vix_val), use_container_width=True)
+        with c1:
+            vix = last.get("VIX", 20)
+            st.plotly_chart(make_gauge(vix, "VIX 공포지수", [0, 15, 25, 35, 50]), use_container_width=True)
+            if pd.notna(vix):
+                if vix > 30: st.error("🔴 극심한 공포")
+                elif vix > 20: st.warning("🟠 불안")
+                else: st.success("🟢 안정")
 
-                if vix_val > 35:
-                    st.error("🔴 극심한 공포 - 시장 패닉 상태")
-                elif vix_val > 25:
-                    st.warning("🟠 높은 불안 - 조정 가능성")
-                elif vix_val > 15:
-                    st.info("🟡 보통 수준 - 정상 범위")
-                else:
-                    st.success("🟢 낙관적 - 과열 주의")
+        with c2:
+            hy = last.get("하이일드스프레드", 4)
+            st.plotly_chart(make_gauge(hy, "하이일드 스프레드", [0, 3, 5, 7, 10]), use_container_width=True)
 
-        with col2:
-            st.plotly_chart(
-                create_multi_line_chart(
-                    df, ['VIX', '하이일드스프레드', 'TED스프레드'],
-                    '공포/위험 지표 추이', '지수/스프레드'
-                ),
-                use_container_width=True
-            )
+        with c3:
+            spread = last.get("미국장단기스프레드", 0)
+            st.metric("📉 장단기스프레드", f"{spread:.2f}%p" if pd.notna(spread) else "N/A")
+            if pd.notna(spread) and spread < 0:
+                st.warning("⚠️ 수익률곡선 역전 (경기침체 신호)")
 
-        # 유동성 지표
-        st.plotly_chart(
-            create_dual_axis_chart(
-                df, '연준총자산', 'S&P500',
-                '연준 총자산 vs S&P500 (유동성 효과)', '연준자산 (백만$)', 'S&P500',
-                '#9B59B6', '#2ECC71'
-            ),
-            use_container_width=True
-        )
+        st.plotly_chart(make_dual_chart(df, "VIX", "SP500", "😱 VIX vs S&P500", "#e74c3c", "#3498db"), use_container_width=True)
 
-    st.markdown("---")
+    # 분석 탭
+    with tabs[5]:
+        st.markdown("### 📊 상관관계 분석")
+        corr = calc_correlation(df)
+        st.plotly_chart(make_heatmap(corr), use_container_width=True)
 
-    # 데이터 테이블
-    with st.expander("📋 전체 데이터 보기"):
-        # 컬럼 선택
-        all_cols = [c for c in df.columns if c != 'date']
-        selected_cols = st.multiselect("표시할 컬럼 선택", all_cols, default=all_cols[:10])
+        st.divider()
 
-        if selected_cols:
-            display_df = df[['date'] + selected_cols].copy()
-            display_df['date'] = display_df['date'].dt.strftime('%Y-%m')
-            st.dataframe(display_df.round(2), use_container_width=True, height=400)
+        st.markdown("### 📈 기간별 수익률")
+        returns = calc_returns(df)
+        if not returns.empty:
+            st.plotly_chart(make_returns_chart(returns), use_container_width=True)
+            st.dataframe(returns.round(2).style.format("{:.2f}%"), use_container_width=True)
 
-            # 다운로드
-            csv = df.to_csv(index=False).encode('utf-8-sig')
-            st.download_button("📥 전체 데이터 CSV 다운로드", csv, "finance_data.csv", "text/csv")
+    # 논문용 탭
+    with tabs[6]:
+        st.markdown("### 📑 논문용 통계 분석")
+
+        st.markdown("#### 1️⃣ 기술통계량")
+        desc = df.describe().T
+        st.dataframe(desc.round(2), use_container_width=True)
+
+        st.divider()
+
+        st.markdown("#### 2️⃣ 주요 변수 상관계수")
+        key_cols = ["금리차", "원달러", "VIX", "KOSPI", "SP500"]
+        available_cols = [c for c in key_cols if c in df.columns]
+        if available_cols:
+            st.dataframe(df[available_cols].corr().round(3), use_container_width=True)
+
+        st.divider()
+
+        st.markdown("#### 3️⃣ 금리차-환율 회귀분석")
+        if "금리차" in df.columns and "원달러" in df.columns:
+            clean = df[["금리차", "원달러"]].dropna()
+            if len(clean) > 10:
+                corr_val = clean["금리차"].corr(clean["원달러"])
+                st.metric("상관계수", f"{corr_val:.3f}")
+
+                # 간단한 회귀계수
+                x = clean["금리차"]
+                y = clean["원달러"]
+                slope = np.cov(x, y)[0, 1] / np.var(x)
+                intercept = y.mean() - slope * x.mean()
+
+                st.write(f"**회귀식**: 원달러 = {intercept:.2f} + ({slope:.2f}) × 금리차")
+                st.write(f"**해석**: 금리차가 1%p 하락하면 원달러 환율 약 {abs(slope):.0f}원 상승")
+
+        st.divider()
+
+        st.markdown("#### 4️⃣ 데이터 다운로드")
+        csv = df.to_csv().encode("utf-8-sig")
+        st.download_button("📥 전체 데이터 CSV", csv, "finance_data.csv", "text/csv")
+
+    # 전체 데이터
+    st.divider()
+    with st.expander("📋 전체 데이터"):
+        st.dataframe(df.round(2), use_container_width=True)
 
     # 푸터
-    st.markdown("---")
-    st.markdown(
-        """
-        <div style='text-align: center; color: gray; font-size: 12px;'>
-        📊 데이터 출처: 한국은행 ECOS, 미국 연준 FRED |
-        ⏰ 데이터는 1시간 캐시됨 |
-        Made with Streamlit
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.divider()
+    st.caption("📊 금융 지표 대시보드 Pro  |  데이터: FRED, ECOS, Yahoo  |  Made with Streamlit")
 
 
 if __name__ == "__main__":
