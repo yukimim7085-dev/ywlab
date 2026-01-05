@@ -1,6 +1,8 @@
 """
-금융 지표 대시보드 Pro v6.0
+금융 지표 대시보드 Pro v7.0
 모든 기능 탑재: 데이터, 분석, 시각화, 논문용 통계
+- SSL 문제 우회용 대체 API 추가
+- Deprecation 경고 수정
 """
 
 import streamlit as st
@@ -109,15 +111,14 @@ def fetch_yahoo(ticker, start_date, end_date):
     return pd.DataFrame()
 
 
-def fetch_coinbase_btc(start_date, end_date):
-    """CoinGecko에서 비트코인 가격 가져오기"""
+def fetch_coingecko(coin_id, start_date, end_date):
+    """CoinGecko에서 가격 가져오기 (비트코인, 금, 은 등)"""
     try:
-        # 일수 계산
         start = datetime.strptime(start_date, "%Y-%m-%d")
         end = datetime.strptime(end_date, "%Y-%m-%d")
-        days = (end - start).days
+        days = min((end - start).days, 365)  # CoinGecko 무료 API 제한
 
-        url = f"https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days={days}"
+        url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=usd&days={days}"
         resp = requests.get(url, timeout=10)
         if resp.status_code == 200:
             prices = resp.json().get("prices", [])
@@ -128,6 +129,28 @@ def fetch_coinbase_btc(start_date, end_date):
                 df = df.groupby("ym")["value"].mean().reset_index()
                 df["date"] = df["ym"].dt.to_timestamp()
                 return df[["date", "value"]]
+    except:
+        pass
+    return pd.DataFrame()
+
+
+def fetch_kospi_ecos(start_date, end_date):
+    """ECOS에서 KOSPI 지수 가져오기"""
+    start = start_date.replace("-", "")[:6]
+    end = end_date.replace("-", "")[:6]
+    # KOSPI 지수: 901Y014, 0001000
+    url = f"https://ecos.bok.or.kr/api/StatisticSearch/{ECOS_KEY}/json/kr/1/1000/901Y014/M/{start}/{end}/0001000"
+    try:
+        resp = requests.get(url, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            if "StatisticSearch" in data:
+                rows = data["StatisticSearch"].get("row", [])
+                if rows:
+                    df = pd.DataFrame(rows)
+                    df["date"] = pd.to_datetime(df["TIME"], format="%Y%m")
+                    df["value"] = pd.to_numeric(df["DATA_VALUE"], errors="coerce")
+                    return df[["date", "value"]].dropna()
     except:
         pass
     return pd.DataFrame()
@@ -166,20 +189,30 @@ def load_all_data(start_date, end_date):
     if not df.empty:
         data["한국금리"] = df.set_index("date")["value"]
 
-    # Yahoo Finance
-    yahoo_items = {
-        "KOSPI": "^KS11",
-        "금": "GC=F",
-        "은": "SI=F",
-    }
+    # Yahoo Finance (SSL 문제시 대체 API 사용)
+    # KOSPI - Yahoo 시도 후 ECOS 폴백
+    df = fetch_yahoo("^KS11", start_date, end_date)
+    if df.empty:
+        df = fetch_kospi_ecos(start_date, end_date)
+    if not df.empty:
+        data["KOSPI"] = df.set_index("date")["value"]
 
-    for name, ticker in yahoo_items.items():
-        df = fetch_yahoo(ticker, start_date, end_date)
-        if not df.empty:
-            data[name] = df.set_index("date")["value"]
+    # 금 - Yahoo 시도 후 FRED 폴백
+    df = fetch_yahoo("GC=F", start_date, end_date)
+    if df.empty:
+        df = fetch_fred("GOLDAMGBD228NLBM", start_date, end_date)
+    if not df.empty:
+        data["금"] = df.set_index("date")["value"]
+
+    # 은 - Yahoo 시도 후 FRED 폴백
+    df = fetch_yahoo("SI=F", start_date, end_date)
+    if df.empty:
+        df = fetch_fred("SLVPRUSD", start_date, end_date)
+    if not df.empty:
+        data["은"] = df.set_index("date")["value"]
 
     # 비트코인 - CoinGecko API (SSL 문제 우회)
-    btc_df = fetch_coinbase_btc(start_date, end_date)
+    btc_df = fetch_coingecko("bitcoin", start_date, end_date)
     if not btc_df.empty:
         data["비트코인"] = btc_df.set_index("date")["value"]
 
@@ -196,7 +229,7 @@ def load_all_data(start_date, end_date):
             result["미국장단기스프레드"] = result["미국10Y"] - result["미국2Y"]
 
         if "미국CPI" in result.columns:
-            result["미국CPI_YoY"] = result["미국CPI"].pct_change(12) * 100
+            result["미국CPI_YoY"] = result["미국CPI"].pct_change(periods=12, fill_method=None) * 100
 
         return result
 
@@ -441,7 +474,7 @@ def main():
         st.divider()
 
         # 새로고침
-        if st.button("🔄 데이터 새로고침", use_container_width=True):
+        if st.button("🔄 데이터 새로고침", width="stretch"):
             st.cache_data.clear()
             st.rerun()
 
@@ -522,13 +555,13 @@ def main():
     with tabs[0]:
         show_events = st.checkbox("📌 주요 이벤트 표시", value=True)
         events = RATE_EVENTS if show_events else None
-        st.plotly_chart(make_rate_chart(df, events), use_container_width=True)
+        st.plotly_chart(make_rate_chart(df, events), width="stretch")
 
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_dual_chart(df, "미국2Y", "미국10Y", "🇺🇸 미국 국채금리"), use_container_width=True)
+            st.plotly_chart(make_dual_chart(df, "미국2Y", "미국10Y", "🇺🇸 미국 국채금리"), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "미국장단기스프레드", "📉 미국 장단기 스프레드", "#9b59b6"), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "미국장단기스프레드", "📉 미국 장단기 스프레드", "#9b59b6"), width="stretch")
 
         # 해석
         v = last.get("금리차")
@@ -545,40 +578,40 @@ def main():
         show_ma = st.checkbox("📈 이동평균선 표시", value=True, key="fx_ma")
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_line_chart(df, "원달러", "💵 원/달러", "#3498db", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "원달러", "💵 원/달러", "#3498db", ma=show_ma), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "달러인덱스", "💪 달러인덱스", "#9b59b6", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "달러인덱스", "💪 달러인덱스", "#9b59b6", ma=show_ma), width="stretch")
 
-        st.plotly_chart(make_dual_chart(df, "원달러", "금리차", "📉 환율 vs 금리차", "#3498db", "#e74c3c"), use_container_width=True)
+        st.plotly_chart(make_dual_chart(df, "원달러", "금리차", "📉 환율 vs 금리차", "#3498db", "#e74c3c"), width="stretch")
 
     # 주가 탭
     with tabs[2]:
         show_ma = st.checkbox("📈 이동평균선 표시", value=True, key="stock_ma")
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_line_chart(df, "KOSPI", "🇰🇷 KOSPI", "#e74c3c", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "KOSPI", "🇰🇷 KOSPI", "#e74c3c", ma=show_ma), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "SP500", "🇺🇸 S&P500", "#3498db", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "SP500", "🇺🇸 S&P500", "#3498db", ma=show_ma), width="stretch")
 
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_line_chart(df, "나스닥", "📱 나스닥", "#9b59b6", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "나스닥", "📱 나스닥", "#9b59b6", ma=show_ma), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "비트코인", "₿ 비트코인", "#f39c12", ma=show_ma), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "비트코인", "₿ 비트코인", "#f39c12", ma=show_ma), width="stretch")
 
     # 원자재 탭
     with tabs[3]:
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_line_chart(df, "금", "🥇 금", "#f1c40f", ma=True), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "금", "🥇 금", "#f1c40f", ma=True), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "유가", "🛢️ WTI 유가", "#27ae60", ma=True), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "유가", "🛢️ WTI 유가", "#27ae60", ma=True), width="stretch")
 
         c1, c2 = st.columns(2)
         with c1:
-            st.plotly_chart(make_line_chart(df, "구리", "🔶 구리 (경기선행)", "#e67e22", ma=True), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "구리", "🔶 구리 (경기선행)", "#e67e22", ma=True), width="stretch")
         with c2:
-            st.plotly_chart(make_line_chart(df, "은", "🥈 은", "#95a5a6", ma=True), use_container_width=True)
+            st.plotly_chart(make_line_chart(df, "은", "🥈 은", "#95a5a6", ma=True), width="stretch")
 
     # 공포지표 탭
     with tabs[4]:
@@ -586,7 +619,7 @@ def main():
 
         with c1:
             vix = last.get("VIX", 20)
-            st.plotly_chart(make_gauge(vix, "VIX 공포지수", [0, 15, 25, 35, 50]), use_container_width=True)
+            st.plotly_chart(make_gauge(vix, "VIX 공포지수", [0, 15, 25, 35, 50]), width="stretch")
             if pd.notna(vix):
                 if vix > 30: st.error("🔴 극심한 공포")
                 elif vix > 20: st.warning("🟠 불안")
@@ -594,7 +627,7 @@ def main():
 
         with c2:
             hy = last.get("하이일드스프레드", 4)
-            st.plotly_chart(make_gauge(hy, "하이일드 스프레드", [0, 3, 5, 7, 10]), use_container_width=True)
+            st.plotly_chart(make_gauge(hy, "하이일드 스프레드", [0, 3, 5, 7, 10]), width="stretch")
 
         with c3:
             spread = last.get("미국장단기스프레드", 0)
@@ -602,21 +635,21 @@ def main():
             if pd.notna(spread) and spread < 0:
                 st.warning("⚠️ 수익률곡선 역전 (경기침체 신호)")
 
-        st.plotly_chart(make_dual_chart(df, "VIX", "SP500", "😱 VIX vs S&P500", "#e74c3c", "#3498db"), use_container_width=True)
+        st.plotly_chart(make_dual_chart(df, "VIX", "SP500", "😱 VIX vs S&P500", "#e74c3c", "#3498db"), width="stretch")
 
     # 분석 탭
     with tabs[5]:
         st.markdown("### 📊 상관관계 분석")
         corr = calc_correlation(df)
-        st.plotly_chart(make_heatmap(corr), use_container_width=True)
+        st.plotly_chart(make_heatmap(corr), width="stretch")
 
         st.divider()
 
         st.markdown("### 📈 기간별 수익률")
         returns = calc_returns(df)
         if not returns.empty:
-            st.plotly_chart(make_returns_chart(returns), use_container_width=True)
-            st.dataframe(returns.round(2).style.format("{:.2f}%"), use_container_width=True)
+            st.plotly_chart(make_returns_chart(returns), width="stretch")
+            st.dataframe(returns.round(2).style.format("{:.2f}%"), width="stretch")
 
     # 논문용 탭
     with tabs[6]:
@@ -624,7 +657,7 @@ def main():
 
         st.markdown("#### 1️⃣ 기술통계량")
         desc = df.describe().T
-        st.dataframe(desc.round(2), use_container_width=True)
+        st.dataframe(desc.round(2), width="stretch")
 
         st.divider()
 
@@ -632,7 +665,7 @@ def main():
         key_cols = ["금리차", "원달러", "VIX", "KOSPI", "SP500"]
         available_cols = [c for c in key_cols if c in df.columns]
         if available_cols:
-            st.dataframe(df[available_cols].corr().round(3), use_container_width=True)
+            st.dataframe(df[available_cols].corr().round(3), width="stretch")
 
         st.divider()
 
@@ -661,7 +694,7 @@ def main():
     # 전체 데이터
     st.divider()
     with st.expander("📋 전체 데이터"):
-        st.dataframe(df.round(2), use_container_width=True)
+        st.dataframe(df.round(2), width="stretch")
 
     # 푸터
     st.divider()
