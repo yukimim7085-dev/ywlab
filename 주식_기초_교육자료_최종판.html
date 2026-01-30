@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식 입문자를 위한 기초 경제 교육 (최종판)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            color: #8892a8;
+            font-size: 1.1em;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            color: #1a1a2e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+        
+        .toc {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(79, 172, 254, 0.15);
+        }
+        
+        .toc h2 {
+            color: #4facfe;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .toc-category {
+            margin-bottom: 20px;
+        }
+        
+        .toc-category h3 {
+            color: #00f2fe;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            padding: 8px 12px;
+            background: rgba(79, 172, 254, 0.1);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .toc li:hover {
+            background: rgba(79, 172, 254, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .toc li.new-section {
+            background: rgba(255, 107, 107, 0.2);
+            border-left: 3px solid #ff6b6b;
+        }
+        
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(79, 172, 254, 0.1);
+        }
+        
+        h2 {
+            color: #4facfe;
+            font-size: 1.8em;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(79, 172, 254, 0.3);
+        }
+        
+        h3 {
+            color: #00f2fe;
+            font-size: 1.3em;
+            margin: 28px 0 16px;
+        }
+        
+        h4 {
+            color: #feca57;
+            font-size: 1.1em;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 16px;
+        }
+        
+        .definition-box {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.1) 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #4facfe;
+        }
+        
+        .example-box {
+            background: rgba(254, 202, 87, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #feca57;
+        }
+        
+        .tip-box {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .slang-box {
+            background: rgba(162, 89, 255, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #a259ff;
+        }
+        
+        .formula {
+            background: #0a0a1a;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        
+        th {
+            background: rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(79, 172, 254, 0.05);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-card {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        
+        .comparison-card h4 {
+            margin-top: 0;
+        }
+        
+        .comparison-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .comparison-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .comparison-card li:last-child {
+            border-bottom: none;
+        }
+        
+        /* 자산 분류 관련 스타일 */
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .safe-asset {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 136, 255, 0.1) 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 255, 136, 0.4);
+        }
+        
+        .risk-asset {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.15) 0%, rgba(255, 182, 72, 0.1) 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 107, 107, 0.4);
+        }
+        
+        .alt-asset {
+            background: linear-gradient(135deg, rgba(162, 89, 255, 0.15) 0%, rgba(79, 172, 254, 0.1) 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid rgba(162, 89, 255, 0.4);
+        }
+        
+        .asset-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .safe-asset .asset-title { color: #00ff88; }
+        .risk-asset .asset-title { color: #ff6b6b; }
+        .alt-asset .asset-title { color: #a259ff; }
+        
+        /* 경제 상황 사분면 */
+        .quadrant-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .quadrant {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .quadrant-1 {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 140, 0, 0.15) 100%);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+        }
+        
+        .quadrant-2 {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 200, 100, 0.15) 100%);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+        }
+        
+        .quadrant-3 {
+            background: linear-gradient(135deg, rgba(135, 206, 250, 0.2) 0%, rgba(70, 130, 180, 0.15) 100%);
+            border: 2px solid rgba(135, 206, 250, 0.5);
+        }
+        
+        .quadrant-4 {
+            background: linear-gradient(135deg, rgba(255, 99, 71, 0.2) 0%, rgba(220, 20, 60, 0.15) 100%);
+            border: 2px solid rgba(255, 99, 71, 0.5);
+        }
+        
+        .quadrant h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .quadrant-1 h4 { color: #ffd700; }
+        .quadrant-2 h4 { color: #00ff88; }
+        .quadrant-3 h4 { color: #87ceeb; }
+        .quadrant-4 h4 { color: #ff6347; }
+        
+        .quadrant-assets {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-top: 10px;
+        }
+        
+        /* 시나리오 카드 */
+        .scenario-card {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid;
+        }
+        
+        .scenario-card.bullish { border-color: #00ff88; }
+        .scenario-card.bearish { border-color: #ff6b6b; }
+        .scenario-card.neutral { border-color: #feca57; }
+        
+        .scenario-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        
+        .scenario-card.bullish .scenario-title { color: #00ff88; }
+        .scenario-card.bearish .scenario-title { color: #ff6b6b; }
+        .scenario-card.neutral .scenario-title { color: #feca57; }
+        
+        .asset-movement {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .asset-tag {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        
+        .asset-up {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.4);
+        }
+        
+        .asset-down {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.4);
+        }
+        
+        .asset-stable {
+            background: rgba(254, 202, 87, 0.2);
+            color: #feca57;
+            border: 1px solid rgba(254, 202, 87, 0.4);
+        }
+        
+        /* 상관관계 매트릭스 */
+        .correlation-table th, .correlation-table td {
+            text-align: center;
+            padding: 10px 8px;
+            font-size: 0.85em;
+        }
+        
+        .corr-positive { color: #ff6b6b; }
+        .corr-negative { color: #00ff88; }
+        .corr-neutral { color: #feca57; }
+        
+        /* 올웨더 포트폴리오 */
+        .portfolio-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .portfolio-item {
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .portfolio-item.stock {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #1a1a2e;
+            flex: 0 0 30%;
+        }
+        
+        .portfolio-item.bond-long {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            flex: 0 0 40%;
+        }
+        
+        .portfolio-item.bond-mid {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            flex: 0 0 15%;
+        }
+        
+        .portfolio-item.gold {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            color: #1a1a2e;
+            flex: 0 0 7.5%;
+        }
+        
+        .portfolio-item.commodity {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #1a1a2e;
+            flex: 0 0 7.5%;
+        }
+        
+        .portfolio-percent {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .portfolio-label {
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            border-top: 1px solid rgba(79, 172, 254, 0.2);
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            section {
+                padding: 24px;
+            }
+            
+            .asset-grid, .quadrant-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.8em;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                color: #333;
+            }
+            
+            section {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📈 주식 입문자를 위한 기초 경제 교육</h1>
+            <p class="subtitle">경제 기초부터 자산배분 전략까지 한 번에 배우는 투자 가이드</p>
+            <span class="version-badge">🎯 최종판 v3.0 - 자산분류 & 시나리오 분석 추가</span>
+        </header>
+
+        <nav class="toc">
+            <h2>📋 목차</h2>
+            
+            <div class="toc-category">
+                <h3>PART 1: 경제 기초</h3>
+                <ul>
+                    <li>1. 중앙은행과 연준 (Fed)</li>
+                    <li>2. 단리와 복리</li>
+                </ul>
+            </div>
+            
+            <div class="toc-category">
+                <h3>PART 2: 자산 이해 ⭐ NEW</h3>
+                <ul>
+                    <li class="new-section">3. 안전자산 vs 위험자산 vs 대체자산</li>
+                    <li class="new-section">4. 경제 상황별 자산 움직임 (시나리오 분석)</li>
+                </ul>
+            </div>
+            
+            <div class="toc-category">
+                <h3>PART 3: 주식 시장 이해</h3>
+                <ul>
+                    <li>5. 주요 증시 & 지수 (KOSPI/KOSDAQ/나스닥/S&P500)</li>
+                    <li>6. 주식 용어 총정리</li>
+                </ul>
+            </div>
+            
+            <div class="toc-category">
+                <h3>PART 4: 기업 분석 지표</h3>
+                <ul>
+                    <li>7. 시가총액</li>
+                    <li>8. PER / PBR / ROE / EPS</li>
+                </ul>
+            </div>
+            
+            <div class="toc-category">
+                <h3>PART 5: 기술적 분석</h3>
+                <ul>
+                    <li>9. 이동평균선 & 골든/데드 크로스</li>
+                    <li>10. RSI / MACD / 볼린저밴드</li>
+                    <li>11. 피보나치 되돌림</li>
+                </ul>
+            </div>
+            
+            <div class="toc-category">
+                <h3>PART 6: 투자 전략</h3>
+                <ul>
+                    <li>12. ETF 투자</li>
+                    <li class="new-section">13. 올웨더 포트폴리오 (자산배분 전략)</li>
+                    <li>14. 투자 전략 종합</li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- PART 1: 경제 기초 -->
+        <section id="section1">
+            <h2>1. 중앙은행과 연준 (Fed)</h2>
+            
+            <div class="definition-box">
+                <strong>중앙은행이란?</strong><br>
+                한 나라의 통화(돈)를 발행하고 금융 시스템을 관리하는 국가 기관입니다.
+                금리를 조절하여 경제를 안정시키는 역할을 합니다.
+            </div>
+            
+            <h3>주요 중앙은행 비교</h3>
+            <table>
+                <tr>
+                    <th>국가</th>
+                    <th>중앙은행</th>
+                    <th>약칭</th>
+                    <th>통화</th>
+                </tr>
+                <tr>
+                    <td>🇺🇸 미국</td>
+                    <td>연방준비제도</td>
+                    <td>Fed (연준)</td>
+                    <td>달러 (USD)</td>
+                </tr>
+                <tr>
+                    <td>🇰🇷 한국</td>
+                    <td>한국은행</td>
+                    <td>BOK</td>
+                    <td>원 (KRW)</td>
+                </tr>
+                <tr>
+                    <td>🇪🇺 유럽</td>
+                    <td>유럽중앙은행</td>
+                    <td>ECB</td>
+                    <td>유로 (EUR)</td>
+                </tr>
+                <tr>
+                    <td>🇯🇵 일본</td>
+                    <td>일본은행</td>
+                    <td>BOJ</td>
+                    <td>엔 (JPY)</td>
+                </tr>
+            </table>
+            
+            <h3>FOMC란?</h3>
+            <div class="definition-box">
+                <strong>FOMC (Federal Open Market Committee)</strong><br>
+                연준의 '연방공개시장위원회'로, 미국의 기준금리를 결정하는 회의입니다.
+                1년에 8회 개최되며, 전 세계 금융시장에 큰 영향을 미칩니다.
+            </div>
+            
+            <h3>금리와 주식시장의 관계</h3>
+            <table>
+                <tr>
+                    <th>금리 변동</th>
+                    <th>주식시장</th>
+                    <th>이유</th>
+                </tr>
+                <tr>
+                    <td>📈 금리 인상</td>
+                    <td>하락 압력</td>
+                    <td>대출 비용 증가, 기업 이익 감소, 예금 매력 상승</td>
+                </tr>
+                <tr>
+                    <td>📉 금리 인하</td>
+                    <td>상승 압력</td>
+                    <td>대출 비용 감소, 투자 활성화, 주식 매력 상승</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="section2">
+            <h2>2. 단리와 복리</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>📊 단리 (Simple Interest)</h4>
+                    <p>원금에만 이자가 붙는 방식</p>
+                    <div class="formula">
+                        원금 × (1 + 이자율 × 기간)
+                    </div>
+                </div>
+                <div class="comparison-card">
+                    <h4>📈 복리 (Compound Interest)</h4>
+                    <p>원금 + 이자에 다시 이자가 붙는 방식</p>
+                    <div class="formula">
+                        원금 × (1 + 이자율)^기간
+                    </div>
+                </div>
+            </div>
+            
+            <h3>10년 후 비교 (원금 1,000만원, 연 10%)</h3>
+            <div class="example-box">
+                <strong>단리:</strong> 1,000만원 × (1 + 0.1 × 10) = <strong>2,000만원</strong><br>
+                <strong>복리:</strong> 1,000만원 × (1.1)^10 = <strong>약 2,594만원</strong><br><br>
+                💡 <strong>차이: 594만원!</strong> 기간이 길수록 복리 효과가 커집니다.
+            </div>
+            
+            <div class="tip-box">
+                <strong>72의 법칙</strong><br>
+                복리로 원금이 2배가 되는 기간을 간단히 계산하는 방법<br><br>
+                <div class="formula">
+                    72 ÷ 이자율(%) = 원금 2배 되는 기간(년)
+                </div>
+                예시: 연 8% 수익률 → 72 ÷ 8 = <strong>9년</strong>에 원금 2배
+            </div>
+        </section>
+
+        <!-- PART 2: 자산 이해 (NEW) -->
+        <section id="section3">
+            <h2>3. 안전자산 vs 위험자산 vs 대체자산 ⭐</h2>
+            
+            <div class="definition-box">
+                <strong>자산 분류의 중요성</strong><br>
+                투자 자산은 위험도와 특성에 따라 크게 안전자산, 위험자산, 대체자산으로 분류됩니다.
+                각 자산의 특성을 이해하면 경제 상황에 맞는 포트폴리오를 구성할 수 있습니다.
+            </div>
+            
+            <div class="asset-grid">
+                <div class="safe-asset">
+                    <div class="asset-title">🛡️ 안전자산 (Safe Haven)</div>
+                    <p><strong>특징:</strong> 원금 손실 위험이 낮고, 위기 시 가치 유지</p>
+                    <ul>
+                        <li>💵 <strong>미국 달러</strong> - 세계 기축통화</li>
+                        <li>📜 <strong>국채</strong> - 특히 미국 국채</li>
+                        <li>💴 <strong>일본 엔화</strong> - 안전통화</li>
+                        <li>🇨🇭 <strong>스위스 프랑</strong> - 정치적 중립국</li>
+                        <li>💰 <strong>예금</strong> - 원금 보장 (예금자보호)</li>
+                    </ul>
+                </div>
+                
+                <div class="risk-asset">
+                    <div class="asset-title">🎯 위험자산 (Risk Asset)</div>
+                    <p><strong>특징:</strong> 높은 수익 가능하나 손실 위험도 큼</p>
+                    <ul>
+                        <li>📈 <strong>주식</strong> - 국내주, 해외주</li>
+                        <li>🏢 <strong>부동산</strong> - 가격 변동성 존재</li>
+                        <li>💎 <strong>회사채</strong> - 신용위험 존재</li>
+                        <li>₿ <strong>암호화폐</strong> - 높은 변동성</li>
+                        <li>🌍 <strong>이머징 마켓 자산</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="alt-asset" style="margin-top: 20px;">
+                <div class="asset-title">⚖️ 대체자산 (Alternative Asset)</div>
+                <p><strong>특징:</strong> 기축통화 시스템 외의 자산, 인플레이션 헤지 기능</p>
+                <div class="comparison-grid">
+                    <div>
+                        <ul>
+                            <li>🥇 <strong>금 (Gold)</strong> - 전통적 가치 저장 수단</li>
+                            <li>🥈 <strong>은, 백금</strong> - 귀금속</li>
+                            <li>🛢️ <strong>원유, 원자재</strong></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>🌾 <strong>농산물</strong> - 곡물, 커피 등</li>
+                            <li>₿ <strong>비트코인</strong> - '디지털 금' (논쟁 중)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>자산별 특성 비교</h3>
+            <table>
+                <tr>
+                    <th>자산</th>
+                    <th>변동성</th>
+                    <th>수익성</th>
+                    <th>안전성</th>
+                    <th>유동성</th>
+                    <th>인플레이션 헤지</th>
+                </tr>
+                <tr>
+                    <td>💵 미국 달러</td>
+                    <td>낮음</td>
+                    <td>낮음</td>
+                    <td>높음</td>
+                    <td>매우 높음</td>
+                    <td>❌</td>
+                </tr>
+                <tr>
+                    <td>📜 미국 국채</td>
+                    <td>낮음~중간</td>
+                    <td>낮음~중간</td>
+                    <td>높음</td>
+                    <td>높음</td>
+                    <td>⚠️ 물가연동채만</td>
+                </tr>
+                <tr>
+                    <td>🥇 금</td>
+                    <td>중간</td>
+                    <td>중간</td>
+                    <td>중간</td>
+                    <td>높음</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>📈 주식</td>
+                    <td>높음</td>
+                    <td>높음</td>
+                    <td>낮음</td>
+                    <td>높음</td>
+                    <td>⚠️ 일부</td>
+                </tr>
+                <tr>
+                    <td>🏢 부동산</td>
+                    <td>중간</td>
+                    <td>중간~높음</td>
+                    <td>중간</td>
+                    <td>낮음</td>
+                    <td>✅</td>
+                </tr>
+                <tr>
+                    <td>₿ 암호화폐</td>
+                    <td>매우 높음</td>
+                    <td>매우 높음</td>
+                    <td>매우 낮음</td>
+                    <td>높음</td>
+                    <td>❓ 불확실</td>
+                </tr>
+            </table>
+            
+            <div class="tip-box">
+                <strong>💡 핵심 원칙: 역의 상관관계</strong><br>
+                안전자산과 위험자산은 일반적으로 <strong>반대로 움직이는 경향</strong>이 있습니다.<br>
+                • 경제 불안 → 안전자산 ↑, 위험자산 ↓<br>
+                • 경기 호황 → 안전자산 ↓, 위험자산 ↑<br>
+                이 원리를 이용해 포트폴리오를 분산하면 리스크를 줄일 수 있습니다.
+            </div>
+        </section>
+
+        <section id="section4">
+            <h2>4. 경제 상황별 자산 움직임 ⭐</h2>
+            
+            <div class="definition-box">
+                <strong>레이 달리오의 4계절 이론</strong><br>
+                세계 최대 헤지펀드 브리지워터의 창립자 레이 달리오는 경제 상황을 
+                <strong>성장 × 물가</strong>의 조합으로 4가지로 분류했습니다.
+                각 상황에서 유리한 자산이 다르므로, 이를 이해하면 어떤 경제 환경에서도 대응할 수 있습니다.
+            </div>
+            
+            <h3>경제 4계절과 유리한 자산</h3>
+            
+            <div class="quadrant-grid">
+                <div class="quadrant quadrant-1">
+                    <h4>🔥 인플레이션 (호황+물가상승)</h4>
+                    <p>경기 상승 + 물가 상승</p>
+                    <div class="quadrant-assets">
+                        <strong>유리:</strong> 원자재, 금, 물가연동채, 부동산
+                    </div>
+                </div>
+                
+                <div class="quadrant quadrant-2">
+                    <h4>🌸 골디락스 (호황+물가안정)</h4>
+                    <p>경기 상승 + 물가 하락</p>
+                    <div class="quadrant-assets">
+                        <strong>유리:</strong> 주식, 회사채, 성장주
+                    </div>
+                </div>
+                
+                <div class="quadrant quadrant-3">
+                    <h4>❄️ 디플레이션 (불황+물가하락)</h4>
+                    <p>경기 하락 + 물가 하락</p>
+                    <div class="quadrant-assets">
+                        <strong>유리:</strong> 국채, 현금, 달러
+                    </div>
+                </div>
+                
+                <div class="quadrant quadrant-4">
+                    <h4>🌪️ 스태그플레이션 (불황+물가상승)</h4>
+                    <p>경기 하락 + 물가 상승</p>
+                    <div class="quadrant-assets">
+                        <strong>유리:</strong> 금, 물가연동채, 실물자산
+                    </div>
+                </div>
+            </div>
+            
+            <h3>구체적 이벤트별 자산 움직임</h3>
+            
+            <div class="scenario-card bullish">
+                <div class="scenario-title">📈 금리 인하 시</div>
+                <p>중앙은행이 기준금리를 낮추면 시중에 돈이 풀리고 투자가 활성화됩니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-up">주식 ↑</span>
+                    <span class="asset-tag asset-up">채권 가격 ↑</span>
+                    <span class="asset-tag asset-up">금 ↑</span>
+                    <span class="asset-tag asset-up">부동산 ↑</span>
+                    <span class="asset-tag asset-down">달러 ↓</span>
+                    <span class="asset-tag asset-down">예금 이자 ↓</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card bearish">
+                <div class="scenario-title">📉 금리 인상 시</div>
+                <p>중앙은행이 기준금리를 올리면 대출 비용이 증가하고 투자가 위축됩니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-down">주식 ↓</span>
+                    <span class="asset-tag asset-down">채권 가격 ↓</span>
+                    <span class="asset-tag asset-down">금 ↓</span>
+                    <span class="asset-tag asset-down">부동산 ↓</span>
+                    <span class="asset-tag asset-up">달러 ↑</span>
+                    <span class="asset-tag asset-up">예금 이자 ↑</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card bearish">
+                <div class="scenario-title">🌍 경기침체 / 금융위기 시</div>
+                <p>경제 불안이 심화되면 투자자들은 안전자산으로 대피합니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-down">주식 ↓↓</span>
+                    <span class="asset-tag asset-down">원자재 ↓</span>
+                    <span class="asset-tag asset-down">회사채 ↓</span>
+                    <span class="asset-tag asset-up">미국채 ↑</span>
+                    <span class="asset-tag asset-up">달러 ↑</span>
+                    <span class="asset-tag asset-up">금 ↑</span>
+                    <span class="asset-tag asset-up">엔화 ↑</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card neutral">
+                <div class="scenario-title">🔥 인플레이션 (물가 상승) 시</div>
+                <p>화폐 가치가 하락하면 실물자산의 가치가 상대적으로 상승합니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-up">금 ↑</span>
+                    <span class="asset-tag asset-up">원자재 ↑</span>
+                    <span class="asset-tag asset-up">부동산 ↑</span>
+                    <span class="asset-tag asset-up">물가연동채 ↑</span>
+                    <span class="asset-tag asset-down">현금 가치 ↓</span>
+                    <span class="asset-tag asset-down">일반 채권 ↓</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card bearish">
+                <div class="scenario-title">⚔️ 전쟁 / 지정학적 위기 시</div>
+                <p>국제 정세 불안은 안전자산 선호 현상을 심화시킵니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-up">금 ↑↑</span>
+                    <span class="asset-tag asset-up">달러 ↑</span>
+                    <span class="asset-tag asset-up">원유 ↑ (공급 차질 시)</span>
+                    <span class="asset-tag asset-down">해당 지역 주식 ↓</span>
+                    <span class="asset-tag asset-stable">글로벌 주식 혼조</span>
+                </div>
+            </div>
+            
+            <div class="scenario-card bullish">
+                <div class="scenario-title">🌱 경기 회복 / 호황기</div>
+                <p>경제가 성장하면 기업 이익 증가 기대로 위험자산이 선호됩니다.</p>
+                <div class="asset-movement">
+                    <span class="asset-tag asset-up">주식 ↑↑</span>
+                    <span class="asset-tag asset-up">원자재 ↑</span>
+                    <span class="asset-tag asset-up">회사채 ↑</span>
+                    <span class="asset-tag asset-up">이머징 마켓 ↑</span>
+                    <span class="asset-tag asset-down">국채 ↓</span>
+                    <span class="asset-tag asset-down">금 ↓</span>
+                </div>
+            </div>
+            
+            <h3>자산간 상관관계</h3>
+            
+            <table class="correlation-table">
+                <tr>
+                    <th></th>
+                    <th>주식</th>
+                    <th>국채</th>
+                    <th>금</th>
+                    <th>달러</th>
+                    <th>원자재</th>
+                </tr>
+                <tr>
+                    <td><strong>주식</strong></td>
+                    <td>-</td>
+                    <td class="corr-negative">역(-)</td>
+                    <td class="corr-negative">역(-)</td>
+                    <td class="corr-neutral">약(-)</td>
+                    <td class="corr-positive">정(+)</td>
+                </tr>
+                <tr>
+                    <td><strong>국채</strong></td>
+                    <td class="corr-negative">역(-)</td>
+                    <td>-</td>
+                    <td class="corr-neutral">약(+)</td>
+                    <td class="corr-positive">정(+)</td>
+                    <td class="corr-negative">역(-)</td>
+                </tr>
+                <tr>
+                    <td><strong>금</strong></td>
+                    <td class="corr-negative">역(-)</td>
+                    <td class="corr-neutral">약(+)</td>
+                    <td>-</td>
+                    <td class="corr-negative">역(-)</td>
+                    <td class="corr-positive">정(+)</td>
+                </tr>
+                <tr>
+                    <td><strong>달러</strong></td>
+                    <td class="corr-neutral">약(-)</td>
+                    <td class="corr-positive">정(+)</td>
+                    <td class="corr-negative">역(-)</td>
+                    <td>-</td>
+                    <td class="corr-negative">역(-)</td>
+                </tr>
+            </table>
+            
+            <div class="tip-box">
+                <strong>💡 상관관계 활용법</strong><br>
+                • <span class="corr-positive">정(+)</span>: 같은 방향으로 움직임 → 함께 보유 시 리스크 분산 효과 적음<br>
+                • <span class="corr-negative">역(-)</span>: 반대 방향으로 움직임 → 함께 보유 시 리스크 분산 효과 큼<br>
+                • 역의 상관관계 자산을 함께 보유하면 포트폴리오 변동성을 줄일 수 있습니다.
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 주의사항</strong><br>
+                • 상관관계는 <strong>항상 일정하지 않습니다</strong> - 상황에 따라 변할 수 있음<br>
+                • 2022년처럼 주식과 채권이 <strong>동시에 하락</strong>하는 경우도 있음<br>
+                • 위 내용은 일반적인 경향이며, 개별 상황마다 다를 수 있습니다<br>
+                • 투자 결정 전 충분한 분석과 공부가 필요합니다
+            </div>
+        </section>
+
+        <!-- PART 3: 주식 시장 이해 -->
+        <section id="section5">
+            <h2>5. 주요 증시 & 지수</h2>
+            
+            <h3>한국 시장</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>📊 KOSPI (코스피)</h4>
+                    <ul>
+                        <li><strong>정식명칭:</strong> Korea Composite Stock Price Index</li>
+                        <li><strong>특징:</strong> 대기업 중심</li>
+                        <li><strong>설립:</strong> 1980년 (기준지수 100)</li>
+                        <li><strong>종목수:</strong> 약 940개</li>
+                        <li><strong>대표 기업:</strong> 삼성전자, SK하이닉스, 현대차</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h4>🚀 KOSDAQ (코스닥)</h4>
+                    <ul>
+                        <li><strong>정식명칭:</strong> Korea Securities Dealers Automated Quotation</li>
+                        <li><strong>특징:</strong> 중소·벤처기업 중심</li>
+                        <li><strong>설립:</strong> 1996년 (기준지수 1000)</li>
+                        <li><strong>종목수:</strong> 약 1,700개</li>
+                        <li><strong>대표 기업:</strong> 에코프로비엠, 셀트리온헬스케어</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>미국 시장</h3>
+            <table>
+                <tr>
+                    <th>지수</th>
+                    <th>특징</th>
+                    <th>종목수</th>
+                    <th>대표 기업</th>
+                </tr>
+                <tr>
+                    <td>📱 NASDAQ</td>
+                    <td>기술주 중심</td>
+                    <td>약 3,000개</td>
+                    <td>애플, 마이크로소프트, 엔비디아</td>
+                </tr>
+                <tr>
+                    <td>📈 S&P 500</td>
+                    <td>미국 대형주 500개</td>
+                    <td>500개</td>
+                    <td>미국 시장 80% 대표</td>
+                </tr>
+                <tr>
+                    <td>🏛️ 다우존스</td>
+                    <td>우량 대기업</td>
+                    <td>30개</td>
+                    <td>보잉, 코카콜라, 월마트</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="section6">
+            <h2>6. 주식 용어 총정리</h2>
+            
+            <h3>기본 매매 용어</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>뜻</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td>매수</td>
+                    <td>Buy (사다)</td>
+                    <td>주식을 구매하는 것</td>
+                </tr>
+                <tr>
+                    <td>매도</td>
+                    <td>Sell (팔다)</td>
+                    <td>주식을 판매하는 것</td>
+                </tr>
+                <tr>
+                    <td>호가</td>
+                    <td>Quote</td>
+                    <td>사고팔려는 가격 제시</td>
+                </tr>
+                <tr>
+                    <td>체결</td>
+                    <td>Execution</td>
+                    <td>매수/매도 주문이 성사됨</td>
+                </tr>
+                <tr>
+                    <td>지정가</td>
+                    <td>Limit Order</td>
+                    <td>원하는 가격에 주문</td>
+                </tr>
+                <tr>
+                    <td>시장가</td>
+                    <td>Market Order</td>
+                    <td>현재 시세로 즉시 주문</td>
+                </tr>
+            </table>
+            
+            <h3>가격 관련 용어</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>의미</th>
+                </tr>
+                <tr>
+                    <td>시가</td>
+                    <td>장 시작 시 첫 거래 가격</td>
+                </tr>
+                <tr>
+                    <td>종가</td>
+                    <td>장 마감 시 마지막 거래 가격</td>
+                </tr>
+                <tr>
+                    <td>고가</td>
+                    <td>당일 가장 높은 가격</td>
+                </tr>
+                <tr>
+                    <td>저가</td>
+                    <td>당일 가장 낮은 가격</td>
+                </tr>
+                <tr>
+                    <td>상한가</td>
+                    <td>전일 대비 +30% (하루 최대 상승폭)</td>
+                </tr>
+                <tr>
+                    <td>하한가</td>
+                    <td>전일 대비 -30% (하루 최대 하락폭)</td>
+                </tr>
+            </table>
+            
+            <div class="slang-box">
+                <strong>🗣️ 주식 커뮤니티 속어</strong><br><br>
+                <strong>익절</strong>: 이익 실현 (수익 상태에서 매도)<br>
+                <strong>손절</strong>: 손실 확정 (손실 상태에서 매도)<br>
+                <strong>물타기</strong>: 하락 시 추가 매수하여 평균 단가 낮추기<br>
+                <strong>불타기</strong>: 상승 시 추가 매수<br>
+                <strong>존버</strong>: 존X 버티기 (무조건 보유)<br>
+                <strong>떡상</strong>: 급격한 상승<br>
+                <strong>따상</strong>: 시초가 2배 + 상한가 (신규 상장주)<br>
+                <strong>총알</strong>: 투자 가능한 현금
+            </div>
+        </section>
+
+        <!-- PART 4: 기업 분석 지표 -->
+        <section id="section7">
+            <h2>7. 시가총액 (Market Capitalization)</h2>
+            
+            <div class="definition-box">
+                <strong>시가총액이란?</strong><br>
+                기업의 전체 가치를 나타내는 지표로, 주가 × 발행주식수로 계산합니다.
+            </div>
+            
+            <div class="formula">
+                시가총액 = 현재 주가 × 총 발행주식수
+            </div>
+            
+            <div class="example-box">
+                <strong>예시: 삼성전자</strong><br>
+                주가 70,000원 × 발행주식 60억주 = <strong>시가총액 420조원</strong>
+            </div>
+            
+            <h3>시가총액 기준 분류</h3>
+            <table>
+                <tr>
+                    <th>분류</th>
+                    <th>시가총액 기준</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td>대형주</td>
+                    <td>10조원 이상</td>
+                    <td>안정적, 낮은 변동성</td>
+                </tr>
+                <tr>
+                    <td>중형주</td>
+                    <td>1조 ~ 10조원</td>
+                    <td>성장 + 안정 균형</td>
+                </tr>
+                <tr>
+                    <td>소형주</td>
+                    <td>1조원 미만</td>
+                    <td>높은 성장 가능성, 높은 리스크</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="section8">
+            <h2>8. PER / PBR / ROE / EPS</h2>
+            
+            <h3>PER (주가수익비율)</h3>
+            <div class="definition-box">
+                현재 주가가 주당순이익(EPS)의 몇 배인지 나타내는 지표.<br>
+                낮을수록 저평가, 높을수록 고평가 가능성.
+            </div>
+            
+            <div class="formula">
+                PER = 주가 ÷ 주당순이익(EPS)
+            </div>
+            
+            <table>
+                <tr>
+                    <th>PER 범위</th>
+                    <th>해석</th>
+                </tr>
+                <tr>
+                    <td>10 미만</td>
+                    <td>저평가 가능성 (가치주)</td>
+                </tr>
+                <tr>
+                    <td>10 ~ 20</td>
+                    <td>적정 수준</td>
+                </tr>
+                <tr>
+                    <td>20 이상</td>
+                    <td>고평가 또는 고성장 기대 (성장주)</td>
+                </tr>
+            </table>
+            
+            <h3>EPS (주당순이익)</h3>
+            <div class="formula">
+                EPS = 당기순이익 ÷ 발행주식수
+            </div>
+            <p>1주당 기업이 벌어들인 순이익. 높을수록 수익성이 좋음.</p>
+            
+            <h3>PBR (주가순자산비율)</h3>
+            <div class="formula">
+                PBR = 주가 ÷ 주당순자산(BPS)
+            </div>
+            <p>PBR < 1이면 주가가 순자산 가치보다 낮다는 의미 (저평가 가능성).</p>
+            
+            <h3>ROE (자기자본이익률)</h3>
+            <div class="formula">
+                ROE = (당기순이익 ÷ 자기자본) × 100%
+            </div>
+            <p>투자한 자본 대비 얼마나 이익을 냈는지. 일반적으로 <strong>10% 이상</strong>이면 양호.</p>
+        </section>
+
+        <!-- PART 5: 기술적 분석 -->
+        <section id="section9">
+            <h2>9. 이동평균선 & 골든/데드 크로스</h2>
+            
+            <div class="definition-box">
+                <strong>이동평균선 (Moving Average)</strong><br>
+                일정 기간의 주가 평균을 선으로 연결한 것. 추세 파악에 사용됩니다.
+            </div>
+            
+            <table>
+                <tr>
+                    <th>이동평균선</th>
+                    <th>기간</th>
+                    <th>의미</th>
+                </tr>
+                <tr>
+                    <td>5일선</td>
+                    <td>1주</td>
+                    <td>단기 추세 (심리선)</td>
+                </tr>
+                <tr>
+                    <td>20일선</td>
+                    <td>1개월</td>
+                    <td>단기 추세</td>
+                </tr>
+                <tr>
+                    <td>60일선</td>
+                    <td>3개월</td>
+                    <td>중기 추세</td>
+                </tr>
+                <tr>
+                    <td>120일선</td>
+                    <td>6개월</td>
+                    <td>중장기 추세</td>
+                </tr>
+                <tr>
+                    <td>200일선</td>
+                    <td>10개월</td>
+                    <td>장기 추세 (생명선)</td>
+                </tr>
+            </table>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4>📈 골든 크로스 (Golden Cross)</h4>
+                    <p><strong>단기 이동평균선이 장기 이동평균선을 상향 돌파</strong></p>
+                    <p style="color: #00ff88;">→ 매수 신호 (상승 추세 전환)</p>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #ff6b6b;">
+                    <h4>📉 데드 크로스 (Dead Cross)</h4>
+                    <p><strong>단기 이동평균선이 장기 이동평균선을 하향 돌파</strong></p>
+                    <p style="color: #ff6b6b;">→ 매도 신호 (하락 추세 전환)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="section10">
+            <h2>10. RSI / MACD / 볼린저밴드</h2>
+            
+            <h3>RSI (상대강도지수)</h3>
+            <div class="definition-box">
+                일정 기간 동안 주가의 상승/하락 강도를 0~100으로 나타낸 지표.
+            </div>
+            
+            <table>
+                <tr>
+                    <th>RSI 값</th>
+                    <th>해석</th>
+                    <th>전략</th>
+                </tr>
+                <tr>
+                    <td>70 이상</td>
+                    <td>과매수 (Overbought)</td>
+                    <td>매도 고려</td>
+                </tr>
+                <tr>
+                    <td>30 ~ 70</td>
+                    <td>중립 구간</td>
+                    <td>추세 관망</td>
+                </tr>
+                <tr>
+                    <td>30 이하</td>
+                    <td>과매도 (Oversold)</td>
+                    <td>매수 고려</td>
+                </tr>
+            </table>
+            
+            <h3>MACD</h3>
+            <div class="formula">
+                MACD = 12일 EMA - 26일 EMA<br>
+                시그널선 = MACD의 9일 EMA
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border-left: 4px solid #00ff88;">
+                    <h4>매수 신호</h4>
+                    <p>MACD가 시그널선을 상향 돌파</p>
+                </div>
+                <div class="comparison-card" style="border-left: 4px solid #ff6b6b;">
+                    <h4>매도 신호</h4>
+                    <p>MACD가 시그널선을 하향 돌파</p>
+                </div>
+            </div>
+            
+            <h3>볼린저밴드 (Bollinger Bands)</h3>
+            <div class="definition-box">
+                이동평균선을 중심으로 표준편차를 이용해 상단/하단 밴드를 그린 지표.
+            </div>
+            
+            <table>
+                <tr>
+                    <th>구성</th>
+                    <th>계산</th>
+                </tr>
+                <tr>
+                    <td>중심선</td>
+                    <td>20일 이동평균</td>
+                </tr>
+                <tr>
+                    <td>상단밴드</td>
+                    <td>중심선 + (표준편차 × 2)</td>
+                </tr>
+                <tr>
+                    <td>하단밴드</td>
+                    <td>중심선 - (표준편차 × 2)</td>
+                </tr>
+            </table>
+            
+            <div class="tip-box">
+                <strong>볼린저밴드 활용</strong><br>
+                • 밴드폭 축소 (스퀴즈): 큰 변동 예고<br>
+                • 주가가 상단밴드 터치: 과매수 가능성<br>
+                • 주가가 하단밴드 터치: 과매도 가능성
+            </div>
+        </section>
+
+        <section id="section11">
+            <h2>11. 피보나치 되돌림 (Fibonacci Retracement)</h2>
+            
+            <div class="definition-box">
+                주가가 상승/하락 후 <strong>어느 수준까지 되돌아갈지</strong> 예측하는 기술적 분석 도구.
+                피보나치 수열에서 파생된 비율을 사용합니다.
+            </div>
+            
+            <h3>주요 피보나치 비율</h3>
+            <table>
+                <tr>
+                    <th>비율</th>
+                    <th>의미</th>
+                </tr>
+                <tr>
+                    <td>23.6%</td>
+                    <td>약한 되돌림</td>
+                </tr>
+                <tr>
+                    <td>38.2%</td>
+                    <td>일반적 되돌림</td>
+                </tr>
+                <tr>
+                    <td>50.0%</td>
+                    <td>중간 되돌림</td>
+                </tr>
+                <tr>
+                    <td>61.8%</td>
+                    <td>황금비율 (가장 중요!)</td>
+                </tr>
+                <tr>
+                    <td>78.6%</td>
+                    <td>깊은 되돌림</td>
+                </tr>
+            </table>
+            
+            <div class="example-box">
+                <strong>계산 예시</strong><br>
+                주가가 10,000원 → 15,000원으로 상승 후 조정 시<br>
+                상승폭: 5,000원<br><br>
+                • 23.6% 되돌림: 15,000 - (5,000 × 0.236) = <strong>13,820원</strong><br>
+                • 38.2% 되돌림: 15,000 - (5,000 × 0.382) = <strong>13,090원</strong><br>
+                • 50% 되돌림: 15,000 - (5,000 × 0.5) = <strong>12,500원</strong><br>
+                • 61.8% 되돌림: 15,000 - (5,000 × 0.618) = <strong>11,910원</strong>
+            </div>
+        </section>
+
+        <!-- PART 6: 투자 전략 -->
+        <section id="section12">
+            <h2>12. ETF 투자</h2>
+            
+            <div class="definition-box">
+                <strong>ETF (Exchange Traded Fund)</strong><br>
+                여러 주식이나 자산을 묶어 하나의 상품처럼 거래되는 펀드.<br>
+                지수, 섹터, 테마, 원자재 등 다양한 형태가 있습니다.
+            </div>
+            
+            <h3>ETF의 장점</h3>
+            <table>
+                <tr>
+                    <th>장점</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td>분산투자</td>
+                    <td>여러 종목에 자동으로 분산</td>
+                </tr>
+                <tr>
+                    <td>낮은 수수료</td>
+                    <td>운용보수 0.1~0.5% 수준</td>
+                </tr>
+                <tr>
+                    <td>실시간 거래</td>
+                    <td>주식처럼 언제든 매매 가능</td>
+                </tr>
+                <tr>
+                    <td>투명성</td>
+                    <td>구성 종목 매일 공개</td>
+                </tr>
+                <tr>
+                    <td>세금 혜택</td>
+                    <td>국내 주식형 ETF 양도세 비과세</td>
+                </tr>
+            </table>
+            
+            <h3>ETF 종류</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>📊 지수추종형</h4>
+                    <ul>
+                        <li>KODEX 200 (KOSPI 200)</li>
+                        <li>TIGER 나스닥100</li>
+                        <li>SPY (S&P 500)</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h4>🏭 섹터/테마형</h4>
+                    <ul>
+                        <li>반도체 ETF</li>
+                        <li>2차전지 ETF</li>
+                        <li>AI 관련 ETF</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h4>🥇 원자재/금</h4>
+                    <ul>
+                        <li>KODEX 골드선물</li>
+                        <li>원유 ETF</li>
+                        <li>은 ETF</li>
+                    </ul>
+                </div>
+                <div class="comparison-card">
+                    <h4>📜 채권형</h4>
+                    <ul>
+                        <li>미국 국채 ETF</li>
+                        <li>단기채 ETF</li>
+                        <li>물가연동채 ETF</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 레버리지/인버스 ETF 주의</strong><br>
+                • 레버리지 ETF: 지수의 2~3배 수익 추구 (손실도 2~3배)<br>
+                • 인버스 ETF: 지수 하락 시 수익<br>
+                • <strong>장기 보유 시 손실 누적 위험</strong> → 단기 매매용
+            </div>
+        </section>
+
+        <section id="section13">
+            <h2>13. 올웨더 포트폴리오 (자산배분 전략) ⭐</h2>
+            
+            <div class="definition-box">
+                <strong>올웨더 (All Weather) 포트폴리오</strong><br>
+                세계 최대 헤지펀드 브리지워터의 레이 달리오가 고안한 자산배분 전략.<br>
+                어떤 경제 상황(4계절)에서도 안정적인 수익을 추구합니다.<br>
+                <strong>1970~2022년 연평균 수익률 약 9%, 2008년 금융위기에도 +14% 수익</strong>
+            </div>
+            
+            <h3>올웨더 포트폴리오 비율</h3>
+            
+            <div class="portfolio-visual">
+                <div class="portfolio-item bond-long">
+                    <div class="portfolio-percent">40%</div>
+                    <div class="portfolio-label">장기 국채</div>
+                </div>
+                <div class="portfolio-item stock">
+                    <div class="portfolio-percent">30%</div>
+                    <div class="portfolio-label">주식</div>
+                </div>
+                <div class="portfolio-item bond-mid">
+                    <div class="portfolio-percent">15%</div>
+                    <div class="portfolio-label">중기 국채</div>
+                </div>
+                <div class="portfolio-item gold">
+                    <div class="portfolio-percent">7.5%</div>
+                    <div class="portfolio-label">금</div>
+                </div>
+                <div class="portfolio-item commodity">
+                    <div class="portfolio-percent">7.5%</div>
+                    <div class="portfolio-label">원자재</div>
+                </div>
+            </div>
+            
+            <h3>각 자산의 역할</h3>
+            <table>
+                <tr>
+                    <th>자산</th>
+                    <th>비중</th>
+                    <th>유리한 상황</th>
+                    <th>ETF 예시</th>
+                </tr>
+                <tr>
+                    <td>주식</td>
+                    <td>30%</td>
+                    <td>경기 호황, 성장기</td>
+                    <td>SPY, VTI, QQQ</td>
+                </tr>
+                <tr>
+                    <td>장기 국채</td>
+                    <td>40%</td>
+                    <td>경기 침체, 디플레이션</td>
+                    <td>TLT, EDV</td>
+                </tr>
+                <tr>
+                    <td>중기 국채</td>
+                    <td>15%</td>
+                    <td>안정적 이자 수익</td>
+                    <td>IEF, GOVT</td>
+                </tr>
+                <tr>
+                    <td>금</td>
+                    <td>7.5%</td>
+                    <td>인플레이션, 위기</td>
+                    <td>GLD, IAU</td>
+                </tr>
+                <tr>
+                    <td>원자재</td>
+                    <td>7.5%</td>
+                    <td>인플레이션, 경기 확장</td>
+                    <td>DBC, GSG</td>
+                </tr>
+            </table>
+            
+            <h3>왜 채권 비중이 55%나 될까?</h3>
+            <div class="tip-box">
+                <strong>💡 리스크 균형의 원리</strong><br>
+                주식은 채권보다 변동성(리스크)이 약 <strong>3배</strong> 높습니다.<br>
+                금액 기준이 아닌 <strong>리스크 기준</strong>으로 균형을 맞추면,<br>
+                각 자산이 포트폴리오에 미치는 영향을 동등하게 만들 수 있습니다.<br><br>
+                → 이를 <strong>리스크 패리티(Risk Parity)</strong> 전략이라고 합니다.
+            </div>
+            
+            <h3>리밸런싱 방법</h3>
+            <div class="example-box">
+                <strong>리밸런싱이란?</strong><br>
+                시간이 지나면 자산별 비중이 달라집니다. 정해진 비율로 다시 맞추는 것이 리밸런싱입니다.<br><br>
+                <strong>주기:</strong> 보통 1년에 1회 (너무 잦으면 거래비용 증가)<br>
+                <strong>방법:</strong> 비중이 커진 자산 매도 → 작아진 자산 매수
+            </div>
+            
+            <div class="warning-box">
+                <strong>⚠️ 올웨더 포트폴리오 주의사항</strong><br>
+                • 2022년처럼 <strong>주식과 채권이 동시에 하락</strong>하는 경우 손실 발생<br>
+                • 강세장에서는 주식 100% 대비 <strong>수익률이 낮음</strong><br>
+                • 장기 투자(10년 이상) 관점에서 효과적<br>
+                • 개인 상황에 맞게 비율 조정 가능
+            </div>
+        </section>
+
+        <section id="section14">
+            <h2>14. 투자 전략 종합</h2>
+            
+            <h3>투자 기간별 전략</h3>
+            <table>
+                <tr>
+                    <th>전략</th>
+                    <th>기간</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td>스캘핑</td>
+                    <td>초~분 단위</td>
+                    <td>소액 차익 다수 실현</td>
+                </tr>
+                <tr>
+                    <td>데이트레이딩</td>
+                    <td>당일</td>
+                    <td>당일 청산, 야간 리스크 회피</td>
+                </tr>
+                <tr>
+                    <td>스윙트레이딩</td>
+                    <td>수일~수주</td>
+                    <td>추세 파악 후 매매</td>
+                </tr>
+                <tr>
+                    <td>장기투자</td>
+                    <td>수개월~수년</td>
+                    <td>기업 성장과 함께</td>
+                </tr>
+            </table>
+            
+            <h3>대표적인 투자 전략</h3>
+            
+            <div class="definition-box">
+                <strong>1. 가치투자 (Value Investing)</strong><br>
+                내재가치 대비 저평가된 주식을 찾아 장기 보유하는 전략.<br>
+                대표 투자자: 워렌 버핏
+            </div>
+            
+            <div class="definition-box">
+                <strong>2. 성장투자 (Growth Investing)</strong><br>
+                빠르게 성장하는 기업에 투자하여 주가 상승을 기대하는 전략.<br>
+                현재 PER이 높더라도 미래 성장성에 베팅
+            </div>
+            
+            <div class="definition-box">
+                <strong>3. 배당투자 (Dividend Investing)</strong><br>
+                꾸준히 배당을 지급하는 기업에 투자하여 현금 흐름 확보.<br>
+                복리 효과를 위해 배당 재투자
+            </div>
+            
+            <div class="definition-box">
+                <strong>4. 자산배분 (Asset Allocation)</strong><br>
+                주식, 채권, 금, 원자재 등 여러 자산에 분산 투자.<br>
+                경제 상황 변화에 대응, 리스크 관리에 효과적
+            </div>
+            
+            <div class="definition-box">
+                <strong>5. 적립식 투자 (Dollar Cost Averaging)</strong><br>
+                일정 금액을 정기적으로 투자하여 평균 매입 단가를 낮추는 전략.<br>
+                시장 타이밍에 대한 부담 감소
+            </div>
+            
+            <div class="warning-box">
+                <strong>투자 전 반드시 확인하세요:</strong><br>
+                • 원금 손실 가능성 항상 존재<br>
+                • 여유 자금으로만 투자 (생활비 X)<br>
+                • 레버리지(빚투)는 리스크 증가<br>
+                • 수익률 과대 광고에 주의
+            </div>
+            
+            <div class="tip-box">
+                <strong>초보자 추천 시작 방법:</strong><br>
+                1. 소액으로 시작 (경험 축적)<br>
+                2. ETF로 분산투자 연습<br>
+                3. 투자 일지 작성 (매매 이유 기록)<br>
+                4. 꾸준히 공부 (뉴스, 리포트, 책)
+            </div>
+        </section>
+
+        <footer>
+            <p>📚 본 자료는 교육 목적으로 제작되었습니다.</p>
+            <p>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</p>
+            <p style="margin-top: 20px; font-size: 0.85em;">
+                🗓️ 작성일: 2026년 1월 | 총 14개 섹션<br>
+                ⭐ 최종판: 자산분류 & 경제상황별 시나리오 분석 & 올웨더 포트폴리오 추가
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
