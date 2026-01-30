@@ -481,6 +481,13 @@ def main():
             st.rerun()
 
         st.divider()
+
+        # 경제 기초 교육 페이지 링크
+        st.markdown("### 📚 교육 자료")
+        if st.button("경제 기초 교육 보기", type="primary", use_container_width=True):
+            st.switch_page("pages/1_경제_기초_교육.py")
+
+        st.divider()
         st.caption("📡 데이터: FRED, ECOS, Yahoo")
         st.caption(f"🕐 마지막 갱신: {datetime.now().strftime('%m/%d %H:%M')}")
 
@@ -551,7 +558,7 @@ def main():
     st.divider()
 
     # ===== 탭 =====
-    tabs = st.tabs(["💰 금리", "💱 환율", "📈 주가", "🛢️ 원자재", "😱 공포지표", "📊 분석", "📑 논문용", "📚 경제 기초 교육"])
+    tabs = st.tabs(["💰 금리", "💱 환율", "📈 주가", "🛢️ 원자재", "😱 공포지표", "📊 분석", "📑 논문용"])
 
     # 금리 탭
     with tabs[0]:
@@ -692,25 +699,6 @@ def main():
         st.markdown("#### 4️⃣ 데이터 다운로드")
         csv = df.to_csv().encode("utf-8-sig")
         st.download_button("📥 전체 데이터 CSV", csv, "finance_data.csv", "text/csv")
-
-    # 경제 기초 교육 탭
-    with tabs[7]:
-        st.markdown("### 📚 주식 입문자를 위한 경제 기초 교육")
-        st.caption("경제 기초부터 자산배분 전략까지 한 번에 배우는 투자 가이드")
-
-        # HTML 파일 경로
-        html_file_path = os.path.join(os.path.dirname(__file__), "주식_기초_교육자료_최종판.html")
-
-        try:
-            with open(html_file_path, "r", encoding="utf-8") as f:
-                html_content = f.read()
-
-            # HTML을 iframe 형태로 표시
-            components.html(html_content, height=800, scrolling=True)
-
-        except FileNotFoundError:
-            st.error("❌ 교육 자료 파일을 찾을 수 없습니다.")
-            st.info("📁 '주식_기초_교육자료_최종판.html' 파일이 app.py와 같은 폴더에 있어야 합니다.")
 
     # 전체 데이터
     st.divider()
