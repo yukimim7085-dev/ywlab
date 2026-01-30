@@ -93,6 +93,13 @@
             margin: 20px 0;
             border-left: 4px solid #a259ff;
         }
+        .step-box {
+            background: rgba(79, 172, 254, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #4facfe;
+        }
         .formula {
             background: #0a0a1a;
             padding: 20px;
@@ -124,6 +131,50 @@
         .comparison-card ul { list-style: none; padding: 0; }
         .comparison-card li { padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .comparison-card li:last-child { border-bottom: none; }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #feca57, #ff9f43);
+            color: #1a1a2e;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 16px 0;
+            padding: 16px;
+            background: rgba(15, 52, 96, 0.3);
+            border-radius: 12px;
+        }
+        .step-content { flex: 1; }
+        .step-content h4 { margin: 0 0 8px 0; color: #feca57; }
+        .psychology-card {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+        .psychology-card h4 { color: #ff6b6b; margin-bottom: 10px; }
+        .broker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .broker-card {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        .broker-card h4 { color: #4facfe; margin-bottom: 10px; }
         footer {
             text-align: center;
             padding: 40px;
@@ -161,12 +212,402 @@
 
         <header>
             <h1>주식 기초</h1>
-            <p class="subtitle">주식 용어, 기업 분석 지표, 재무제표 읽는 법</p>
+            <p class="subtitle">주식의 개념부터 계좌 개설, 용어, 기업 분석까지</p>
         </header>
 
-        <!-- Section 11: 주식 용어 -->
+        <!-- NEW Section: 주식이란? -->
         <section>
-            <h2>1. 주식 용어 총정리</h2>
+            <h2>1. 주식이란 무엇인가?</h2>
+
+            <div class="definition-box">
+                <strong>주식(Stock)의 정의</strong><br>
+                주식은 <strong>기업의 소유권을 나타내는 증서</strong>입니다.
+                주식을 사면 그 기업의 일부를 소유하는 '주주(株主)'가 됩니다.
+            </div>
+
+            <h3>주식을 산다는 것의 의미</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #feca57;">
+                    <h4 style="color: #feca57;">소유권 획득</h4>
+                    <p>삼성전자 주식 1주를 사면, 삼성전자라는 회사의 약 <strong>0.00000002%</strong>를 소유하게 됩니다.</p>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4 style="color: #00ff88;">이익 공유</h4>
+                    <p>회사가 돈을 벌면 <strong>배당금</strong>으로 이익의 일부를 받을 수 있습니다.</p>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #4facfe;">
+                    <h4 style="color: #4facfe;">의결권 행사</h4>
+                    <p>주주총회에서 회사의 중요한 결정에 <strong>투표</strong>할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <h3>주식으로 수익을 얻는 방법</h3>
+            <table>
+                <tr>
+                    <th>방법</th>
+                    <th>설명</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>시세차익 (Capital Gain)</strong></td>
+                    <td>주가 상승 시 매도하여 차익 실현</td>
+                    <td>5만원에 사서 7만원에 팔면 2만원 이익</td>
+                </tr>
+                <tr>
+                    <td><strong>배당금 (Dividend)</strong></td>
+                    <td>기업이 이익의 일부를 주주에게 분배</td>
+                    <td>연간 주당 2,000원 배당</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <strong>예시: 카페 창업에 비유</strong><br><br>
+                친구가 카페를 창업하는데 1억원이 필요합니다.<br>
+                당신이 1,000만원을 투자하면 → <strong>10% 지분(주식)</strong>을 갖게 됩니다.<br><br>
+                • 카페가 연간 5,000만원 순이익을 내면 → 당신 몫은 <strong>500만원</strong><br>
+                • 카페 가치가 2억원이 되면 → 당신 지분 가치는 <strong>2,000만원</strong> (시세차익 1,000만원)
+            </div>
+
+            <h3>주식 vs 다른 금융상품</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>주식</th>
+                    <th>예금</th>
+                    <th>채권</th>
+                </tr>
+                <tr>
+                    <td>원금 보장</td>
+                    <td style="color: #ff6b6b;">X (손실 가능)</td>
+                    <td style="color: #00ff88;">O (5천만원까지)</td>
+                    <td style="color: #feca57;">회사/국가에 따라</td>
+                </tr>
+                <tr>
+                    <td>기대 수익</td>
+                    <td style="color: #00ff88;">높음 (연 7~10%+)</td>
+                    <td style="color: #ff6b6b;">낮음 (연 3~4%)</td>
+                    <td style="color: #feca57;">중간 (연 4~6%)</td>
+                </tr>
+                <tr>
+                    <td>위험도</td>
+                    <td style="color: #ff6b6b;">높음</td>
+                    <td style="color: #00ff88;">매우 낮음</td>
+                    <td style="color: #feca57;">낮음~중간</td>
+                </tr>
+                <tr>
+                    <td>소유 성격</td>
+                    <td>기업의 소유권</td>
+                    <td>은행에 돈을 빌려줌</td>
+                    <td>기업/국가에 돈을 빌려줌</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>주식 투자의 리스크</strong><br><br>
+                • <strong>원금 손실:</strong> 주가가 하락하면 투자 원금을 잃을 수 있습니다<br>
+                • <strong>회사 파산:</strong> 최악의 경우 투자금 전액을 잃을 수 있습니다<br>
+                • <strong>변동성:</strong> 하루에도 수십% 오르내릴 수 있습니다<br><br>
+                <span style="color: #feca57;">→ 반드시 '잃어도 괜찮은 돈'으로만 투자하세요!</span>
+            </div>
+        </section>
+
+        <!-- NEW Section: 증권계좌 개설 -->
+        <section>
+            <h2>2. 증권계좌 개설 방법</h2>
+
+            <div class="definition-box">
+                <strong>증권계좌란?</strong><br>
+                주식을 사고팔기 위해 필요한 전용 계좌입니다.
+                은행 계좌와 비슷하지만, 주식 거래를 위한 계좌입니다.
+            </div>
+
+            <h3>계좌 개설 순서</h3>
+
+            <div class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <h4>증권사 선택</h4>
+                    <p>수수료, 앱 사용성, 이벤트 등을 고려해 증권사를 선택합니다.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <h4>앱 다운로드 & 본인인증</h4>
+                    <p>증권사 MTS(모바일 앱)를 설치하고 본인인증을 진행합니다.<br>
+                    필요 서류: 신분증, 본인 명의 휴대폰</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <h4>계좌 개설 신청</h4>
+                    <p>비대면으로 계좌 개설이 가능합니다. (영업일 기준 1일 내 완료)</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                    <h4>계좌에 입금</h4>
+                    <p>개설된 증권 계좌에 투자할 금액을 이체합니다.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">5</span>
+                <div class="step-content">
+                    <h4>주식 매수!</h4>
+                    <p>원하는 종목을 검색하고 매수 버튼을 누르면 끝!</p>
+                </div>
+            </div>
+
+            <h3>주요 증권사 비교</h3>
+            <div class="broker-grid">
+                <div class="broker-card">
+                    <h4>키움증권</h4>
+                    <p>업계 1위<br>낮은 수수료<br>영웅문 HTS</p>
+                </div>
+                <div class="broker-card">
+                    <h4>삼성증권</h4>
+                    <p>대형 증권사<br>안정적 서비스<br>리서치 강점</p>
+                </div>
+                <div class="broker-card">
+                    <h4>미래에셋증권</h4>
+                    <p>해외주식 강점<br>다양한 상품<br>글로벌 네트워크</p>
+                </div>
+                <div class="broker-card">
+                    <h4>토스증권</h4>
+                    <p>초보자 친화적<br>간편한 UI<br>소수점 매매</p>
+                </div>
+            </div>
+
+            <h3>계좌 종류</h3>
+            <table>
+                <tr>
+                    <th>계좌 종류</th>
+                    <th>특징</th>
+                    <th>추천 대상</th>
+                </tr>
+                <tr>
+                    <td><strong>일반 위탁계좌</strong></td>
+                    <td>기본 주식 거래용 계좌</td>
+                    <td>모든 투자자</td>
+                </tr>
+                <tr>
+                    <td><strong>ISA (개인종합자산관리계좌)</strong></td>
+                    <td>200~400만원 비과세, 초과분 9.9% 분리과세</td>
+                    <td>절세를 원하는 투자자</td>
+                </tr>
+                <tr>
+                    <td><strong>연금저축계좌</strong></td>
+                    <td>세액공제 혜택 (연 400만원 한도)</td>
+                    <td>노후 대비 장기투자자</td>
+                </tr>
+                <tr>
+                    <td><strong>IRP (개인형 퇴직연금)</strong></td>
+                    <td>세액공제 + 퇴직금 관리</td>
+                    <td>직장인, 자영업자</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>초보자 추천 전략</strong><br><br>
+                1. <strong>일반 계좌</strong>로 시작해서 주식 투자에 익숙해지기<br>
+                2. 익숙해지면 <strong>ISA 계좌</strong> 개설해서 절세 혜택 받기<br>
+                3. 여유자금이 있다면 <strong>연금저축</strong>으로 노후 대비
+            </div>
+        </section>
+
+        <!-- NEW Section: 첫 주식 매수 가이드 -->
+        <section>
+            <h2>3. 첫 주식 매수 완전 가이드</h2>
+
+            <div class="definition-box">
+                처음 주식을 사는 것은 두려울 수 있습니다.
+                아래 단계를 따라하면 누구나 쉽게 첫 주식을 매수할 수 있습니다.
+            </div>
+
+            <h3>매수 전 체크리스트</h3>
+            <div class="step-box">
+                <p>✅ 투자할 금액 결정 (잃어도 괜찮은 금액)<br>
+                ✅ 투자 목적 설정 (단기 vs 장기)<br>
+                ✅ 관심 종목 리스트업<br>
+                ✅ 기업 기본 정보 확인 (무슨 사업을 하는지)</p>
+            </div>
+
+            <h3>주문 유형 이해하기</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4 style="color: #00ff88;">지정가 주문 (추천)</h4>
+                    <p><strong>내가 원하는 가격</strong>에 주문</p>
+                    <ul>
+                        <li>예: "50,000원에 사겠다"</li>
+                        <li>장점: 원하는 가격에 거래 가능</li>
+                        <li>단점: 체결이 안 될 수 있음</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #ff9f43;">
+                    <h4 style="color: #ff9f43;">시장가 주문</h4>
+                    <p><strong>현재 시세</strong>로 즉시 주문</p>
+                    <ul>
+                        <li>예: "지금 바로 사겠다"</li>
+                        <li>장점: 즉시 체결</li>
+                        <li>단점: 예상과 다른 가격에 체결될 수 있음</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>실제 매수 과정 (MTS 앱 기준)</h3>
+            <div class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                    <h4>종목 검색</h4>
+                    <p>앱에서 원하는 종목명 또는 종목코드 검색<br>
+                    예: "삼성전자" 또는 "005930"</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                    <h4>현재가 및 호가창 확인</h4>
+                    <p>현재 주가와 매수/매도 호가 확인<br>
+                    호가창에서 거래량이 많은지 확인</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                    <h4>매수 버튼 클릭</h4>
+                    <p>'매수' 또는 '사기' 버튼 선택</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">4</span>
+                <div class="step-content">
+                    <h4>수량과 가격 입력</h4>
+                    <p>• 수량: 몇 주를 살 것인지<br>
+                    • 가격: 지정가면 원하는 가격 입력, 시장가면 자동</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <span class="step-number">5</span>
+                <div class="step-content">
+                    <h4>주문 확인 및 비밀번호 입력</h4>
+                    <p>주문 내용을 확인하고 계좌 비밀번호 입력 후 주문 전송</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <strong>매수 예시</strong><br><br>
+                삼성전자를 70,000원에 10주 매수하려면:<br>
+                • 필요 금액: 70,000원 × 10주 = <strong>700,000원</strong><br>
+                • 수수료: 약 0.015% = 105원<br>
+                • 총 필요 금액: 약 <strong>700,105원</strong>
+            </div>
+
+            <div class="warning-box">
+                <strong>초보자 주의사항</strong><br><br>
+                • <strong>처음에는 소액으로!</strong> 10만원~50만원으로 시작하세요<br>
+                • <strong>한 종목에 올인 금지!</strong> 최소 3~5개 종목으로 분산<br>
+                • <strong>빚내서 투자 금지!</strong> 절대 대출받아서 투자하지 마세요<br>
+                • <strong>단타 지양!</strong> 처음에는 장기투자 관점으로 접근하세요
+            </div>
+        </section>
+
+        <!-- NEW Section: 투자 심리학 -->
+        <section>
+            <h2>4. 투자 심리학: 피해야 할 함정들</h2>
+
+            <div class="definition-box">
+                <strong>행동경제학 (Behavioral Economics)</strong><br>
+                인간은 합리적으로 행동하지 않습니다.
+                감정과 편향이 투자 결정에 큰 영향을 미치는데, 이를 연구하는 학문입니다.
+                이러한 심리적 함정을 알면 피할 수 있습니다.
+            </div>
+
+            <h3>흔한 투자 심리 함정</h3>
+
+            <div class="psychology-card">
+                <h4>1. 손실 회피 (Loss Aversion)</h4>
+                <p>이익보다 <strong>손실에 2배 더 민감</strong>하게 반응합니다.</p>
+                <p style="color: #ff6b6b;">→ 손절해야 할 때 "조금만 더 기다리면 오르겠지..." 하며 버팁니다.</p>
+                <p style="color: #00ff88;"><strong>대책:</strong> 매수 전에 손절 기준을 정해두세요. (예: -10%면 무조건 손절)</p>
+            </div>
+
+            <div class="psychology-card">
+                <h4>2. 확증 편향 (Confirmation Bias)</h4>
+                <p>내 생각을 <strong>뒷받침하는 정보만</strong> 찾고, 반대 의견은 무시합니다.</p>
+                <p style="color: #ff6b6b;">→ "이 주식 오른다"고 믿으면 긍정적인 기사만 보입니다.</p>
+                <p style="color: #00ff88;"><strong>대책:</strong> 의도적으로 반대 의견을 찾아보세요.</p>
+            </div>
+
+            <div class="psychology-card">
+                <h4>3. 군중 심리 (Herd Mentality)</h4>
+                <p>다수가 하는 것을 따라 합니다. <strong>"다들 사니까 나도"</strong></p>
+                <p style="color: #ff6b6b;">→ 이미 많이 오른 주식을 고점에서 매수하게 됩니다.</p>
+                <p style="color: #00ff88;"><strong>대책:</strong> "남들이 탐욕적일 때 두려워하고, 두려워할 때 탐욕적이어라" - 워런 버핏</p>
+            </div>
+
+            <div class="psychology-card">
+                <h4>4. 앵커링 효과 (Anchoring Effect)</h4>
+                <p>처음 접한 숫자에 <strong>고정</strong>되어 판단합니다.</p>
+                <p style="color: #ff6b6b;">→ "예전에 10만원이었는데 지금 5만원이면 싸다!" (하지만 적정가가 3만원일 수도)</p>
+                <p style="color: #00ff88;"><strong>대책:</strong> 과거 주가보다 현재 기업가치를 기준으로 판단하세요.</p>
+            </div>
+
+            <div class="psychology-card">
+                <h4>5. FOMO (Fear Of Missing Out)</h4>
+                <p>나만 <strong>기회를 놓치는 것</strong> 같은 두려움</p>
+                <p style="color: #ff6b6b;">→ 급등하는 주식을 보면 "나도 빨리 사야 해!"라며 쫓아갑니다.</p>
+                <p style="color: #00ff88;"><strong>대책:</strong> "기차는 항상 온다." 기회는 또 옵니다. 조급해하지 마세요.</p>
+            </div>
+
+            <h3>성공적인 투자를 위한 마인드셋</h3>
+            <div class="tip-box">
+                <strong>워런 버핏의 투자 원칙</strong><br><br>
+                1. "첫 번째 규칙: 돈을 잃지 마라. 두 번째 규칙: 첫 번째 규칙을 잊지 마라."<br><br>
+                2. "좋은 기업을 적정한 가격에 사는 것이, 적정한 기업을 좋은 가격에 사는 것보다 낫다."<br><br>
+                3. "주식시장은 인내심 없는 사람의 돈을 인내심 있는 사람에게 옮기는 장치다."
+            </div>
+
+            <table>
+                <tr>
+                    <th>나쁜 투자 습관</th>
+                    <th>좋은 투자 습관</th>
+                </tr>
+                <tr>
+                    <td>매일 주가 확인하며 조바심</td>
+                    <td>주 1회 정도만 확인</td>
+                </tr>
+                <tr>
+                    <td>뉴스 헤드라인에 즉각 반응</td>
+                    <td>장기 트렌드 중심으로 판단</td>
+                </tr>
+                <tr>
+                    <td>수익 나면 바로 매도</td>
+                    <td>목표가 도달 시까지 홀딩</td>
+                </tr>
+                <tr>
+                    <td>손실 나면 물타기</td>
+                    <td>기준에 따라 손절 또는 보유</td>
+                </tr>
+                <tr>
+                    <td>남의 말 듣고 매수</td>
+                    <td>직접 분석 후 투자</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Original Section: 주식 용어 -->
+        <section>
+            <h2>5. 주식 용어 총정리</h2>
 
             <h3>기본 매매 용어</h3>
             <table>
@@ -239,6 +680,35 @@
                 </tr>
             </table>
 
+            <h3>거래 시간 용어</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>시간</th>
+                    <th>설명</th>
+                </tr>
+                <tr>
+                    <td>정규장</td>
+                    <td>09:00 ~ 15:30</td>
+                    <td>일반적인 거래 시간</td>
+                </tr>
+                <tr>
+                    <td>장전 시간외</td>
+                    <td>08:30 ~ 09:00</td>
+                    <td>전일 종가로 거래</td>
+                </tr>
+                <tr>
+                    <td>장후 시간외</td>
+                    <td>15:40 ~ 16:00</td>
+                    <td>당일 종가로 거래</td>
+                </tr>
+                <tr>
+                    <td>동시호가</td>
+                    <td>08:30~09:00, 15:20~15:30</td>
+                    <td>주문만 받고 한 번에 체결</td>
+                </tr>
+            </table>
+
             <div class="slang-box">
                 <strong>주식 커뮤니티 속어</strong><br><br>
                 <strong>익절</strong>: 이익 실현 (수익 상태에서 매도)<br>
@@ -248,13 +718,15 @@
                 <strong>존버</strong>: 존X 버티기 (무조건 보유)<br>
                 <strong>떡상</strong>: 급격한 상승<br>
                 <strong>따상</strong>: 시초가 2배 + 상한가 (신규 상장주)<br>
-                <strong>총알</strong>: 투자 가능한 현금
+                <strong>총알</strong>: 투자 가능한 현금<br>
+                <strong>개미</strong>: 개인 투자자<br>
+                <strong>큰손/세력</strong>: 대량 매매하는 기관/외국인
             </div>
         </section>
 
-        <!-- Section 12: 시가총액 -->
+        <!-- Original Section: 시가총액 -->
         <section>
-            <h2>2. 시가총액 (Market Capitalization)</h2>
+            <h2>6. 시가총액 (Market Capitalization)</h2>
 
             <div class="definition-box">
                 <strong>시가총액이란?</strong><br>
@@ -276,33 +748,61 @@
                     <th>분류</th>
                     <th>시가총액 기준</th>
                     <th>특징</th>
+                    <th>예시</th>
                 </tr>
                 <tr>
                     <td>대형주</td>
                     <td>10조원 이상</td>
                     <td>안정적, 낮은 변동성</td>
+                    <td>삼성전자, SK하이닉스</td>
                 </tr>
                 <tr>
                     <td>중형주</td>
                     <td>1조 ~ 10조원</td>
                     <td>성장 + 안정 균형</td>
+                    <td>카카오게임즈, 엔씨소프트</td>
                 </tr>
                 <tr>
                     <td>소형주</td>
                     <td>1조원 미만</td>
                     <td>높은 성장 가능성, 높은 리스크</td>
+                    <td>바이오벤처, 스타트업</td>
                 </tr>
             </table>
+
+            <div class="tip-box">
+                <strong>시가총액 활용법</strong><br><br>
+                • <strong>같은 업종 비교:</strong> A회사 시총 10조, B회사 시총 5조면 → A가 2배 큰 회사<br>
+                • <strong>적정 가치 판단:</strong> 매출/이익 대비 시총이 너무 높으면 고평가 가능성<br>
+                • <strong>지수 편입:</strong> 시총이 크면 KOSPI200 등 지수에 편입되어 안정적
+            </div>
         </section>
 
-        <!-- Section 13: PER/PBR/ROE/EPS -->
+        <!-- Original Section: PER/PBR/ROE/EPS -->
         <section>
-            <h2>3. PER / PBR / ROE / EPS</h2>
+            <h2>7. PER / PBR / ROE / EPS</h2>
+
+            <h3>EPS (주당순이익)</h3>
+            <div class="definition-box">
+                <strong>Earnings Per Share</strong><br>
+                1주당 기업이 벌어들인 순이익. 기업의 수익력을 나타내는 가장 기본적인 지표입니다.
+            </div>
+
+            <div class="formula">
+                EPS = 당기순이익 ÷ 발행주식수
+            </div>
+
+            <div class="example-box">
+                <strong>예시</strong><br>
+                당기순이익 1조원, 발행주식 1억주 → EPS = <strong>10,000원</strong><br>
+                = 주식 1주가 1년에 10,000원을 벌었다는 의미
+            </div>
 
             <h3>PER (주가수익비율)</h3>
             <div class="definition-box">
+                <strong>Price to Earnings Ratio</strong><br>
                 현재 주가가 주당순이익(EPS)의 몇 배인지 나타내는 지표.<br>
-                낮을수록 저평가, 높을수록 고평가 가능성.
+                <strong>"이 기업의 1년 이익으로 투자금을 회수하는 데 몇 년 걸리는가?"</strong>
             </div>
 
             <div class="formula">
@@ -313,43 +813,114 @@
                 <tr>
                     <th>PER 범위</th>
                     <th>해석</th>
+                    <th>투자 관점</th>
                 </tr>
                 <tr>
                     <td>10 미만</td>
-                    <td>저평가 가능성 (가치주)</td>
+                    <td>저평가 가능성</td>
+                    <td>가치주 투자 대상</td>
                 </tr>
                 <tr>
                     <td>10 ~ 20</td>
                     <td>적정 수준</td>
+                    <td>안정적 투자</td>
                 </tr>
                 <tr>
-                    <td>20 이상</td>
-                    <td>고평가 또는 고성장 기대 (성장주)</td>
+                    <td>20 ~ 40</td>
+                    <td>고평가 또는 성장 기대</td>
+                    <td>성장주 가능성</td>
+                </tr>
+                <tr>
+                    <td>40 이상</td>
+                    <td>매우 높은 성장 기대</td>
+                    <td>고위험 투자</td>
                 </tr>
             </table>
 
-            <h3>EPS (주당순이익)</h3>
-            <div class="formula">
-                EPS = 당기순이익 ÷ 발행주식수
+            <div class="warning-box">
+                <strong>PER 해석 시 주의사항</strong><br><br>
+                • <strong>업종별로 평균 PER이 다릅니다:</strong> IT는 높고, 금융/건설은 낮음<br>
+                • <strong>적자 기업은 PER이 없습니다:</strong> 이익이 마이너스면 계산 불가<br>
+                • <strong>일회성 이익 주의:</strong> 토지 매각 등으로 일시적으로 EPS가 높아질 수 있음
             </div>
-            <p>1주당 기업이 벌어들인 순이익. 높을수록 수익성이 좋음.</p>
 
             <h3>PBR (주가순자산비율)</h3>
-            <div class="formula">
-                PBR = 주가 ÷ 주당순자산(BPS)
+            <div class="definition-box">
+                <strong>Price to Book Ratio</strong><br>
+                주가가 1주당 순자산(BPS)의 몇 배인지 나타내는 지표.
             </div>
-            <p>PBR < 1이면 주가가 순자산 가치보다 낮다는 의미 (저평가 가능성).</p>
+
+            <div class="formula">
+                PBR = 주가 ÷ 주당순자산(BPS)<br>
+                BPS = (총자산 - 총부채) ÷ 발행주식수
+            </div>
+
+            <table>
+                <tr>
+                    <th>PBR 범위</th>
+                    <th>의미</th>
+                </tr>
+                <tr>
+                    <td>PBR < 1</td>
+                    <td>주가 < 순자산 → 청산가치보다 싸다 (저평가)</td>
+                </tr>
+                <tr>
+                    <td>PBR = 1</td>
+                    <td>주가 = 순자산 → 적정 수준</td>
+                </tr>
+                <tr>
+                    <td>PBR > 1</td>
+                    <td>주가 > 순자산 → 프리미엄 존재 (성장 기대)</td>
+                </tr>
+            </table>
 
             <h3>ROE (자기자본이익률)</h3>
+            <div class="definition-box">
+                <strong>Return on Equity</strong><br>
+                투자한 자본 대비 얼마나 이익을 냈는지. 경영 효율성의 대표 지표입니다.
+            </div>
+
             <div class="formula">
                 ROE = (당기순이익 ÷ 자기자본) × 100%
             </div>
-            <p>투자한 자본 대비 얼마나 이익을 냈는지. 일반적으로 <strong>10% 이상</strong>이면 양호.</p>
+
+            <table>
+                <tr>
+                    <th>ROE 범위</th>
+                    <th>평가</th>
+                </tr>
+                <tr>
+                    <td>15% 이상</td>
+                    <td style="color: #00ff88;">우수 (워런 버핏 기준)</td>
+                </tr>
+                <tr>
+                    <td>10~15%</td>
+                    <td style="color: #feca57;">양호</td>
+                </tr>
+                <tr>
+                    <td>5~10%</td>
+                    <td>보통</td>
+                </tr>
+                <tr>
+                    <td>5% 미만</td>
+                    <td style="color: #ff6b6b;">부진</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>지표 종합 활용법</strong><br><br>
+                <strong>좋은 기업의 조건 (일반적 기준):</strong><br>
+                • PER 10~15 (업종 평균 이하)<br>
+                • PBR 1 전후<br>
+                • ROE 10% 이상<br>
+                • EPS 증가 추세<br><br>
+                단, 이 지표들은 <strong>같은 업종 내에서 비교</strong>해야 의미가 있습니다.
+            </div>
         </section>
 
-        <!-- Section 20: 재무제표 -->
+        <!-- Original Section: 재무제표 -->
         <section>
-            <h2>4. 재무제표 읽는 법</h2>
+            <h2>8. 재무제표 읽는 법</h2>
 
             <div class="definition-box">
                 <strong>재무제표란?</strong><br>
@@ -389,6 +960,25 @@
                 </div>
             </div>
 
+            <h3>손익계산서 구조</h3>
+            <div class="step-box">
+                <p style="font-family: monospace;">
+                <strong>매출액</strong> (Revenue)<br>
+                &nbsp;&nbsp;- 매출원가<br>
+                ──────────────<br>
+                = <strong>매출총이익</strong> (Gross Profit)<br>
+                &nbsp;&nbsp;- 판매비와관리비 (인건비, 마케팅비 등)<br>
+                ──────────────<br>
+                = <strong>영업이익</strong> (Operating Income) ★ 본업 실력<br>
+                &nbsp;&nbsp;± 영업외손익 (이자, 환차익 등)<br>
+                ──────────────<br>
+                = <strong>세전이익</strong><br>
+                &nbsp;&nbsp;- 법인세<br>
+                ──────────────<br>
+                = <strong>당기순이익</strong> (Net Income) ★ 최종 성적
+                </p>
+            </div>
+
             <h3>핵심 지표 체크리스트</h3>
             <table>
                 <tr>
@@ -423,19 +1013,22 @@
                 </tr>
             </table>
 
+            <h3>재무제표로 알 수 있는 위험 신호</h3>
+            <div class="warning-box">
+                <strong>이런 기업은 조심하세요!</strong><br><br>
+                • <strong>영업이익 적자가 3년 이상 지속:</strong> 본업에서 돈을 못 번다는 뜻<br>
+                • <strong>부채비율 300% 이상:</strong> 빚이 너무 많음<br>
+                • <strong>유동비율 100% 미만:</strong> 당장 갚을 돈이 부족<br>
+                • <strong>영업현금흐름 마이너스:</strong> 실제 현금이 나가고 있음<br>
+                • <strong>매출은 늘지만 이익은 줄어듦:</strong> 수익성 악화
+            </div>
+
             <div class="tip-box">
                 <strong>재무제표 확인 방법</strong><br><br>
                 • <strong>DART (dart.fss.or.kr)</strong>: 금융감독원 전자공시시스템<br>
                 • <strong>네이버 금융</strong>: 종목 검색 → 기업실적분석<br>
                 • <strong>증권사 MTS/HTS</strong>: 종목 상세정보<br><br>
                 최근 3년치 추세를 확인하고, 동종 업계와 비교하세요!
-            </div>
-
-            <div class="warning-box">
-                <strong>주의할 점</strong><br>
-                • 일회성 이익으로 숫자가 좋아진 건 아닌지 확인<br>
-                • 업종별로 적정 부채비율이 다름 (금융업은 높음)<br>
-                • 현금흐름표로 실제 돈의 흐름 확인 필수
             </div>
         </section>
 

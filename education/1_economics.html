@@ -39,11 +39,7 @@
             background: rgba(15, 52, 96, 0.5);
             border-radius: 12px;
         }
-        .nav-bar a {
-            color: #4facfe;
-            text-decoration: none;
-            font-size: 0.9em;
-        }
+        .nav-bar a { color: #4facfe; text-decoration: none; font-size: 0.9em; }
         .nav-bar a:hover { text-decoration: underline; }
         section {
             background: rgba(255, 255, 255, 0.03);
@@ -100,7 +96,6 @@
             margin: 20px 0;
             border: 1px solid rgba(79, 172, 254, 0.3);
         }
-        .table-container { width: 100%; overflow-x: auto; margin: 20px 0; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
         th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid rgba(79, 172, 254, 0.2); }
         th { background: rgba(79, 172, 254, 0.2); color: #4facfe; font-weight: 600; }
@@ -145,10 +140,7 @@
             border-top: 1px solid rgba(79, 172, 254, 0.2);
             margin-top: 40px;
         }
-        .next-page {
-            text-align: center;
-            margin-top: 40px;
-        }
+        .next-page { text-align: center; margin-top: 40px; }
         .next-page a {
             display: inline-block;
             background: linear-gradient(90deg, #4facfe, #00f2fe);
@@ -182,9 +174,162 @@
             <p class="subtitle">금리, 채권, 경기사이클 - 투자의 기반이 되는 핵심 원리</p>
         </header>
 
-        <!-- Section 1: 중앙은행과 연준 -->
+        <!-- NEW: GDP와 경제성장 -->
         <section>
-            <h2>1. 중앙은행과 연준 (Fed)</h2>
+            <h2>1. GDP와 경제성장</h2>
+
+            <div class="definition-box">
+                <strong>GDP (국내총생산)란?</strong><br>
+                한 나라에서 일정 기간(보통 1년) 동안 생산된 모든 재화와 서비스의 시장 가치 합계입니다.
+                경제의 크기와 성장을 측정하는 가장 중요한 지표입니다.
+            </div>
+
+            <h3>GDP의 구성요소</h3>
+            <div class="formula">
+                GDP = C (소비) + I (투자) + G (정부지출) + (X - M) (순수출)
+            </div>
+
+            <table>
+                <tr>
+                    <th>구성요소</th>
+                    <th>설명</th>
+                    <th>비중 (한국 기준)</th>
+                </tr>
+                <tr>
+                    <td><strong>C (소비)</strong></td>
+                    <td>가계의 소비 지출</td>
+                    <td>약 48%</td>
+                </tr>
+                <tr>
+                    <td><strong>I (투자)</strong></td>
+                    <td>기업의 설비투자, 건설투자</td>
+                    <td>약 31%</td>
+                </tr>
+                <tr>
+                    <td><strong>G (정부지출)</strong></td>
+                    <td>정부의 재화/서비스 구매</td>
+                    <td>약 18%</td>
+                </tr>
+                <tr>
+                    <td><strong>X-M (순수출)</strong></td>
+                    <td>수출 - 수입</td>
+                    <td>약 3%</td>
+                </tr>
+            </table>
+
+            <h3>GDP 성장률과 주식시장</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4 style="color: #00ff88;">GDP 성장률 상승</h4>
+                    <ul>
+                        <li>기업 매출/이익 증가 기대</li>
+                        <li>고용 증가, 소비 확대</li>
+                        <li>주식시장 상승 요인</li>
+                        <li>경기민감주 강세</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #ff6b6b;">
+                    <h4 style="color: #ff6b6b;">GDP 성장률 하락</h4>
+                    <ul>
+                        <li>기업 실적 악화 우려</li>
+                        <li>실업 증가, 소비 위축</li>
+                        <li>주식시장 하락 요인</li>
+                        <li>방어주/채권 선호</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>GDP 발표 일정</strong><br><br>
+                • <strong>한국:</strong> 한국은행, 분기별 발표 (1/4/7/10월)<br>
+                • <strong>미국:</strong> 상무부 BEA, 분기별 발표 (속보치 → 잠정치 → 확정치)<br>
+                • <strong>중국:</strong> 국가통계국, 분기별 발표<br><br>
+                GDP 발표일에는 시장 변동성이 커질 수 있으니 주의하세요.
+            </div>
+        </section>
+
+        <!-- NEW: 인플레이션과 디플레이션 -->
+        <section>
+            <h2>2. 인플레이션과 디플레이션</h2>
+
+            <div class="definition-box">
+                <strong>인플레이션 (Inflation)</strong><br>
+                물가가 지속적으로 상승하는 현상입니다. 같은 돈으로 살 수 있는 물건이 줄어들어 화폐 가치가 하락합니다.
+            </div>
+
+            <h3>인플레이션 vs 디플레이션</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border-left: 4px solid #ff6b6b;">
+                    <h4 style="color: #ff6b6b;">인플레이션</h4>
+                    <p>물가 상승, 화폐 가치 하락</p>
+                    <ul>
+                        <li><strong>원인:</strong> 통화량 증가, 수요 증가, 비용 상승</li>
+                        <li><strong>영향:</strong> 실질 구매력 감소</li>
+                        <li><strong>대응:</strong> 금리 인상</li>
+                        <li><strong>수혜자산:</strong> 실물자산, 금, 부동산</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border-left: 4px solid #4facfe;">
+                    <h4 style="color: #4facfe;">디플레이션</h4>
+                    <p>물가 하락, 화폐 가치 상승</p>
+                    <ul>
+                        <li><strong>원인:</strong> 수요 감소, 경기 침체</li>
+                        <li><strong>영향:</strong> 소비 지연, 기업 수익 감소</li>
+                        <li><strong>대응:</strong> 금리 인하, 양적완화</li>
+                        <li><strong>수혜자산:</strong> 현금, 국채</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>주요 물가 지표</h3>
+            <table>
+                <tr>
+                    <th>지표</th>
+                    <th>측정 대상</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td><strong>CPI (소비자물가지수)</strong></td>
+                    <td>가계가 구매하는 상품/서비스</td>
+                    <td>가장 널리 사용, 생활물가 체감</td>
+                </tr>
+                <tr>
+                    <td><strong>Core CPI (근원 CPI)</strong></td>
+                    <td>식료품, 에너지 제외</td>
+                    <td>변동성 제거, 추세 파악에 유용</td>
+                </tr>
+                <tr>
+                    <td><strong>PPI (생산자물가지수)</strong></td>
+                    <td>생산자가 받는 가격</td>
+                    <td>CPI 선행지표 역할</td>
+                </tr>
+                <tr>
+                    <td><strong>PCE (개인소비지출)</strong></td>
+                    <td>개인 소비 물가</td>
+                    <td>연준이 선호하는 물가지표</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <strong>인플레이션율 계산</strong><br><br>
+                • 작년 CPI: 100<br>
+                • 올해 CPI: 103<br>
+                • 인플레이션율: (103 - 100) / 100 × 100 = <strong>3%</strong><br><br>
+                일반적으로 연 2% 수준의 인플레이션이 경제에 건강한 것으로 간주됩니다.
+            </div>
+
+            <div class="warning-box">
+                <strong>하이퍼인플레이션 주의</strong><br>
+                월 50% 이상의 급격한 물가 상승을 하이퍼인플레이션이라 합니다.<br>
+                • 사례: 짐바브웨 (2008년), 베네수엘라, 독일 바이마르 공화국<br>
+                • 원인: 과도한 화폐 발행, 정부 신뢰 상실<br>
+                • 결과: 화폐 가치 붕괴, 경제 마비
+            </div>
+        </section>
+
+        <!-- 기존: 중앙은행과 연준 -->
+        <section>
+            <h2>3. 중앙은행과 연준 (Fed)</h2>
 
             <div class="definition-box">
                 <strong>중앙은행이란?</strong><br>
@@ -192,70 +337,113 @@
                 금리를 조절하여 경제를 안정시키는 역할을 합니다.
             </div>
 
+            <h3>중앙은행의 주요 역할</h3>
+            <table>
+                <tr>
+                    <th>역할</th>
+                    <th>설명</th>
+                    <th>투자에 미치는 영향</th>
+                </tr>
+                <tr>
+                    <td><strong>통화정책</strong></td>
+                    <td>기준금리 결정, 통화량 조절</td>
+                    <td>금리 변동 → 자산 가격 변동</td>
+                </tr>
+                <tr>
+                    <td><strong>물가 안정</strong></td>
+                    <td>인플레이션 목표 관리 (보통 2%)</td>
+                    <td>물가 상승 → 금리 인상 가능성</td>
+                </tr>
+                <tr>
+                    <td><strong>금융 안정</strong></td>
+                    <td>금융시스템 건전성 유지</td>
+                    <td>위기 시 유동성 공급</td>
+                </tr>
+                <tr>
+                    <td><strong>최종 대부자</strong></td>
+                    <td>금융기관에 긴급 자금 공급</td>
+                    <td>시장 안정화 역할</td>
+                </tr>
+            </table>
+
             <h3>주요 중앙은행 비교</h3>
             <table>
                 <tr>
                     <th>국가</th>
                     <th>중앙은행</th>
                     <th>약칭</th>
-                    <th>통화</th>
+                    <th>주요 회의</th>
                 </tr>
                 <tr>
                     <td>미국</td>
                     <td>연방준비제도</td>
                     <td>Fed (연준)</td>
-                    <td>달러 (USD)</td>
+                    <td>FOMC (연 8회)</td>
                 </tr>
                 <tr>
                     <td>한국</td>
                     <td>한국은행</td>
                     <td>BOK</td>
-                    <td>원 (KRW)</td>
+                    <td>금통위 (연 8회)</td>
                 </tr>
                 <tr>
                     <td>유럽</td>
                     <td>유럽중앙은행</td>
                     <td>ECB</td>
-                    <td>유로 (EUR)</td>
+                    <td>정책이사회 (연 8회)</td>
                 </tr>
                 <tr>
                     <td>일본</td>
                     <td>일본은행</td>
                     <td>BOJ</td>
-                    <td>엔 (JPY)</td>
+                    <td>금융정책결정회합 (연 8회)</td>
                 </tr>
             </table>
 
-            <h3>FOMC란?</h3>
+            <h3>FOMC와 금리 결정</h3>
             <div class="definition-box">
                 <strong>FOMC (Federal Open Market Committee)</strong><br>
                 연준의 '연방공개시장위원회'로, 미국의 기준금리를 결정하는 회의입니다.
                 1년에 8회 개최되며, 전 세계 금융시장에 큰 영향을 미칩니다.
             </div>
 
-            <h3>금리와 주식시장의 관계</h3>
+            <h3>금리와 자산시장의 관계</h3>
             <table>
                 <tr>
                     <th>금리 변동</th>
-                    <th>주식시장</th>
-                    <th>이유</th>
+                    <th>주식</th>
+                    <th>채권</th>
+                    <th>달러</th>
+                    <th>부동산</th>
                 </tr>
                 <tr>
-                    <td>금리 인상</td>
-                    <td>하락 압력</td>
-                    <td>대출 비용 증가, 기업 이익 감소, 예금 매력 상승</td>
+                    <td><strong>금리 인상</strong></td>
+                    <td style="color: #ff6b6b;">하락 압력</td>
+                    <td style="color: #ff6b6b;">가격 하락</td>
+                    <td style="color: #00ff88;">강세</td>
+                    <td style="color: #ff6b6b;">하락 압력</td>
                 </tr>
                 <tr>
-                    <td>금리 인하</td>
-                    <td>상승 압력</td>
-                    <td>대출 비용 감소, 투자 활성화, 주식 매력 상승</td>
+                    <td><strong>금리 인하</strong></td>
+                    <td style="color: #00ff88;">상승 압력</td>
+                    <td style="color: #00ff88;">가격 상승</td>
+                    <td style="color: #ff6b6b;">약세</td>
+                    <td style="color: #00ff88;">상승 압력</td>
                 </tr>
             </table>
+
+            <div class="tip-box">
+                <strong>FOMC 일정 확인법</strong><br><br>
+                • 연준 공식 사이트: federalreserve.gov<br>
+                • FOMC 발표 시간: 미국 동부시간 오후 2시 (한국 새벽 3~4시)<br>
+                • <strong>점도표 (Dot Plot):</strong> 위원들의 금리 전망을 보여주는 차트 (3/6/9/12월 발표)<br>
+                • 발표 후 기자회견에서 의장 발언도 중요!
+            </div>
         </section>
 
-        <!-- Section 2: 단리와 복리 -->
+        <!-- 기존: 단리와 복리 -->
         <section>
-            <h2>2. 단리와 복리</h2>
+            <h2>4. 단리와 복리</h2>
 
             <div class="comparison-grid">
                 <div class="comparison-card">
@@ -281,25 +469,98 @@
                 <strong>차이: 594만원!</strong> 기간이 길수록 복리 효과가 커집니다.
             </div>
 
+            <h3>복리의 마법: 기간별 자산 성장</h3>
+            <table>
+                <tr>
+                    <th>기간</th>
+                    <th>연 5% 복리</th>
+                    <th>연 7% 복리</th>
+                    <th>연 10% 복리</th>
+                </tr>
+                <tr>
+                    <td>10년</td>
+                    <td>1,629만원</td>
+                    <td>1,967만원</td>
+                    <td>2,594만원</td>
+                </tr>
+                <tr>
+                    <td>20년</td>
+                    <td>2,653만원</td>
+                    <td>3,870만원</td>
+                    <td>6,727만원</td>
+                </tr>
+                <tr>
+                    <td>30년</td>
+                    <td>4,322만원</td>
+                    <td>7,612만원</td>
+                    <td>1억 7,449만원</td>
+                </tr>
+            </table>
+
             <div class="tip-box">
                 <strong>72의 법칙</strong><br>
                 복리로 원금이 2배가 되는 기간을 간단히 계산하는 방법<br><br>
                 <div class="formula">
                     72 ÷ 이자율(%) = 원금 2배 되는 기간(년)
                 </div>
-                예시: 연 8% 수익률 → 72 ÷ 8 = <strong>9년</strong>에 원금 2배
+                예시:<br>
+                • 연 6% → 72 ÷ 6 = <strong>12년</strong><br>
+                • 연 8% → 72 ÷ 8 = <strong>9년</strong><br>
+                • 연 12% → 72 ÷ 12 = <strong>6년</strong>
+            </div>
+
+            <div class="warning-box">
+                <strong>복리의 양면성</strong><br>
+                복리는 수익뿐 아니라 <strong>손실에도 적용</strong>됩니다.<br><br>
+                • 대출 이자도 복리로 늘어남 (신용카드 리볼빙 등)<br>
+                • 투자 손실 시 회복이 더 어려움 (-50% 후 +100% 필요)<br>
+                • 수수료/세금도 복리로 자산을 갉아먹음
             </div>
         </section>
 
-        <!-- Section 5: 채권의 기초 -->
+        <!-- 기존: 채권의 기초 -->
         <section>
-            <h2>3. 채권의 기초</h2>
+            <h2>5. 채권의 기초</h2>
 
             <div class="definition-box">
                 <strong>채권(Bond)이란?</strong><br>
                 정부나 기업이 자금을 빌리면서 발행하는 일종의 '빚 증서'입니다.
-                정해진 기간 동안 이자를 지급하고, 만기에 원금을 상환합니다.
+                정해진 기간 동안 이자(쿠폰)를 지급하고, 만기에 원금(액면가)을 상환합니다.
             </div>
+
+            <h3>채권 용어 정리</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>설명</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>액면가</strong></td>
+                    <td>만기 시 돌려받는 금액</td>
+                    <td>10,000원</td>
+                </tr>
+                <tr>
+                    <td><strong>쿠폰(이자율)</strong></td>
+                    <td>매년 받는 이자 비율</td>
+                    <td>연 3%</td>
+                </tr>
+                <tr>
+                    <td><strong>만기</strong></td>
+                    <td>원금 상환 시점</td>
+                    <td>10년</td>
+                </tr>
+                <tr>
+                    <td><strong>시장가격</strong></td>
+                    <td>현재 거래되는 가격</td>
+                    <td>9,500원 or 10,500원</td>
+                </tr>
+                <tr>
+                    <td><strong>수익률(YTM)</strong></td>
+                    <td>만기까지 보유 시 총 수익률</td>
+                    <td>연 3.5%</td>
+                </tr>
+            </table>
 
             <h3>채권의 종류</h3>
             <table>
@@ -316,28 +577,28 @@
                     <td>낮음</td>
                 </tr>
                 <tr>
-                    <td>회사채</td>
-                    <td>기업</td>
-                    <td>신용등급에 따라 다름</td>
-                    <td>국채보다 높음</td>
+                    <td>회사채 (투자등급)</td>
+                    <td>우량 기업</td>
+                    <td>높음</td>
+                    <td>국채+α</td>
                 </tr>
                 <tr>
-                    <td>물가연동채</td>
+                    <td>회사채 (하이일드)</td>
+                    <td>신용 낮은 기업</td>
+                    <td>낮음</td>
+                    <td>높음</td>
+                </tr>
+                <tr>
+                    <td>물가연동채 (TIPS)</td>
                     <td>정부</td>
                     <td>높음</td>
-                    <td>물가상승률 연동</td>
-                </tr>
-                <tr>
-                    <td>금융채</td>
-                    <td>금융기관</td>
-                    <td>중간</td>
-                    <td>중간</td>
+                    <td>물가+α</td>
                 </tr>
             </table>
 
             <h3>핵심: 금리와 채권 가격의 역관계</h3>
             <div class="warning-box">
-                <strong>가장 중요한 원리</strong><br><br>
+                <strong>가장 중요한 원리 (시소 관계)</strong><br><br>
                 <strong style="font-size: 1.2em; color: #ff6b6b;">금리 상승 = 채권 가격 하락</strong><br>
                 <strong style="font-size: 1.2em; color: #00ff88;">금리 하락 = 채권 가격 상승</strong><br><br>
                 금리가 오르면 새로 발행되는 채권이 더 높은 이자를 주기 때문에,<br>
@@ -346,16 +607,18 @@
 
             <div class="example-box">
                 <strong>예시로 이해하기</strong><br><br>
-                • 내가 연 3% 이자 주는 채권을 100만원에 샀다<br>
-                • 금리가 올라서 새 채권은 연 5% 이자를 준다<br>
-                • 내 채권(3%)을 사려는 사람이 있을까? → 가격을 깎아야 팔림<br>
-                • 결과: 내 채권 가격이 하락
+                1. 내가 연 3% 이자 주는 채권을 100만원에 샀다<br>
+                2. 금리가 올라서 새 채권은 연 5% 이자를 준다<br>
+                3. 내 채권(3%)을 사려는 사람이 있을까?<br>
+                4. 가격을 깎아야만 팔 수 있음 → 내 채권 가격 하락<br><br>
+                반대로 금리가 1%로 내리면 내 3% 채권이 인기 → 가격 상승
             </div>
 
             <h3>듀레이션 (Duration)</h3>
             <div class="definition-box">
                 <strong>듀레이션이란?</strong><br>
-                투자금의 평균 회수 기간을 나타내며, 금리 변화에 대한 채권 가격의 민감도를 측정하는 지표입니다.
+                투자금의 평균 회수 기간을 나타내며, 금리 변화에 대한 채권 가격의 민감도를 측정합니다.
+                듀레이션이 길수록 금리 변화에 더 민감하게 반응합니다.
             </div>
 
             <table>
@@ -363,38 +626,39 @@
                     <th>듀레이션</th>
                     <th>금리 1% 상승 시</th>
                     <th>금리 1% 하락 시</th>
-                    <th>특징</th>
+                    <th>적합한 상황</th>
                 </tr>
                 <tr>
                     <td>단기 (1~3년)</td>
                     <td>가격 약 1~3% 하락</td>
                     <td>가격 약 1~3% 상승</td>
-                    <td>안정적, 금리 상승기 유리</td>
+                    <td>금리 상승기</td>
                 </tr>
                 <tr>
                     <td>중기 (5~7년)</td>
                     <td>가격 약 5~7% 하락</td>
                     <td>가격 약 5~7% 상승</td>
-                    <td>균형</td>
+                    <td>금리 불확실</td>
                 </tr>
                 <tr>
                     <td>장기 (10년+)</td>
                     <td>가격 약 10%+ 하락</td>
                     <td>가격 약 10%+ 상승</td>
-                    <td>변동성 큼, 금리 하락기 유리</td>
+                    <td>금리 하락기</td>
                 </tr>
             </table>
 
             <div class="tip-box">
-                <strong>금리 전망에 따른 채권 투자 전략</strong><br><br>
-                • <strong>금리 하락 예상:</strong> 장기채 투자 → 가격 상승폭이 큼<br>
-                • <strong>금리 상승 예상:</strong> 단기채 투자 → 가격 하락폭이 작음
+                <strong>채권 투자 전략</strong><br><br>
+                • <strong>금리 하락 예상:</strong> 장기채 투자 → 가격 상승폭 큼<br>
+                • <strong>금리 상승 예상:</strong> 단기채 투자 → 가격 하락폭 작음<br>
+                • <strong>불확실할 때:</strong> 채권 사다리 전략 (다양한 만기 분산)
             </div>
         </section>
 
-        <!-- Section 6: 경기사이클 -->
+        <!-- 기존: 경기사이클 -->
         <section>
-            <h2>4. 경기사이클 (Business Cycle)</h2>
+            <h2>6. 경기사이클 (Business Cycle)</h2>
 
             <div class="definition-box">
                 <strong>경기사이클이란?</strong><br>
@@ -403,7 +667,6 @@
             </div>
 
             <h3>경기사이클 4단계</h3>
-
             <div class="quadrant-grid">
                 <div class="quadrant quadrant-2">
                     <h4>회복기 (Recovery)</h4>
@@ -442,6 +705,50 @@
                 </div>
             </div>
 
+            <h3>경기사이클과 자산배분</h3>
+            <table>
+                <tr>
+                    <th>단계</th>
+                    <th>경제 상황</th>
+                    <th>주식</th>
+                    <th>채권</th>
+                    <th>원자재</th>
+                    <th>현금</th>
+                </tr>
+                <tr>
+                    <td>회복기</td>
+                    <td>성장↑ 물가↓</td>
+                    <td style="color: #00ff88;">+++</td>
+                    <td>+</td>
+                    <td>+</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>확장기</td>
+                    <td>성장↑ 물가↑</td>
+                    <td style="color: #00ff88;">++</td>
+                    <td style="color: #ff6b6b;">-</td>
+                    <td style="color: #00ff88;">+++</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>수축기</td>
+                    <td>성장↓ 물가↑</td>
+                    <td style="color: #ff6b6b;">-</td>
+                    <td>+</td>
+                    <td style="color: #ff6b6b;">-</td>
+                    <td style="color: #00ff88;">++</td>
+                </tr>
+                <tr>
+                    <td>침체기</td>
+                    <td>성장↓ 물가↓</td>
+                    <td>+</td>
+                    <td style="color: #00ff88;">+++</td>
+                    <td style="color: #ff6b6b;">--</td>
+                    <td>+</td>
+                </tr>
+            </table>
+
             <h3>코스톨라니 달걀 이론</h3>
             <div class="definition-box">
                 전설적인 투자자 앙드레 코스톨라니의 투자 타이밍 이론입니다.<br>
@@ -477,7 +784,7 @@
                 <tr>
                     <td>금리 상승 초기 (E)</td>
                     <td>경기 확장</td>
-                    <td>주식 보유 지속, 상승 향유</td>
+                    <td>주식 보유 지속</td>
                 </tr>
                 <tr>
                     <td>금리 상승 후기 (F)</td>
@@ -490,7 +797,105 @@
                 <strong>핵심 포인트</strong><br>
                 • 주식은 경기와 6개월~1년 <strong>선행</strong>하는 경향<br>
                 • 경기 바닥에서 주식을 사면 이미 늦음 → 침체 중 매수가 최적<br>
-                • "남들이 두려워할 때 탐욕을 부려라" - 워렌 버핏
+                • "남들이 두려워할 때 탐욕을 부려라" - 워렌 버핏<br>
+                • "강세장은 비관 속에서 태어나, 회의 속에서 자라며, 낙관 속에서 성숙하고, 행복 속에서 죽는다" - 존 템플턴
+            </div>
+        </section>
+
+        <!-- NEW: 주요 경제지표 읽는 법 -->
+        <section>
+            <h2>7. 주요 경제지표 읽는 법</h2>
+
+            <div class="definition-box">
+                <strong>경제지표란?</strong><br>
+                경제 상황을 수치화한 데이터로, 경기의 현재 상태와 미래 방향을 예측하는 데 사용됩니다.
+                투자자는 경제지표를 통해 시장 움직임을 예측할 수 있습니다.
+            </div>
+
+            <h3>선행/동행/후행 지표</h3>
+            <table>
+                <tr>
+                    <th>분류</th>
+                    <th>설명</th>
+                    <th>대표 지표</th>
+                </tr>
+                <tr>
+                    <td><strong>선행지표</strong></td>
+                    <td>경기보다 먼저 움직임</td>
+                    <td>주가지수, 건축허가, 신규실업급여청구</td>
+                </tr>
+                <tr>
+                    <td><strong>동행지표</strong></td>
+                    <td>경기와 함께 움직임</td>
+                    <td>산업생산, 소매판매, 비농업고용</td>
+                </tr>
+                <tr>
+                    <td><strong>후행지표</strong></td>
+                    <td>경기보다 늦게 움직임</td>
+                    <td>실업률, 소비자물가, 기업이익</td>
+                </tr>
+            </table>
+
+            <h3>핵심 경제지표 캘린더</h3>
+            <table>
+                <tr>
+                    <th>지표</th>
+                    <th>발표 주기</th>
+                    <th>중요도</th>
+                    <th>시장 영향</th>
+                </tr>
+                <tr>
+                    <td><strong>비농업고용 (NFP)</strong></td>
+                    <td>매월 첫째 금요일</td>
+                    <td>★★★★★</td>
+                    <td>예상 상회 → 금리인상 기대 → 주식↓</td>
+                </tr>
+                <tr>
+                    <td><strong>CPI (소비자물가)</strong></td>
+                    <td>매월 중순</td>
+                    <td>★★★★★</td>
+                    <td>예상 상회 → 인플레 우려 → 금리↑</td>
+                </tr>
+                <tr>
+                    <td><strong>FOMC 회의</strong></td>
+                    <td>연 8회</td>
+                    <td>★★★★★</td>
+                    <td>금리 결정, 점도표, 의장 발언</td>
+                </tr>
+                <tr>
+                    <td><strong>PMI (구매관리자지수)</strong></td>
+                    <td>매월 초</td>
+                    <td>★★★★</td>
+                    <td>50 이상: 확장, 50 미만: 수축</td>
+                </tr>
+                <tr>
+                    <td><strong>GDP</strong></td>
+                    <td>분기별</td>
+                    <td>★★★★</td>
+                    <td>경제성장률, 경기 판단</td>
+                </tr>
+                <tr>
+                    <td><strong>소매판매</strong></td>
+                    <td>매월</td>
+                    <td>★★★</td>
+                    <td>소비 동향 파악</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <strong>경제지표 해석 예시: 비농업고용</strong><br><br>
+                • <strong>발표:</strong> 신규 고용 30만명 (예상 20만명)<br>
+                • <strong>해석:</strong> 예상보다 강한 고용 = 경기 과열 신호<br>
+                • <strong>연준 반응:</strong> 금리 인상 지속 가능성 높아짐<br>
+                • <strong>시장 반응:</strong> 채권 하락(금리 상승), 주식 혼조, 달러 강세
+            </div>
+
+            <div class="tip-box">
+                <strong>경제지표 확인 사이트</strong><br><br>
+                • <strong>Investing.com:</strong> 경제 캘린더 (한국어 지원)<br>
+                • <strong>Trading Economics:</strong> 글로벌 경제지표<br>
+                • <strong>FRED (세인트루이스 연준):</strong> 미국 경제 데이터<br>
+                • <strong>한국은행 경제통계시스템:</strong> 한국 경제지표
             </div>
         </section>
 
