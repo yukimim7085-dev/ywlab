@@ -12,86 +12,159 @@ st.set_page_config(
     layout="centered"
 )
 
-# GitHub Pages URL
-EDUCATION_URL = "https://yukimim7085-dev.github.io/finance-dashboard/education.html"
+# GitHub Pages URLs
+BASE_URL = "https://yukimim7085-dev.github.io/finance-dashboard/education"
+FULL_URL = "https://yukimim7085-dev.github.io/finance-dashboard/education.html"
 
 st.markdown("## 📚 주식 입문자를 위한 경제 기초 교육")
-st.markdown("경제 기초부터 자산배분 전략까지 한 번에 배우는 투자 가이드")
+st.markdown("경제 기초부터 자산배분 전략까지 단계별로 배우는 체계적인 가이드")
 
 st.divider()
 
-# 전체 화면 보기 버튼
-st.markdown(f"""
-<a href="{EDUCATION_URL}" target="_blank" style="
-    display: inline-block;
-    background: linear-gradient(90deg, #4facfe, #00f2fe);
-    color: #1a1a2e;
-    padding: 16px 32px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.2em;
-    margin: 20px 0;
-">
-    🚀 전체 화면으로 보기 (새 탭)
-</a>
-""", unsafe_allow_html=True)
-
-st.markdown("")
-st.info("👆 버튼을 클릭하면 새 탭에서 전체 화면 교육 자료가 열립니다.")
-
-st.divider()
-
-# 목차 미리보기
-st.markdown("### 📋 목차")
+# 주제별 학습 섹션
+st.markdown("### 📖 주제별 학습")
+st.markdown("원하는 주제를 선택해서 학습하세요.")
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("""
-    **PART 1: 경제 기초**
-    - 중앙은행과 연준
-    - 단리와 복리
+    st.markdown(f"""
+    <a href="{BASE_URL}/1_economics.html" target="_blank" style="
+        display: block;
+        background: rgba(79, 172, 254, 0.15);
+        border-left: 4px solid #4facfe;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #4facfe;">1. 경제학 기초</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">금리, 채권, 경기사이클</span>
+    </a>
+    """, unsafe_allow_html=True)
 
-    **PART 2: 자산 이해**
-    - 안전자산 vs 위험자산
-    - 경제 상황별 자산 움직임
+    st.markdown(f"""
+    <a href="{BASE_URL}/2_assets.html" target="_blank" style="
+        display: block;
+        background: rgba(0, 255, 136, 0.1);
+        border-left: 4px solid #00ff88;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #00ff88;">2. 자산과 시장</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">자산분류, 환율, 증시</span>
+    </a>
+    """, unsafe_allow_html=True)
 
-    **PART 3: 채권과 경기사이클**
-    - 채권의 기초
-    - 경기사이클
-
-    **PART 4: 환율과 세금**
-    - 환율과 투자
-    - 배당 투자 기초
-    - 주식 세금 기초
-
-    **PART 5: 주식 시장 이해**
-    - 주요 증시 & 지수
-    - 주식 용어 총정리
-    """)
+    st.markdown(f"""
+    <a href="{BASE_URL}/3_stocks.html" target="_blank" style="
+        display: block;
+        background: rgba(254, 202, 87, 0.1);
+        border-left: 4px solid #feca57;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #feca57;">3. 주식 기초</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">용어, PER/PBR, 재무제표</span>
+    </a>
+    """, unsafe_allow_html=True)
 
 with col2:
-    st.markdown("""
-    **PART 6: 기업 분석 지표**
-    - 시가총액
-    - PER / PBR / ROE / EPS
+    st.markdown(f"""
+    <a href="{BASE_URL}/4_technical.html" target="_blank" style="
+        display: block;
+        background: rgba(255, 107, 107, 0.1);
+        border-left: 4px solid #ff6b6b;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #ff6b6b;">4. 기술적 분석</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">이동평균선, RSI, MACD</span>
+    </a>
+    """, unsafe_allow_html=True)
 
-    **PART 7: 기술적 분석**
-    - 이동평균선 & 크로스
-    - RSI / MACD / 볼린저밴드
-    - 피보나치 되돌림
+    st.markdown(f"""
+    <a href="{BASE_URL}/5_strategy.html" target="_blank" style="
+        display: block;
+        background: rgba(162, 89, 255, 0.1);
+        border-left: 4px solid #a259ff;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #a259ff;">5. 투자 전략</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">ETF, 올웨더, 섹터분류</span>
+    </a>
+    """, unsafe_allow_html=True)
 
-    **PART 8: 투자 전략**
-    - ETF 투자
-    - 올웨더 포트폴리오
-    - 투자 전략 종합
-
-    **PART 9~11: 심화**
-    - 재무제표, 어닝 시즌
-    - 공매도, IPO, 섹터 분류
-    - 절세 계좌, 리스크 관리
-    """)
+    st.markdown(f"""
+    <a href="{BASE_URL}/6_practical.html" target="_blank" style="
+        display: block;
+        background: rgba(255, 159, 67, 0.1);
+        border-left: 4px solid #ff9f43;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #ff9f43;">6. 실전과 리스크</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">세금, IPO, 리스크관리</span>
+    </a>
+    """, unsafe_allow_html=True)
 
 st.divider()
-st.caption("총 26개 섹션 | v5.0")
+
+# 전체 보기 버튼
+st.markdown("### 📋 전체 보기")
+col_a, col_b = st.columns(2)
+
+with col_a:
+    st.markdown(f"""
+    <a href="{BASE_URL}/index.html" target="_blank" style="
+        display: inline-block;
+        background: linear-gradient(90deg, #4facfe, #00f2fe);
+        color: #1a1a2e;
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 10px 0;
+    ">
+        📚 주제별 목차 페이지
+    </a>
+    """, unsafe_allow_html=True)
+
+with col_b:
+    st.markdown(f"""
+    <a href="{FULL_URL}" target="_blank" style="
+        display: inline-block;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        color: white;
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 10px 0;
+    ">
+        📖 전체 내용 한 번에 보기
+    </a>
+    """, unsafe_allow_html=True)
+
+st.markdown("")
+st.info("👆 원하는 주제를 선택하거나, 전체 내용을 한 번에 볼 수 있습니다.")
+
+st.divider()
+st.caption("총 26개 섹션 | 6개 주제별 페이지 | v6.0")

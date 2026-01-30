@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>주식 입문자를 위한 경제 기초 교육</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            min-height: 100vh;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 50px 40px;
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            border-radius: 24px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            color: #8892a8;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            color: #1a1a2e;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .course-card {
+            background: rgba(15, 52, 96, 0.5);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(79, 172, 254, 0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(79, 172, 254, 0.4);
+            background: rgba(15, 52, 96, 0.7);
+        }
+
+        .course-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+        }
+
+        .course-title {
+            font-size: 1.4em;
+            color: #4facfe;
+            margin-bottom: 12px;
+        }
+
+        .course-desc {
+            color: #a0a0a0;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .course-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topic-tag {
+            background: rgba(79, 172, 254, 0.15);
+            color: #00f2fe;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .course-card.economics .course-title { color: #4facfe; }
+        .course-card.assets .course-title { color: #00ff88; }
+        .course-card.stocks .course-title { color: #feca57; }
+        .course-card.technical .course-title { color: #ff6b6b; }
+        .course-card.strategy .course-title { color: #a259ff; }
+        .course-card.practical .course-title { color: #ff9f43; }
+
+        .course-card.economics { border-left: 4px solid #4facfe; }
+        .course-card.assets { border-left: 4px solid #00ff88; }
+        .course-card.stocks { border-left: 4px solid #feca57; }
+        .course-card.technical { border-left: 4px solid #ff6b6b; }
+        .course-card.strategy { border-left: 4px solid #a259ff; }
+        .course-card.practical { border-left: 4px solid #ff9f43; }
+
+        .full-course {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .full-course a {
+            display: inline-block;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            color: #1a1a2e;
+            padding: 16px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .full-course a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            border-top: 1px solid rgba(79, 172, 254, 0.2);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            header {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .course-card {
+                padding: 24px;
+            }
+
+            .course-icon {
+                font-size: 2.5em;
+            }
+
+            .course-title {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .subtitle {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>주식 입문자를 위한 경제 기초 교육</h1>
+            <p class="subtitle">경제 기초부터 투자 전략까지 단계별로 배우는 체계적인 가이드</p>
+            <span class="version-badge">v5.0 | 총 26개 섹션</span>
+        </header>
+
+        <div class="course-grid">
+            <a href="1_economics.html" class="course-card economics">
+                <div class="course-icon">📊</div>
+                <h2 class="course-title">1. 경제학 기초</h2>
+                <p class="course-desc">금리, 복리, 채권, 경기사이클 등 투자의 기반이 되는 핵심 경제 원리를 학습합니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">중앙은행/연준</span>
+                    <span class="topic-tag">단리/복리</span>
+                    <span class="topic-tag">채권</span>
+                    <span class="topic-tag">경기사이클</span>
+                </div>
+            </a>
+
+            <a href="2_assets.html" class="course-card assets">
+                <div class="course-icon">💰</div>
+                <h2 class="course-title">2. 자산과 시장</h2>
+                <p class="course-desc">자산의 종류와 특성, 경제 상황별 자산 움직임, 환율과 증시의 관계를 이해합니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">안전/위험자산</span>
+                    <span class="topic-tag">경제상황별 움직임</span>
+                    <span class="topic-tag">환율</span>
+                    <span class="topic-tag">증시/지수</span>
+                </div>
+            </a>
+
+            <a href="3_stocks.html" class="course-card stocks">
+                <div class="course-icon">📈</div>
+                <h2 class="course-title">3. 주식 기초</h2>
+                <p class="course-desc">주식 용어, 기업 분석 지표(PER/PBR/ROE), 재무제표 읽는 법을 배웁니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">주식 용어</span>
+                    <span class="topic-tag">시가총액</span>
+                    <span class="topic-tag">PER/PBR/ROE</span>
+                    <span class="topic-tag">재무제표</span>
+                </div>
+            </a>
+
+            <a href="4_technical.html" class="course-card technical">
+                <div class="course-icon">📉</div>
+                <h2 class="course-title">4. 기술적 분석</h2>
+                <p class="course-desc">차트 분석의 기초인 이동평균선, RSI, MACD, 피보나치 등을 학습합니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">이동평균선</span>
+                    <span class="topic-tag">골든/데드 크로스</span>
+                    <span class="topic-tag">RSI/MACD</span>
+                    <span class="topic-tag">피보나치</span>
+                </div>
+            </a>
+
+            <a href="5_strategy.html" class="course-card strategy">
+                <div class="course-icon">🎯</div>
+                <h2 class="course-title">5. 투자 전략</h2>
+                <p class="course-desc">ETF, 올웨더 포트폴리오, 섹터 로테이션 등 실전 투자 전략을 익힙니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">ETF</span>
+                    <span class="topic-tag">올웨더</span>
+                    <span class="topic-tag">투자전략</span>
+                    <span class="topic-tag">섹터분류</span>
+                </div>
+            </a>
+
+            <a href="6_practical.html" class="course-card practical">
+                <div class="course-icon">💼</div>
+                <h2 class="course-title">6. 실전과 리스크</h2>
+                <p class="course-desc">배당, 세금, IPO, 공매도, 절세계좌, 리스크 관리 등 실전 지식을 배웁니다.</p>
+                <div class="course-topics">
+                    <span class="topic-tag">배당/세금</span>
+                    <span class="topic-tag">공매도/IPO</span>
+                    <span class="topic-tag">절세계좌</span>
+                    <span class="topic-tag">리스크관리</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="full-course">
+            <a href="../education.html">전체 내용 한 번에 보기</a>
+        </div>
+
+        <footer>
+            <p>본 자료는 교육 목적으로 제작되었습니다.</p>
+            <p>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
