@@ -484,8 +484,7 @@ def main():
 
         # 경제 기초 교육 페이지 링크
         st.markdown("### 📚 교육 자료")
-        if st.button("경제 기초 교육 보기", type="primary", use_container_width=True):
-            st.switch_page("pages/1_경제_기초_교육.py")
+        st.page_link("pages/1_경제_기초_교육.py", label="경제 기초 교육 보기", icon="📚")
 
         st.divider()
         st.caption("📡 데이터: FRED, ECOS, Yahoo")
