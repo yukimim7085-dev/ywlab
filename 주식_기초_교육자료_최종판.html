@@ -508,7 +508,7 @@
         <header>
             <h1>📈 주식 입문자를 위한 기초 경제 교육</h1>
             <p class="subtitle">경제 기초부터 자산배분 전략까지 한 번에 배우는 투자 가이드</p>
-            <span class="version-badge">🎯 최종판 v3.0 - 자산분류 & 시나리오 분석 추가</span>
+            <span class="version-badge">🎯 최종판 v4.0 - 채권/경기사이클/환율/배당/세금 추가</span>
         </header>
 
         <nav class="toc">
@@ -523,44 +523,61 @@
             </div>
             
             <div class="toc-category">
-                <h3>PART 2: 자산 이해 ⭐ NEW</h3>
+                <h3>PART 2: 자산 이해</h3>
                 <ul>
-                    <li class="new-section">3. 안전자산 vs 위험자산 vs 대체자산</li>
-                    <li class="new-section">4. 경제 상황별 자산 움직임 (시나리오 분석)</li>
+                    <li>3. 안전자산 vs 위험자산 vs 대체자산</li>
+                    <li>4. 경제 상황별 자산 움직임 (시나리오 분석)</li>
                 </ul>
             </div>
-            
+
             <div class="toc-category">
-                <h3>PART 3: 주식 시장 이해</h3>
+                <h3>PART 3: 채권과 경기사이클 ⭐ NEW</h3>
                 <ul>
-                    <li>5. 주요 증시 & 지수 (KOSPI/KOSDAQ/나스닥/S&P500)</li>
-                    <li>6. 주식 용어 총정리</li>
+                    <li class="new-section">5. 채권의 기초 (금리와 채권가격의 관계)</li>
+                    <li class="new-section">6. 경기사이클 (4계절 투자 전략)</li>
                 </ul>
             </div>
-            
+
             <div class="toc-category">
-                <h3>PART 4: 기업 분석 지표</h3>
+                <h3>PART 4: 환율과 세금 ⭐ NEW</h3>
                 <ul>
-                    <li>7. 시가총액</li>
-                    <li>8. PER / PBR / ROE / EPS</li>
+                    <li class="new-section">7. 환율과 투자 (원달러 환율의 영향)</li>
+                    <li class="new-section">8. 배당 투자 기초 (배당금/배당락일)</li>
+                    <li class="new-section">9. 주식 세금 기초 (2025년 기준)</li>
                 </ul>
             </div>
-            
+
             <div class="toc-category">
-                <h3>PART 5: 기술적 분석</h3>
+                <h3>PART 5: 주식 시장 이해</h3>
                 <ul>
-                    <li>9. 이동평균선 & 골든/데드 크로스</li>
-                    <li>10. RSI / MACD / 볼린저밴드</li>
-                    <li>11. 피보나치 되돌림</li>
+                    <li>10. 주요 증시 & 지수 (KOSPI/KOSDAQ/나스닥/S&P500)</li>
+                    <li>11. 주식 용어 총정리</li>
                 </ul>
             </div>
-            
+
             <div class="toc-category">
-                <h3>PART 6: 투자 전략</h3>
+                <h3>PART 6: 기업 분석 지표</h3>
                 <ul>
-                    <li>12. ETF 투자</li>
-                    <li class="new-section">13. 올웨더 포트폴리오 (자산배분 전략)</li>
-                    <li>14. 투자 전략 종합</li>
+                    <li>12. 시가총액</li>
+                    <li>13. PER / PBR / ROE / EPS</li>
+                </ul>
+            </div>
+
+            <div class="toc-category">
+                <h3>PART 7: 기술적 분석</h3>
+                <ul>
+                    <li>14. 이동평균선 & 골든/데드 크로스</li>
+                    <li>15. RSI / MACD / 볼린저밴드</li>
+                    <li>16. 피보나치 되돌림</li>
+                </ul>
+            </div>
+
+            <div class="toc-category">
+                <h3>PART 8: 투자 전략</h3>
+                <ul>
+                    <li>17. ETF 투자</li>
+                    <li>18. 올웨더 포트폴리오 (자산배분 전략)</li>
+                    <li>19. 투자 전략 종합</li>
                 </ul>
             </div>
         </nav>
@@ -985,9 +1002,492 @@
             </div>
         </section>
 
-        <!-- PART 3: 주식 시장 이해 -->
+        <!-- PART 3: 채권과 경기사이클 (NEW) -->
         <section id="section5">
-            <h2>5. 주요 증시 & 지수</h2>
+            <h2>5. 채권의 기초 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>채권(Bond)이란?</strong><br>
+                정부나 기업이 자금을 빌리면서 발행하는 일종의 '빚 증서'입니다.
+                정해진 기간 동안 이자를 지급하고, 만기에 원금을 상환합니다.
+            </div>
+
+            <h3>채권의 종류</h3>
+            <table>
+                <tr>
+                    <th>종류</th>
+                    <th>발행자</th>
+                    <th>안전성</th>
+                    <th>수익률</th>
+                </tr>
+                <tr>
+                    <td>🏛️ 국채</td>
+                    <td>정부</td>
+                    <td>가장 높음</td>
+                    <td>낮음</td>
+                </tr>
+                <tr>
+                    <td>🏢 회사채</td>
+                    <td>기업</td>
+                    <td>신용등급에 따라 다름</td>
+                    <td>국채보다 높음</td>
+                </tr>
+                <tr>
+                    <td>📊 물가연동채</td>
+                    <td>정부</td>
+                    <td>높음</td>
+                    <td>물가상승률 연동</td>
+                </tr>
+                <tr>
+                    <td>🏦 금융채</td>
+                    <td>금융기관</td>
+                    <td>중간</td>
+                    <td>중간</td>
+                </tr>
+            </table>
+
+            <h3>⭐ 핵심: 금리와 채권 가격의 역관계</h3>
+            <div class="warning-box">
+                <strong>🔄 가장 중요한 원리</strong><br><br>
+                <strong style="font-size: 1.2em; color: #ff6b6b;">금리 ↑ = 채권 가격 ↓</strong><br>
+                <strong style="font-size: 1.2em; color: #00ff88;">금리 ↓ = 채권 가격 ↑</strong><br><br>
+                금리가 오르면 새로 발행되는 채권이 더 높은 이자를 주기 때문에,<br>
+                기존에 낮은 이자를 주던 채권의 매력이 떨어져 가격이 하락합니다.
+            </div>
+
+            <div class="example-box">
+                <strong>예시로 이해하기</strong><br><br>
+                • 내가 연 3% 이자 주는 채권을 100만원에 샀다<br>
+                • 금리가 올라서 새 채권은 연 5% 이자를 준다<br>
+                • 내 채권(3%)을 사려는 사람이 있을까? → 가격을 깎아야 팔림<br>
+                • 결과: 내 채권 가격이 하락
+            </div>
+
+            <h3>듀레이션 (Duration)</h3>
+            <div class="definition-box">
+                <strong>듀레이션이란?</strong><br>
+                투자금의 평균 회수 기간을 나타내며, 금리 변화에 대한 채권 가격의 민감도를 측정하는 지표입니다.
+            </div>
+
+            <table>
+                <tr>
+                    <th>듀레이션</th>
+                    <th>금리 1% 상승 시</th>
+                    <th>금리 1% 하락 시</th>
+                    <th>특징</th>
+                </tr>
+                <tr>
+                    <td>단기 (1~3년)</td>
+                    <td>가격 약 1~3% 하락</td>
+                    <td>가격 약 1~3% 상승</td>
+                    <td>안정적, 금리 상승기 유리</td>
+                </tr>
+                <tr>
+                    <td>중기 (5~7년)</td>
+                    <td>가격 약 5~7% 하락</td>
+                    <td>가격 약 5~7% 상승</td>
+                    <td>균형</td>
+                </tr>
+                <tr>
+                    <td>장기 (10년+)</td>
+                    <td>가격 약 10%+ 하락</td>
+                    <td>가격 약 10%+ 상승</td>
+                    <td>변동성 큼, 금리 하락기 유리</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>💡 금리 전망에 따른 채권 투자 전략</strong><br><br>
+                • <strong>금리 하락 예상:</strong> 장기채 투자 → 가격 상승폭이 큼<br>
+                • <strong>금리 상승 예상:</strong> 단기채 투자 → 가격 하락폭이 작음
+            </div>
+        </section>
+
+        <section id="section6">
+            <h2>6. 경기사이클 (Business Cycle) ⭐</h2>
+
+            <div class="definition-box">
+                <strong>경기사이클이란?</strong><br>
+                경제가 일정 기간을 두고 상승과 하강을 반복하며 순환하는 과정입니다.
+                <strong>확장 → 정점 → 수축 → 저점</strong>의 4단계가 주기적으로 반복됩니다.
+            </div>
+
+            <h3>경기사이클 4단계</h3>
+
+            <div class="quadrant-grid">
+                <div class="quadrant quadrant-2">
+                    <h4>🌱 회복기 (Recovery)</h4>
+                    <p>저점 탈출, 경기 개선 시작</p>
+                    <div class="quadrant-assets">
+                        <strong>특징:</strong> 금리 낮음, 실업률 감소 시작<br>
+                        <strong>유리:</strong> 주식, 부동산, 경기민감주
+                    </div>
+                </div>
+
+                <div class="quadrant quadrant-1">
+                    <h4>🔥 확장기 (Expansion)</h4>
+                    <p>경기 과열, 물가 상승</p>
+                    <div class="quadrant-assets">
+                        <strong>특징:</strong> 금리 인상, 인플레이션<br>
+                        <strong>유리:</strong> 원자재, 금, 물가연동채
+                    </div>
+                </div>
+
+                <div class="quadrant quadrant-4">
+                    <h4>📉 수축기 (Contraction)</h4>
+                    <p>경기 둔화, 기업이익 감소</p>
+                    <div class="quadrant-assets">
+                        <strong>특징:</strong> 소비 감소, 실업률 상승<br>
+                        <strong>유리:</strong> 현금, 단기채, 방어주
+                    </div>
+                </div>
+
+                <div class="quadrant quadrant-3">
+                    <h4>❄️ 침체기 (Trough)</h4>
+                    <p>경기 바닥, 금리 인하</p>
+                    <div class="quadrant-assets">
+                        <strong>특징:</strong> 저금리, 경기부양책<br>
+                        <strong>유리:</strong> 장기채, 성장주 매수 기회
+                    </div>
+                </div>
+            </div>
+
+            <h3>코스톨라니 달걀 이론</h3>
+            <div class="definition-box">
+                전설적인 투자자 앙드레 코스톨라니의 투자 타이밍 이론입니다.<br>
+                금리 사이클에 따라 자산별 최적 투자 시점이 다릅니다.
+            </div>
+
+            <table>
+                <tr>
+                    <th>금리 국면</th>
+                    <th>경기 상황</th>
+                    <th>투자 전략</th>
+                </tr>
+                <tr>
+                    <td>금리 정점 (A)</td>
+                    <td>경기 과열 → 침체 예상</td>
+                    <td>주식 매도, 채권 매수 준비</td>
+                </tr>
+                <tr>
+                    <td>금리 하락 초기 (B)</td>
+                    <td>경기 둔화</td>
+                    <td>채권 가격 상승 (채권 투자)</td>
+                </tr>
+                <tr>
+                    <td>금리 하락 중기 (C)</td>
+                    <td>경기 침체</td>
+                    <td>부동산 가격 상승 기대</td>
+                </tr>
+                <tr>
+                    <td>금리 저점 (D)</td>
+                    <td>경기 회복 시작</td>
+                    <td>주식 매수 최적 시점</td>
+                </tr>
+                <tr>
+                    <td>금리 상승 초기 (E)</td>
+                    <td>경기 확장</td>
+                    <td>주식 보유 지속, 상승 향유</td>
+                </tr>
+                <tr>
+                    <td>금리 상승 후기 (F)</td>
+                    <td>경기 과열</td>
+                    <td>주식 매도 준비, 현금 확보</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>💡 핵심 포인트</strong><br>
+                • 주식은 경기와 6개월~1년 <strong>선행</strong>하는 경향<br>
+                • 경기 바닥에서 주식을 사면 이미 늦음 → 침체 중 매수가 최적<br>
+                • "남들이 두려워할 때 탐욕을 부려라" - 워렌 버핏
+            </div>
+        </section>
+
+        <section id="section7">
+            <h2>7. 환율과 투자 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>환율이란?</strong><br>
+                두 국가 통화의 교환 비율입니다. 원/달러 환율 1,400원이면 1달러를 사는 데 1,400원이 필요합니다.
+            </div>
+
+            <h3>환율 표현 방식</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #ff6b6b;">
+                    <h4>📈 환율 상승 (원화 약세)</h4>
+                    <p>1,200원 → 1,400원</p>
+                    <ul>
+                        <li>달러 가치 상승</li>
+                        <li>원화 가치 하락</li>
+                        <li>수입품 가격 상승</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4>📉 환율 하락 (원화 강세)</h4>
+                    <p>1,400원 → 1,200원</p>
+                    <ul>
+                        <li>달러 가치 하락</li>
+                        <li>원화 가치 상승</li>
+                        <li>수입품 가격 하락</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>환율이 주식시장에 미치는 영향</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>환율 상승 시 (원화 약세)</th>
+                    <th>환율 하락 시 (원화 강세)</th>
+                </tr>
+                <tr>
+                    <td>🚗 수출기업</td>
+                    <td style="color: #00ff88;">유리 (가격경쟁력 상승)</td>
+                    <td style="color: #ff6b6b;">불리</td>
+                </tr>
+                <tr>
+                    <td>✈️ 수입기업/항공</td>
+                    <td style="color: #ff6b6b;">불리 (비용 상승)</td>
+                    <td style="color: #00ff88;">유리</td>
+                </tr>
+                <tr>
+                    <td>👨‍💼 외국인 투자</td>
+                    <td style="color: #ff6b6b;">이탈 압력 (환차손 우려)</td>
+                    <td style="color: #00ff88;">유입 유리</td>
+                </tr>
+                <tr>
+                    <td>🇺🇸 해외주식 보유자</td>
+                    <td style="color: #00ff88;">환차익 발생</td>
+                    <td style="color: #ff6b6b;">환차손 발생</td>
+                </tr>
+            </table>
+
+            <h3>환율 수혜주 / 피해주</h3>
+            <div class="comparison-grid">
+                <div class="safe-asset">
+                    <div class="asset-title">📈 환율 상승 수혜주</div>
+                    <ul>
+                        <li>반도체 (삼성전자, SK하이닉스)</li>
+                        <li>자동차 (현대차, 기아)</li>
+                        <li>조선 (HD현대중공업)</li>
+                        <li>화학/정유 (LG화학)</li>
+                    </ul>
+                </div>
+                <div class="risk-asset">
+                    <div class="asset-title">📉 환율 상승 피해주</div>
+                    <ul>
+                        <li>항공 (대한항공, 아시아나)</li>
+                        <li>정유 수입 (원유 수입비용 증가)</li>
+                        <li>해외여행/면세점</li>
+                        <li>원자재 수입 기업</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 달러 자산 투자 방법</strong><br><br>
+                1. <strong>달러 예금:</strong> 환차익 비과세, 예금자보호<br>
+                2. <strong>달러 ETF:</strong> KODEX 미국달러선물 등<br>
+                3. <strong>미국 주식:</strong> 주가 상승 + 환차익 동시 추구<br>
+                4. <strong>달러 RP:</strong> 증권사 달러 RP 상품
+            </div>
+        </section>
+
+        <section id="section8">
+            <h2>8. 배당 투자 기초 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>배당금이란?</strong><br>
+                기업이 벌어들인 이익 중 일부를 주주에게 나눠주는 돈입니다.
+                현금배당(현금 지급)과 주식배당(주식으로 지급)이 있습니다.
+            </div>
+
+            <h3>배당 관련 핵심 용어</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>의미</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>배당기준일</strong></td>
+                    <td>배당 받을 주주를 확정하는 날</td>
+                    <td>보통 12월 말 (연말 결산)</td>
+                </tr>
+                <tr>
+                    <td><strong>배당락일</strong></td>
+                    <td>배당 권리가 사라지는 날 (기준일 1영업일 전)</td>
+                    <td>이 날 매수하면 배당 못 받음</td>
+                </tr>
+                <tr>
+                    <td><strong>배당금 지급일</strong></td>
+                    <td>실제로 배당금이 입금되는 날</td>
+                    <td>보통 주총 후 1개월 내</td>
+                </tr>
+                <tr>
+                    <td><strong>배당수익률</strong></td>
+                    <td>주가 대비 배당금 비율</td>
+                    <td>(주당배당금 ÷ 주가) × 100</td>
+                </tr>
+                <tr>
+                    <td><strong>배당성향</strong></td>
+                    <td>순이익 중 배당 비율</td>
+                    <td>(배당금 ÷ 순이익) × 100</td>
+                </tr>
+            </table>
+
+            <h3>⭐ 배당받으려면 언제까지 사야 할까?</h3>
+            <div class="warning-box">
+                <strong>T+2 결제 규칙</strong><br><br>
+                주식은 매수 후 <strong>2영업일</strong>이 지나야 주주로 등록됩니다.<br>
+                따라서 <strong>배당기준일 2영업일 전</strong>까지 매수해야 배당을 받습니다.<br><br>
+                <strong>예시:</strong> 배당기준일이 12월 31일(화)이면<br>
+                → 12월 27일(금)까지 매수해야 배당 수령 가능<br>
+                → 12월 30일(월, 배당락일)에 사면 배당 못 받음
+            </div>
+
+            <div class="example-box">
+                <strong>배당수익률 계산 예시</strong><br><br>
+                • 주가: 50,000원<br>
+                • 주당 배당금: 2,000원<br>
+                • 배당수익률: 2,000 ÷ 50,000 × 100 = <strong>4%</strong><br><br>
+                💡 일반적으로 배당수익률 3% 이상이면 '고배당주'로 분류
+            </div>
+
+            <h3>배당락일 주가 변동</h3>
+            <div class="tip-box">
+                배당락일에는 이론적으로 <strong>배당금만큼 주가가 하락</strong>합니다.<br>
+                (배당금을 지급하면 기업 가치가 그만큼 줄기 때문)<br><br>
+                그러나 실제로는 시장 상황에 따라 다르게 움직일 수 있습니다.<br>
+                • 배당락일 전 매수 → 배당금 수령, 주가 하락 감수<br>
+                • 배당락일 이후 매수 → 배당 없음, 낮은 가격에 매수
+            </div>
+
+            <h3>좋은 배당주 고르는 기준</h3>
+            <table>
+                <tr>
+                    <th>기준</th>
+                    <th>권장 수준</th>
+                </tr>
+                <tr>
+                    <td>배당수익률</td>
+                    <td>3% 이상 (은행 금리 이상)</td>
+                </tr>
+                <tr>
+                    <td>배당 지속성</td>
+                    <td>5년 이상 연속 배당</td>
+                </tr>
+                <tr>
+                    <td>배당 성장</td>
+                    <td>매년 배당금 증가 기업</td>
+                </tr>
+                <tr>
+                    <td>배당성향</td>
+                    <td>30~60% (너무 높으면 지속 어려움)</td>
+                </tr>
+                <tr>
+                    <td>실적 안정성</td>
+                    <td>꾸준한 이익 창출 기업</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="section9">
+            <h2>9. 주식 세금 기초 (2025년 기준) ⭐</h2>
+
+            <div class="definition-box">
+                주식 투자로 발생하는 세금은 크게 <strong>배당소득세, 양도소득세, 증권거래세</strong> 3가지입니다.
+            </div>
+
+            <h3>1. 배당소득세</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>세율</th>
+                    <th>비고</th>
+                </tr>
+                <tr>
+                    <td>기본 (2천만원 이하)</td>
+                    <td><strong>15.4%</strong> (지방세 포함)</td>
+                    <td>원천징수 (자동 납부)</td>
+                </tr>
+                <tr>
+                    <td>금융소득 2천만원 초과</td>
+                    <td>종합소득세 (6.6~49.5%)</td>
+                    <td>다른 소득과 합산 과세</td>
+                </tr>
+            </table>
+
+            <h3>2. 양도소득세 (주식 매도 차익)</h3>
+            <div class="comparison-grid">
+                <div class="safe-asset">
+                    <div class="asset-title">🇰🇷 국내 주식</div>
+                    <ul>
+                        <li><strong>일반 투자자:</strong> 비과세</li>
+                        <li><strong>대주주:</strong> 22~27.5% 과세</li>
+                        <li>대주주 기준: 50억원 이상 보유</li>
+                    </ul>
+                </div>
+                <div class="risk-asset">
+                    <div class="asset-title">🇺🇸 해외 주식</div>
+                    <ul>
+                        <li>연 250만원 공제 후</li>
+                        <li><strong>22%</strong> 과세 (지방세 포함)</li>
+                        <li>매년 5월 신고 필요</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>3. 증권거래세 (매도 시)</h3>
+            <table>
+                <tr>
+                    <th>시장</th>
+                    <th>2025년 세율</th>
+                </tr>
+                <tr>
+                    <td>코스피 / 코스닥</td>
+                    <td><strong>0.15%</strong></td>
+                </tr>
+                <tr>
+                    <td>코넥스</td>
+                    <td>0.10%</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <strong>세금 계산 예시 (국내 주식)</strong><br><br>
+                • 1,000만원 매수 → 1,500만원 매도<br>
+                • 매매 차익: 500만원 → <strong>세금 없음</strong> (일반 투자자)<br>
+                • 증권거래세: 1,500만원 × 0.15% = <strong>22,500원</strong><br><br>
+                <strong>세금 계산 예시 (미국 주식)</strong><br><br>
+                • 1,000만원 매수 → 1,500만원 매도<br>
+                • 매매 차익: 500만원<br>
+                • 공제: 250만원<br>
+                • 과세 대상: 250만원 × 22% = <strong>55만원</strong>
+            </div>
+
+            <h3>절세 방법</h3>
+            <div class="tip-box">
+                <strong>💡 ISA 계좌 활용 (개인종합자산관리계좌)</strong><br><br>
+                • 순이익 <strong>200만원까지 비과세</strong> (서민형 400만원)<br>
+                • 초과분은 <strong>9.9%</strong> 분리과세 (일반 15.4%보다 유리)<br>
+                • 국내 주식, ETF, 펀드 등 투자 가능<br>
+                • 3년 이상 유지 필요
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 해외주식 양도세 신고 주의</strong><br><br>
+                • 해외주식 수익이 연 250만원 초과 시 <strong>직접 신고 필수</strong><br>
+                • 신고 기간: 매년 5월 (전년도 수익분)<br>
+                • 미신고 시 가산세 부과<br>
+                • 증권사 '양도소득세 대행 신고' 서비스 활용 추천
+            </div>
+        </section>
+
+        <!-- PART 5: 주식 시장 이해 -->
+        <section id="section10">
+            <h2>10. 주요 증시 & 지수</h2>
             
             <h3>한국 시장</h3>
             <div class="comparison-grid">
@@ -1042,8 +1542,8 @@
             </table>
         </section>
 
-        <section id="section6">
-            <h2>6. 주식 용어 총정리</h2>
+        <section id="section11">
+            <h2>11. 주식 용어 총정리</h2>
             
             <h3>기본 매매 용어</h3>
             <table>
@@ -1130,8 +1630,8 @@
         </section>
 
         <!-- PART 4: 기업 분석 지표 -->
-        <section id="section7">
-            <h2>7. 시가총액 (Market Capitalization)</h2>
+        <section id="section12">
+            <h2>12. 시가총액 (Market Capitalization)</h2>
             
             <div class="definition-box">
                 <strong>시가총액이란?</strong><br>
@@ -1172,8 +1672,8 @@
             </table>
         </section>
 
-        <section id="section8">
-            <h2>8. PER / PBR / ROE / EPS</h2>
+        <section id="section13">
+            <h2>13. PER / PBR / ROE / EPS</h2>
             
             <h3>PER (주가수익비율)</h3>
             <div class="definition-box">
@@ -1224,8 +1724,8 @@
         </section>
 
         <!-- PART 5: 기술적 분석 -->
-        <section id="section9">
-            <h2>9. 이동평균선 & 골든/데드 크로스</h2>
+        <section id="section14">
+            <h2>14. 이동평균선 & 골든/데드 크로스</h2>
             
             <div class="definition-box">
                 <strong>이동평균선 (Moving Average)</strong><br>
@@ -1279,8 +1779,8 @@
             </div>
         </section>
 
-        <section id="section10">
-            <h2>10. RSI / MACD / 볼린저밴드</h2>
+        <section id="section15">
+            <h2>15. RSI / MACD / 볼린저밴드</h2>
             
             <h3>RSI (상대강도지수)</h3>
             <div class="definition-box">
@@ -1359,8 +1859,8 @@
             </div>
         </section>
 
-        <section id="section11">
-            <h2>11. 피보나치 되돌림 (Fibonacci Retracement)</h2>
+        <section id="section16">
+            <h2>16. 피보나치 되돌림 (Fibonacci Retracement)</h2>
             
             <div class="definition-box">
                 주가가 상승/하락 후 <strong>어느 수준까지 되돌아갈지</strong> 예측하는 기술적 분석 도구.
@@ -1407,8 +1907,8 @@
         </section>
 
         <!-- PART 6: 투자 전략 -->
-        <section id="section12">
-            <h2>12. ETF 투자</h2>
+        <section id="section17">
+            <h2>17. ETF 투자</h2>
             
             <div class="definition-box">
                 <strong>ETF (Exchange Traded Fund)</strong><br>
@@ -1488,8 +1988,8 @@
             </div>
         </section>
 
-        <section id="section13">
-            <h2>13. 올웨더 포트폴리오 (자산배분 전략) ⭐</h2>
+        <section id="section18">
+            <h2>18. 올웨더 포트폴리오 (자산배분 전략)</h2>
             
             <div class="definition-box">
                 <strong>올웨더 (All Weather) 포트폴리오</strong><br>
@@ -1589,8 +2089,8 @@
             </div>
         </section>
 
-        <section id="section14">
-            <h2>14. 투자 전략 종합</h2>
+        <section id="section19">
+            <h2>19. 투자 전략 종합</h2>
             
             <h3>투자 기간별 전략</h3>
             <table>
@@ -1674,8 +2174,8 @@
             <p>📚 본 자료는 교육 목적으로 제작되었습니다.</p>
             <p>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</p>
             <p style="margin-top: 20px; font-size: 0.85em;">
-                🗓️ 작성일: 2026년 1월 | 총 14개 섹션<br>
-                ⭐ 최종판: 자산분류 & 경제상황별 시나리오 분석 & 올웨더 포트폴리오 추가
+                🗓️ 작성일: 2026년 1월 | 총 19개 섹션<br>
+                ⭐ v4.0: 채권 기초, 경기사이클, 환율, 배당 투자, 주식 세금 추가
             </p>
         </footer>
     </div>
