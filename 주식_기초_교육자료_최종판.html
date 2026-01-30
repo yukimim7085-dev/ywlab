@@ -508,7 +508,7 @@
         <header>
             <h1>📈 주식 입문자를 위한 기초 경제 교육</h1>
             <p class="subtitle">경제 기초부터 자산배분 전략까지 한 번에 배우는 투자 가이드</p>
-            <span class="version-badge">🎯 최종판 v4.0 - 채권/경기사이클/환율/배당/세금 추가</span>
+            <span class="version-badge">🎯 최종판 v5.0 - 재무제표/공매도/IPO/계좌/섹터/리스크/어닝 추가</span>
         </header>
 
         <nav class="toc">
@@ -578,6 +578,31 @@
                     <li>17. ETF 투자</li>
                     <li>18. 올웨더 포트폴리오 (자산배분 전략)</li>
                     <li>19. 투자 전략 종합</li>
+                </ul>
+            </div>
+
+            <div class="toc-category">
+                <h3>PART 9: 기업 분석 심화 ⭐ NEW</h3>
+                <ul>
+                    <li class="new-section">20. 재무제표 읽는 법</li>
+                    <li class="new-section">21. 실적 시즌과 어닝 (컨센서스/서프라이즈/쇼크)</li>
+                </ul>
+            </div>
+
+            <div class="toc-category">
+                <h3>PART 10: 시장 메커니즘 ⭐ NEW</h3>
+                <ul>
+                    <li class="new-section">22. 공매도 (Short Selling)</li>
+                    <li class="new-section">23. IPO와 공모주 청약</li>
+                    <li class="new-section">24. 섹터/산업 분류 (경기민감주 vs 방어주)</li>
+                </ul>
+            </div>
+
+            <div class="toc-category">
+                <h3>PART 11: 실전 투자 관리 ⭐ NEW</h3>
+                <ul>
+                    <li class="new-section">25. 절세 계좌 총정리 (ISA/연금저축/IRP)</li>
+                    <li class="new-section">26. 리스크 관리 (손절매/분산투자/포지션 사이징)</li>
                 </ul>
             </div>
         </nav>
@@ -2170,12 +2195,615 @@
             </div>
         </section>
 
+        <!-- PART 9: 기업 분석 심화 (NEW) -->
+        <section id="section20">
+            <h2>20. 재무제표 읽는 법 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>재무제표란?</strong><br>
+                기업의 재정 상태와 경영 성과를 숫자로 정리한 '기업의 성적표'입니다.
+                투자 전 반드시 확인해야 할 핵심 문서입니다.
+            </div>
+
+            <h3>재무제표 3대 구성요소</h3>
+
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #4facfe;">
+                    <h4>📊 재무상태표 (대차대조표)</h4>
+                    <p><strong>특정 시점</strong>의 재정 상태</p>
+                    <ul>
+                        <li><strong>자산</strong> = 부채 + 자본</li>
+                        <li>유동자산: 현금, 매출채권, 재고</li>
+                        <li>비유동자산: 건물, 설비, 투자</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4>📈 손익계산서</h4>
+                    <p><strong>일정 기간</strong>의 경영 성과</p>
+                    <ul>
+                        <li><strong>매출액</strong>: 총 판매 금액</li>
+                        <li><strong>영업이익</strong>: 본업 수익</li>
+                        <li><strong>순이익</strong>: 최종 이익</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #feca57;">
+                    <h4>💵 현금흐름표</h4>
+                    <p><strong>현금의 이동 경로</strong></p>
+                    <ul>
+                        <li><strong>영업활동</strong>: 본업 현금흐름</li>
+                        <li><strong>투자활동</strong>: 설비투자 등</li>
+                        <li><strong>재무활동</strong>: 차입/상환</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>핵심 지표 체크리스트</h3>
+            <table>
+                <tr>
+                    <th>지표</th>
+                    <th>계산법</th>
+                    <th>적정 수준</th>
+                    <th>의미</th>
+                </tr>
+                <tr>
+                    <td>부채비율</td>
+                    <td>부채 ÷ 자본 × 100</td>
+                    <td>100~200%</td>
+                    <td>재무 안정성</td>
+                </tr>
+                <tr>
+                    <td>유동비율</td>
+                    <td>유동자산 ÷ 유동부채 × 100</td>
+                    <td>150% 이상</td>
+                    <td>단기 지급능력</td>
+                </tr>
+                <tr>
+                    <td>영업이익률</td>
+                    <td>영업이익 ÷ 매출 × 100</td>
+                    <td>10% 이상</td>
+                    <td>본업 수익성</td>
+                </tr>
+                <tr>
+                    <td>순이익률</td>
+                    <td>순이익 ÷ 매출 × 100</td>
+                    <td>5% 이상</td>
+                    <td>전체 수익성</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>💡 재무제표 확인 방법</strong><br><br>
+                • <strong>DART (dart.fss.or.kr)</strong>: 금융감독원 전자공시시스템<br>
+                • <strong>네이버 금융</strong>: 종목 검색 → 기업실적분석<br>
+                • <strong>증권사 MTS/HTS</strong>: 종목 상세정보<br><br>
+                ⚠️ 최근 3년치 추세를 확인하고, 동종 업계와 비교하세요!
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 주의할 점</strong><br>
+                • 일회성 이익으로 숫자가 좋아진 건 아닌지 확인<br>
+                • 업종별로 적정 부채비율이 다름 (금융업은 높음)<br>
+                • 현금흐름표로 실제 돈의 흐름 확인 필수
+            </div>
+        </section>
+
+        <section id="section21">
+            <h2>21. 실적 시즌과 어닝 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>어닝 시즌 (Earnings Season)</strong><br>
+                상장 기업들이 분기별 실적을 집중 발표하는 기간입니다.
+                한국은 1/4/7/10월, 미국은 분기 종료 후 약 2주 뒤부터 시작됩니다.
+            </div>
+
+            <h3>핵심 용어</h3>
+            <table>
+                <tr>
+                    <th>용어</th>
+                    <th>의미</th>
+                    <th>주가 영향</th>
+                </tr>
+                <tr>
+                    <td><strong>컨센서스</strong></td>
+                    <td>애널리스트들의 평균 실적 전망치</td>
+                    <td>기준점 (시장 기대치)</td>
+                </tr>
+                <tr>
+                    <td><strong>어닝 서프라이즈</strong></td>
+                    <td>실적이 컨센서스를 크게 상회 (+10% 이상)</td>
+                    <td style="color: #00ff88;">주가 상승 ↑</td>
+                </tr>
+                <tr>
+                    <td><strong>어닝 쇼크</strong></td>
+                    <td>실적이 컨센서스를 크게 하회</td>
+                    <td style="color: #ff6b6b;">주가 하락 ↓</td>
+                </tr>
+                <tr>
+                    <td><strong>가이던스</strong></td>
+                    <td>기업이 제시하는 향후 실적 전망</td>
+                    <td>미래 주가에 영향</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <strong>실적 발표 예시</strong><br><br>
+                • 컨센서스: 영업이익 1,000억원<br>
+                • 실제 발표: 영업이익 1,200억원 (+20%)<br>
+                • 결과: <strong style="color: #00ff88;">어닝 서프라이즈!</strong> → 주가 상승 가능성<br><br>
+                ⚠️ 단, 좋은 실적이어도 컨센서스에 못 미치면 주가가 하락할 수 있음
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 어닝 시즌 투자 전략</strong><br><br>
+                1. 실적 발표 전 컨센서스 확인<br>
+                2. 발표 직전 급등한 종목은 주의 (기대감 선반영)<br>
+                3. 어닝 쇼크 후 과매도 구간 매수 기회 탐색<br>
+                4. 가이던스(향후 전망)도 함께 확인
+            </div>
+        </section>
+
+        <!-- PART 10: 시장 메커니즘 (NEW) -->
+        <section id="section22">
+            <h2>22. 공매도 (Short Selling) ⭐</h2>
+
+            <div class="definition-box">
+                <strong>공매도란?</strong><br>
+                '없는 것을 판다'는 뜻으로, 주식을 빌려서 먼저 팔고 나중에 싸게 사서 갚는 투자 방식입니다.
+                주가 <strong>하락</strong>에 베팅하는 전략입니다.
+            </div>
+
+            <h3>공매도 vs 일반 투자</h3>
+            <div class="comparison-grid">
+                <div class="safe-asset">
+                    <div class="asset-title">📈 롱 포지션 (일반 투자)</div>
+                    <p><strong>"싸게 사서 비싸게 판다"</strong></p>
+                    <ul>
+                        <li>1만원에 매수 → 2만원에 매도</li>
+                        <li>수익: +1만원</li>
+                        <li>주가 상승 시 이익</li>
+                        <li>최대 손실: -100% (원금)</li>
+                    </ul>
+                </div>
+                <div class="risk-asset">
+                    <div class="asset-title">📉 숏 포지션 (공매도)</div>
+                    <p><strong>"비싸게 팔고 싸게 산다"</strong></p>
+                    <ul>
+                        <li>2만원에 매도(빌림) → 1만원에 매수(상환)</li>
+                        <li>수익: +1만원</li>
+                        <li>주가 하락 시 이익</li>
+                        <li>최대 손실: <strong>무한대</strong> (주가 상승 무제한)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>한국의 공매도 규제</h3>
+            <table>
+                <tr>
+                    <th>규제</th>
+                    <th>내용</th>
+                </tr>
+                <tr>
+                    <td>무차입 공매도 금지</td>
+                    <td>반드시 주식을 빌린 후 매도해야 함</td>
+                </tr>
+                <tr>
+                    <td>업틱 룰</td>
+                    <td>직전 체결가보다 높은 가격으로만 공매도 가능</td>
+                </tr>
+                <tr>
+                    <td>공시 의무</td>
+                    <td>대량 공매도 시 보고 의무</td>
+                </tr>
+                <tr>
+                    <td>개인 참여 제한</td>
+                    <td>사실상 기관/외국인 위주 (개인은 대주 거래)</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>🔥 숏스퀴즈 (Short Squeeze)</strong><br><br>
+                공매도 투자자들이 손실을 막기 위해 대거 매수하면서 주가가 급등하는 현상<br><br>
+                <strong>대표 사례:</strong> 2021년 GameStop 사태<br>
+                • 개인 투자자들의 집중 매수 → 주가 폭등<br>
+                • 헤지펀드 막대한 손실 → 추가 매수 → 추가 상승<br>
+                • 2주 만에 주가 20배 상승
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 공매도 잔고 확인법</strong><br><br>
+                • <strong>한국거래소 (krx.co.kr)</strong>: 공매도 거래현황<br>
+                • <strong>네이버 금융</strong>: 종목 → 투자자별 매매동향<br><br>
+                공매도 잔고가 급증하면 해당 종목에 대한 비관적 전망이 늘어난 신호
+            </div>
+        </section>
+
+        <section id="section23">
+            <h2>23. IPO와 공모주 청약 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>IPO (Initial Public Offering)</strong><br>
+                기업이 처음으로 주식시장에 상장하여 일반인에게 주식을 파는 것입니다.
+                공모주 청약을 통해 상장 전 주식을 미리 살 수 있습니다.
+            </div>
+
+            <h3>공모주 청약 절차</h3>
+            <table>
+                <tr>
+                    <th>단계</th>
+                    <th>내용</th>
+                    <th>기간</th>
+                </tr>
+                <tr>
+                    <td>1️⃣ 주관사 확인</td>
+                    <td>해당 증권사 계좌 개설</td>
+                    <td>청약 전 미리</td>
+                </tr>
+                <tr>
+                    <td>2️⃣ 청약증거금 입금</td>
+                    <td>청약금액의 50% 입금</td>
+                    <td>청약 전</td>
+                </tr>
+                <tr>
+                    <td>3️⃣ 청약 신청</td>
+                    <td>원하는 수량 청약</td>
+                    <td>보통 2일간</td>
+                </tr>
+                <tr>
+                    <td>4️⃣ 배정 확인</td>
+                    <td>경쟁률에 따라 배정</td>
+                    <td>청약 마감 후</td>
+                </tr>
+                <tr>
+                    <td>5️⃣ 상장일 거래</td>
+                    <td>시장에서 매매 가능</td>
+                    <td>배정 후 약 1주</td>
+                </tr>
+            </table>
+
+            <h3>배정 방식</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4>⚖️ 균등배정 (50%)</h4>
+                    <p>청약자 전원이 동일하게 나눠 가짐</p>
+                    <ul>
+                        <li>소액 투자자에게 유리</li>
+                        <li>청약 금액과 무관</li>
+                        <li>최소 증거금만 있으면 참여 가능</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #feca57;">
+                    <h4>📊 비례배정 (50%)</h4>
+                    <p>청약 금액에 비례해서 배정</p>
+                    <ul>
+                        <li>자금력에 따라 배정량 증가</li>
+                        <li>경쟁률 높으면 배정 어려움</li>
+                        <li>기관 투자자에게 유리</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>따상 / 따따상</h3>
+            <div class="example-box">
+                <strong>신규 상장주 가격 범위</strong><br><br>
+                • 시초가 범위: 공모가의 <strong>60% ~ 400%</strong><br>
+                • 상한가: 시초가 +30%<br><br>
+                <strong>따상:</strong> 시초가 200% + 상한가 30% = 공모가의 <strong>260%</strong> (160% 수익)<br>
+                <strong>따따상:</strong> 시초가 400% + 상한가 30% = 공모가의 <strong>520%</strong> (420% 수익)
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 공모주 투자 주의사항</strong><br><br>
+                • 2022~2023년 상장 기업 중 <strong>약 40~50%</strong>가 연말 기준 공모가 하회<br>
+                • 기관 경쟁률이 낮은 종목은 주의<br>
+                • 따상 기대감에 과열 청약 시 손실 가능<br>
+                • 상장 직후 차익 실현 매물로 급락 가능
+            </div>
+        </section>
+
+        <section id="section24">
+            <h2>24. 섹터/산업 분류 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>GICS (Global Industry Classification Standard)</strong><br>
+                MSCI와 S&P가 개발한 글로벌 산업 분류 기준으로, 전 세계적으로 가장 많이 사용됩니다.
+                총 <strong>11개 섹터</strong>로 분류됩니다.
+            </div>
+
+            <h3>GICS 11대 섹터</h3>
+            <table>
+                <tr>
+                    <th>섹터</th>
+                    <th>대표 산업</th>
+                    <th>대표 기업 (한/미)</th>
+                </tr>
+                <tr>
+                    <td>🖥️ 정보기술 (IT)</td>
+                    <td>반도체, 소프트웨어</td>
+                    <td>삼성전자 / 애플, 엔비디아</td>
+                </tr>
+                <tr>
+                    <td>💊 헬스케어</td>
+                    <td>제약, 바이오, 의료기기</td>
+                    <td>삼성바이오 / 화이자, J&J</td>
+                </tr>
+                <tr>
+                    <td>🏦 금융</td>
+                    <td>은행, 보험, 증권</td>
+                    <td>KB금융 / JP모건</td>
+                </tr>
+                <tr>
+                    <td>🛒 필수소비재</td>
+                    <td>식품, 음료, 생활용품</td>
+                    <td>CJ제일제당 / P&G, 코카콜라</td>
+                </tr>
+                <tr>
+                    <td>🛍️ 임의소비재</td>
+                    <td>자동차, 호텔, 레저</td>
+                    <td>현대차 / 테슬라, 아마존</td>
+                </tr>
+                <tr>
+                    <td>🏭 산업재</td>
+                    <td>기계, 운송, 건설</td>
+                    <td>현대중공업 / 캐터필러</td>
+                </tr>
+                <tr>
+                    <td>⚡ 에너지</td>
+                    <td>정유, 가스</td>
+                    <td>SK이노베이션 / 엑슨모빌</td>
+                </tr>
+                <tr>
+                    <td>🧱 소재</td>
+                    <td>화학, 철강, 금속</td>
+                    <td>LG화학, 포스코</td>
+                </tr>
+                <tr>
+                    <td>📡 커뮤니케이션</td>
+                    <td>통신, 미디어, 엔터</td>
+                    <td>SK텔레콤 / 메타, 넷플릭스</td>
+                </tr>
+                <tr>
+                    <td>💡 유틸리티</td>
+                    <td>전력, 가스, 수도</td>
+                    <td>한국전력 / 넥스트에라</td>
+                </tr>
+                <tr>
+                    <td>🏠 부동산</td>
+                    <td>리츠, 부동산개발</td>
+                    <td>맥쿼리인프라 / 아메리칸타워</td>
+                </tr>
+            </table>
+
+            <h3>경기민감주 vs 방어주</h3>
+            <div class="comparison-grid">
+                <div class="risk-asset">
+                    <div class="asset-title">🔥 경기민감주 (Cyclical)</div>
+                    <p>경기에 따라 실적 변동 큼</p>
+                    <ul>
+                        <li>IT, 임의소비재, 산업재, 소재, 에너지</li>
+                        <li>경기 호황 시 강세</li>
+                        <li>경기 침체 시 약세</li>
+                        <li>예: 자동차, 반도체, 철강</li>
+                    </ul>
+                </div>
+                <div class="safe-asset">
+                    <div class="asset-title">🛡️ 방어주 (Defensive)</div>
+                    <p>경기와 무관하게 안정적 실적</p>
+                    <ul>
+                        <li>필수소비재, 헬스케어, 유틸리티</li>
+                        <li>경기 침체에도 수요 유지</li>
+                        <li>변동성 낮음, 배당 안정적</li>
+                        <li>예: 식품, 제약, 통신</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 섹터 로테이션 전략</strong><br><br>
+                경기 국면에 따라 유망 섹터가 바뀝니다:<br><br>
+                • <strong>회복기:</strong> IT, 임의소비재 (선행)<br>
+                • <strong>확장기:</strong> 산업재, 소재, 에너지<br>
+                • <strong>둔화기:</strong> 필수소비재, 헬스케어 (방어)<br>
+                • <strong>침체기:</strong> 유틸리티, 채권 (안전)
+            </div>
+        </section>
+
+        <!-- PART 11: 실전 투자 관리 (NEW) -->
+        <section id="section25">
+            <h2>25. 절세 계좌 총정리 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>절세 3종 세트</strong><br>
+                ISA, 연금저축, IRP는 대표적인 절세 계좌입니다.
+                세액공제와 비과세 혜택을 활용해 세금을 크게 줄일 수 있습니다.
+            </div>
+
+            <h3>3대 절세 계좌 비교</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>ISA</th>
+                    <th>연금저축</th>
+                    <th>IRP</th>
+                </tr>
+                <tr>
+                    <td><strong>가입 대상</strong></td>
+                    <td>19세 이상 누구나</td>
+                    <td>누구나 (미성년 포함)</td>
+                    <td>소득 있는 자</td>
+                </tr>
+                <tr>
+                    <td><strong>연간 납입한도</strong></td>
+                    <td>2,000만원</td>
+                    <td>1,800만원</td>
+                    <td>1,800만원</td>
+                </tr>
+                <tr>
+                    <td><strong>세액공제</strong></td>
+                    <td>X (만기 전환 시 O)</td>
+                    <td>최대 600만원</td>
+                    <td>최대 900만원 (합산)</td>
+                </tr>
+                <tr>
+                    <td><strong>운용 수익</strong></td>
+                    <td>200만원 비과세 + 9.9%</td>
+                    <td>과세이연</td>
+                    <td>과세이연</td>
+                </tr>
+                <tr>
+                    <td><strong>중도 인출</strong></td>
+                    <td>가능 (3년 후)</td>
+                    <td>일부 가능</td>
+                    <td>거의 불가</td>
+                </tr>
+                <tr>
+                    <td><strong>위험자산 한도</strong></td>
+                    <td>100%</td>
+                    <td>100%</td>
+                    <td>70%</td>
+                </tr>
+            </table>
+
+            <h3>세액공제 금액</h3>
+            <div class="example-box">
+                <strong>연금저축 + IRP 최대 세액공제</strong><br><br>
+                • 연금저축: 600만원<br>
+                • IRP 추가: 300만원<br>
+                • <strong>합계: 900만원</strong><br><br>
+                <strong>공제율:</strong><br>
+                • 총급여 5,500만원 이하: <strong>16.5%</strong> → 최대 <strong>148.5만원</strong> 환급<br>
+                • 총급여 5,500만원 초과: <strong>13.2%</strong> → 최대 <strong>118.8만원</strong> 환급
+            </div>
+
+            <h3>💰 최적의 납입 순서</h3>
+            <div class="tip-box">
+                <strong>절세 극대화 순서</strong><br><br>
+                <strong>1️⃣ 연금저축 600만원</strong> (세액공제)<br>
+                ↓<br>
+                <strong>2️⃣ IRP 300만원</strong> (세액공제 한도 채움)<br>
+                ↓<br>
+                <strong>3️⃣ ISA 2,000만원</strong> (비과세 + 낮은 세율)<br>
+                ↓<br>
+                <strong>4️⃣ ISA 만기 → 연금계좌 전환</strong> (추가 300만원 공제)
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 주의사항</strong><br><br>
+                • 연금저축/IRP 중도 해지 시 세액공제 받은 금액 + 운용수익에 <strong>16.5%</strong> 과세<br>
+                • 연금 수령 시에도 3.3~5.5% 연금소득세 부과<br>
+                • ISA는 <strong>3년 이상</strong> 유지해야 비과세 혜택
+            </div>
+        </section>
+
+        <section id="section26">
+            <h2>26. 리스크 관리 ⭐</h2>
+
+            <div class="definition-box">
+                <strong>리스크 관리의 핵심</strong><br>
+                "얼마나 벌 수 있느냐"보다 "<strong>얼마나 잃지 않느냐</strong>"가 장기 투자 성공의 핵심입니다.
+                50% 손실을 회복하려면 100% 수익이 필요합니다.
+            </div>
+
+            <h3>손실 회복에 필요한 수익률</h3>
+            <table>
+                <tr>
+                    <th>손실률</th>
+                    <th>회복에 필요한 수익률</th>
+                    <th>난이도</th>
+                </tr>
+                <tr>
+                    <td>-10%</td>
+                    <td>+11%</td>
+                    <td style="color: #00ff88;">쉬움</td>
+                </tr>
+                <tr>
+                    <td>-20%</td>
+                    <td>+25%</td>
+                    <td style="color: #feca57;">보통</td>
+                </tr>
+                <tr>
+                    <td>-30%</td>
+                    <td>+43%</td>
+                    <td style="color: #feca57;">어려움</td>
+                </tr>
+                <tr>
+                    <td>-50%</td>
+                    <td>+100%</td>
+                    <td style="color: #ff6b6b;">매우 어려움</td>
+                </tr>
+                <tr>
+                    <td>-70%</td>
+                    <td>+233%</td>
+                    <td style="color: #ff6b6b;">거의 불가능</td>
+                </tr>
+            </table>
+
+            <h3>리스크 관리 3대 원칙</h3>
+
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #ff6b6b;">
+                    <h4>✂️ 손절매 (Stop Loss)</h4>
+                    <p>미리 정한 가격에 손실 확정</p>
+                    <ul>
+                        <li>초보자 권장: <strong>-5~10%</strong></li>
+                        <li>감정 개입 방지</li>
+                        <li>자동 손절 주문 활용</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4>🎯 분산투자</h4>
+                    <p>여러 자산/종목에 나눠 투자</p>
+                    <ul>
+                        <li>최소 <strong>5~10개 종목</strong></li>
+                        <li>섹터별 분산</li>
+                        <li>자산군별 분산 (주식/채권/금)</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #feca57;">
+                    <h4>⚖️ 포지션 사이징</h4>
+                    <p>한 종목당 투자 비중 제한</p>
+                    <ul>
+                        <li>종목당 최대 <strong>10~20%</strong></li>
+                        <li>확신 없으면 비중 축소</li>
+                        <li>현금 비중 유지 (기회 대비)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>분할 매수/매도 전략</h3>
+            <div class="example-box">
+                <strong>분할 매수 예시 (3회 분할)</strong><br><br>
+                총 투자금: 300만원, 목표가: 10,000원<br><br>
+                • 1차 매수: 10,000원에 100만원 (100주)<br>
+                • 2차 매수: 9,000원에 100만원 (111주) - 하락 시<br>
+                • 3차 매수: 8,000원에 100만원 (125주) - 추가 하락 시<br><br>
+                <strong>평균 단가:</strong> 300만원 ÷ 336주 = 약 <strong>8,929원</strong><br>
+                → 물타기로 평균 단가를 낮춤
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ 투자 심리 관리</strong><br><br>
+                • <strong>FOMO (놓칠까 두려움):</strong> 급등주 추격 매수 금지<br>
+                • <strong>손실 회피:</strong> 손절 못하고 물타기만 반복 금지<br>
+                • <strong>과신:</strong> 연속 수익 후 과도한 베팅 금지<br><br>
+                💡 <strong>투자 일지</strong>를 작성하면 감정적 투자를 줄일 수 있습니다
+            </div>
+
+            <div class="tip-box">
+                <strong>💡 초보자를 위한 리스크 관리 체크리스트</strong><br><br>
+                ☐ 생활비가 아닌 여유자금으로만 투자했는가?<br>
+                ☐ 한 종목에 전체의 20% 이상 투자하지 않았는가?<br>
+                ☐ 손절 라인을 미리 정해두었는가?<br>
+                ☐ 레버리지(빚투)를 사용하지 않았는가?<br>
+                ☐ 급등주를 쫓아 충동 매수하지 않았는가?
+            </div>
+        </section>
+
         <footer>
             <p>📚 본 자료는 교육 목적으로 제작되었습니다.</p>
             <p>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</p>
             <p style="margin-top: 20px; font-size: 0.85em;">
-                🗓️ 작성일: 2026년 1월 | 총 19개 섹션<br>
-                ⭐ v4.0: 채권 기초, 경기사이클, 환율, 배당 투자, 주식 세금 추가
+                🗓️ 작성일: 2026년 1월 | 총 26개 섹션<br>
+                ⭐ v5.0: 재무제표, 공매도, IPO, 절세계좌, 섹터분류, 리스크관리, 어닝시즌 추가
             </p>
         </footer>
     </div>
