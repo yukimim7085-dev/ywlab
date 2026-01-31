@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>고급 경제 - 거시경제와 미시경제</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e8e8e8;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(233, 69, 96, 0.2);
+        }
+        h1 {
+            font-size: 2.2em;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .subtitle { color: #8892a8; font-size: 1em; }
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 12px 20px;
+            background: rgba(15, 52, 96, 0.5);
+            border-radius: 12px;
+        }
+        .nav-bar a { color: #e94560; text-decoration: none; font-size: 0.9em; }
+        .nav-bar a:hover { text-decoration: underline; }
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(233, 69, 96, 0.1);
+        }
+        h2 {
+            color: #e94560;
+            font-size: 1.8em;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+        }
+        h3 { color: #00f2fe; font-size: 1.3em; margin: 28px 0 16px; }
+        h4 { color: #feca57; font-size: 1.1em; margin: 20px 0 12px; }
+        p { margin-bottom: 16px; }
+        .definition-box {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15) 0%, rgba(255, 107, 107, 0.1) 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #e94560;
+        }
+        .example-box {
+            background: rgba(0, 242, 254, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #00f2fe;
+        }
+        .tip-box {
+            background: rgba(0, 255, 136, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff88;
+        }
+        .warning-box {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+        .micro-box {
+            background: rgba(79, 172, 254, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #4facfe;
+        }
+        .macro-box {
+            background: rgba(162, 89, 255, 0.1);
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #a259ff;
+        }
+        .formula {
+            background: #0a0a1a;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+        th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid rgba(233, 69, 96, 0.2); }
+        th { background: rgba(233, 69, 96, 0.2); color: #e94560; font-weight: 600; }
+        tr:hover { background: rgba(233, 69, 96, 0.05); }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .comparison-card {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(79, 172, 254, 0.2);
+        }
+        .comparison-card h4 { margin-top: 0; }
+        .comparison-card ul { list-style: none; padding: 0; }
+        .comparison-card li { padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .comparison-card li:last-child { border-bottom: none; }
+        .theory-card {
+            background: rgba(15, 52, 96, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid;
+        }
+        .theory-card.keynesian { border-color: #4facfe; }
+        .theory-card.classical { border-color: #feca57; }
+        .theory-card h4 { margin-bottom: 10px; }
+        .economist-quote {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-style: italic;
+            border-left: 4px solid #feca57;
+        }
+        .economist-quote .author {
+            text-align: right;
+            color: #feca57;
+            margin-top: 10px;
+            font-style: normal;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+            border-top: 1px solid rgba(233, 69, 96, 0.2);
+            margin-top: 40px;
+        }
+        .home-link { text-align: center; margin-top: 40px; }
+        .home-link a {
+            display: inline-block;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .home-link a:hover { transform: scale(1.05); }
+        @media (max-width: 768px) {
+            .container { padding: 16px 12px; }
+            h1 { font-size: 1.6em; }
+            h2 { font-size: 1.4em; }
+            section { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="6_practical.html">< 이전: 실전과 리스크</a>
+            <span style="color: #8892a8;">7 / 7 (고급)</span>
+            <a href="index.html">목차로 ></a>
+        </div>
+
+        <header>
+            <h1>고급 경제학</h1>
+            <p class="subtitle">거시경제와 미시경제 - 경제학의 두 기둥</p>
+        </header>
+
+        <!-- Section 1: 개요 -->
+        <section>
+            <h2>1. 경제학의 두 가지 시선</h2>
+
+            <div class="definition-box">
+                <strong>경제학 (Economics)</strong><br>
+                희소한 자원을 어떻게 효율적으로 배분할 것인가를 연구하는 학문입니다.
+                경제학은 크게 <strong>미시경제학</strong>과 <strong>거시경제학</strong>으로 나뉩니다.
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #4facfe;">
+                    <h4 style="color: #4facfe;">미시경제학 (Microeconomics)</h4>
+                    <p><strong>"나무를 보는 경제학"</strong></p>
+                    <ul>
+                        <li>개별 경제주체(가계, 기업)의 행동</li>
+                        <li>개별 시장의 가격 결정</li>
+                        <li>수요와 공급의 원리</li>
+                        <li>소비자와 생산자의 선택</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #a259ff;">
+                    <h4 style="color: #a259ff;">거시경제학 (Macroeconomics)</h4>
+                    <p><strong>"숲을 보는 경제학"</strong></p>
+                    <ul>
+                        <li>국가 경제 전체의 흐름</li>
+                        <li>GDP, 실업률, 물가</li>
+                        <li>경기변동과 경제성장</li>
+                        <li>정부 정책의 효과</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>미시 vs 거시 비교</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>미시경제학</th>
+                    <th>거시경제학</th>
+                </tr>
+                <tr>
+                    <td><strong>분석 단위</strong></td>
+                    <td>개인, 가계, 기업</td>
+                    <td>국가, 글로벌 경제</td>
+                </tr>
+                <tr>
+                    <td><strong>주요 지표</strong></td>
+                    <td>가격, 수량, 비용, 이윤</td>
+                    <td>GDP, 실업률, 인플레이션, 금리</td>
+                </tr>
+                <tr>
+                    <td><strong>분석 대상</strong></td>
+                    <td>특정 상품/서비스 시장</td>
+                    <td>경제 전체</td>
+                </tr>
+                <tr>
+                    <td><strong>예시 질문</strong></td>
+                    <td>"아이폰 가격은 왜 비싼가?"</td>
+                    <td>"한국 경제는 왜 성장했나?"</td>
+                </tr>
+                <tr>
+                    <td><strong>정책 관심</strong></td>
+                    <td>규제, 세금, 보조금</td>
+                    <td>금리, 재정지출, 환율</td>
+                </tr>
+            </table>
+
+            <div class="economist-quote">
+                "경제학은 인생에서 가장 중요한 것들에 대해 가장 복잡한 방식으로 가장 단순한 것을 말하는 학문이다."
+                <div class="author">- 폴 새뮤얼슨 (노벨 경제학상 수상자)</div>
+            </div>
+        </section>
+
+        <!-- Section 2: 미시경제학 기초 -->
+        <section>
+            <h2>2. 미시경제학 기초</h2>
+
+            <div class="micro-box">
+                <strong>미시경제학의 핵심 질문</strong><br>
+                "개별 경제주체는 어떻게 의사결정을 하는가?"<br>
+                "시장에서 가격은 어떻게 결정되는가?"
+            </div>
+
+            <h3>수요와 공급의 법칙</h3>
+            <div class="definition-box">
+                <strong>수요의 법칙</strong>: 가격이 오르면 수요량이 감소하고, 가격이 내리면 수요량이 증가한다.<br><br>
+                <strong>공급의 법칙</strong>: 가격이 오르면 공급량이 증가하고, 가격이 내리면 공급량이 감소한다.
+            </div>
+
+            <div class="example-box">
+                <strong>예시: 커피 가격</strong><br><br>
+                • 커피 가격 5,000원 → 하루 100잔 판매<br>
+                • 커피 가격 3,000원 → 하루 200잔 판매 (수요 증가)<br>
+                • 커피 가격 7,000원 → 하루 50잔 판매 (수요 감소)<br><br>
+                가격과 수요량은 <strong>반비례</strong> 관계!
+            </div>
+
+            <h3>시장 균형</h3>
+            <div class="formula">
+                균형 = 수요곡선과 공급곡선이 만나는 점<br>
+                균형가격 (Equilibrium Price) + 균형거래량 (Equilibrium Quantity)
+            </div>
+
+            <table>
+                <tr>
+                    <th>상황</th>
+                    <th>현상</th>
+                    <th>시장 반응</th>
+                </tr>
+                <tr>
+                    <td>수요 > 공급</td>
+                    <td>품귀 현상 (초과수요)</td>
+                    <td style="color: #ff6b6b;">가격 상승</td>
+                </tr>
+                <tr>
+                    <td>수요 < 공급</td>
+                    <td>재고 쌓임 (초과공급)</td>
+                    <td style="color: #00ff88;">가격 하락</td>
+                </tr>
+                <tr>
+                    <td>수요 = 공급</td>
+                    <td>균형 상태</td>
+                    <td style="color: #feca57;">가격 안정</td>
+                </tr>
+            </table>
+
+            <h3>탄력성 (Elasticity)</h3>
+            <div class="definition-box">
+                <strong>가격탄력성</strong>: 가격 변화에 대해 수요량이 얼마나 민감하게 반응하는지를 나타내는 지표
+            </div>
+
+            <div class="formula">
+                수요의 가격탄력성 = 수요량 변화율(%) ÷ 가격 변화율(%)
+            </div>
+
+            <table>
+                <tr>
+                    <th>탄력성</th>
+                    <th>의미</th>
+                    <th>예시</th>
+                </tr>
+                <tr>
+                    <td><strong>탄력적 (>1)</strong></td>
+                    <td>가격 변화에 민감</td>
+                    <td>명품, 외식, 여행</td>
+                </tr>
+                <tr>
+                    <td><strong>비탄력적 (<1)</strong></td>
+                    <td>가격 변화에 둔감</td>
+                    <td>쌀, 소금, 약</td>
+                </tr>
+                <tr>
+                    <td><strong>단위탄력적 (=1)</strong></td>
+                    <td>가격과 수요량 비례</td>
+                    <td>드문 경우</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>투자자가 알아야 할 탄력성</strong><br><br>
+                • <strong>필수재 기업</strong> (식품, 제약): 경기 불황에도 수요 안정 → 방어주<br>
+                • <strong>사치재 기업</strong> (명품, 여행): 경기에 민감 → 경기민감주<br>
+                • 탄력성이 낮은 상품을 파는 기업은 <strong>가격 인상</strong>이 쉬움 (가격결정력)
+            </div>
+
+            <h3>한계효용 체감의 법칙</h3>
+            <div class="example-box">
+                <strong>한계효용 (Marginal Utility)</strong><br>
+                상품을 한 단위 더 소비할 때 얻는 추가적인 만족감<br><br>
+                예시: 더운 날 아이스크림<br>
+                • 첫 번째 아이스크림: 만족도 100점<br>
+                • 두 번째 아이스크림: 만족도 60점<br>
+                • 세 번째 아이스크림: 만족도 20점<br>
+                • 네 번째 아이스크림: 만족도 -10점 (배탈)<br><br>
+                → 소비가 늘수록 <strong>추가 만족감은 감소</strong>한다
+            </div>
+        </section>
+
+        <!-- Section 3: 미시경제 심화 -->
+        <section>
+            <h2>3. 미시경제 심화 개념</h2>
+
+            <h3>시장 구조</h3>
+            <table>
+                <tr>
+                    <th>시장 구조</th>
+                    <th>특징</th>
+                    <th>예시</th>
+                    <th>가격결정력</th>
+                </tr>
+                <tr>
+                    <td><strong>완전경쟁</strong></td>
+                    <td>다수 판매자, 동질적 상품</td>
+                    <td>농산물, 주식시장</td>
+                    <td style="color: #00ff88;">없음</td>
+                </tr>
+                <tr>
+                    <td><strong>독점</strong></td>
+                    <td>유일한 판매자</td>
+                    <td>전기, 수도</td>
+                    <td style="color: #ff6b6b;">매우 높음</td>
+                </tr>
+                <tr>
+                    <td><strong>과점</strong></td>
+                    <td>소수 대기업이 지배</td>
+                    <td>통신사, 정유사</td>
+                    <td style="color: #feca57;">높음</td>
+                </tr>
+                <tr>
+                    <td><strong>독점적 경쟁</strong></td>
+                    <td>다수 판매자, 차별화된 상품</td>
+                    <td>음식점, 의류</td>
+                    <td style="color: #feca57;">제한적</td>
+                </tr>
+            </table>
+
+            <div class="tip-box">
+                <strong>투자에서의 활용</strong><br><br>
+                • <strong>독점/과점 기업</strong>: 높은 마진, 안정적 수익 (예: 삼성전자, SK텔레콤)<br>
+                • <strong>완전경쟁 기업</strong>: 낮은 마진, 가격 경쟁 치열<br>
+                • <strong>해자(Moat)</strong>: 독점력을 유지하게 하는 경쟁우위 (브랜드, 특허, 네트워크효과)
+            </div>
+
+            <h3>기회비용 (Opportunity Cost)</h3>
+            <div class="definition-box">
+                <strong>기회비용</strong><br>
+                어떤 선택을 할 때 포기해야 하는 <strong>차선의 가치</strong>
+            </div>
+
+            <div class="example-box">
+                <strong>예시: 대학 진학의 기회비용</strong><br><br>
+                대학 4년간 비용:<br>
+                • 등록금: 4,000만원<br>
+                • 포기한 수입: 연봉 3,000만원 × 4년 = 1억 2,000만원<br>
+                • <strong>총 기회비용: 1억 6,000만원</strong><br><br>
+                → 대학 졸업 후 이 비용을 회수할 수 있어야 "합리적" 선택
+            </div>
+
+            <div class="example-box">
+                <strong>투자에서의 기회비용</strong><br><br>
+                • 예금에 1억원을 넣으면 → 주식 투자 수익 포기<br>
+                • A주식에 투자하면 → B주식 투자 기회 포기<br>
+                • 현금 보유하면 → 인플레이션으로 가치 하락<br><br>
+                → <strong>"아무것도 안 하는 것"도 기회비용이 있다!</strong>
+            </div>
+
+            <h3>게임이론 기초</h3>
+            <div class="micro-box">
+                <strong>게임이론 (Game Theory)</strong><br>
+                경쟁 상황에서 각 경제주체가 어떻게 전략적으로 행동하는지 분석하는 이론
+            </div>
+
+            <div class="example-box">
+                <strong>죄수의 딜레마 (Prisoner's Dilemma)</strong><br><br>
+                두 죄수 A, B가 각각 자백/묵비 선택:<br>
+                • 둘 다 묵비: 각 1년 형<br>
+                • 둘 다 자백: 각 5년 형<br>
+                • 한 명만 자백: 자백자 석방, 묵비자 10년 형<br><br>
+                → 개인 합리성 vs 집단 합리성의 충돌<br>
+                → <strong>기업 간 가격 담합이 어려운 이유</strong>
+            </div>
+        </section>
+
+        <!-- Section 4: 거시경제학 기초 -->
+        <section>
+            <h2>4. 거시경제학 기초</h2>
+
+            <div class="macro-box">
+                <strong>거시경제학의 핵심 질문</strong><br>
+                "국가 경제 전체는 어떻게 움직이는가?"<br>
+                "경기변동과 경제성장은 왜 발생하는가?"
+            </div>
+
+            <h3>GDP (국내총생산)</h3>
+            <div class="definition-box">
+                <strong>GDP (Gross Domestic Product)</strong><br>
+                일정 기간 동안 한 나라 안에서 생산된 모든 최종 재화와 서비스의 시장가치 합계
+            </div>
+
+            <div class="formula">
+                GDP = C (소비) + I (투자) + G (정부지출) + (X - M) (순수출)
+            </div>
+
+            <table>
+                <tr>
+                    <th>구성요소</th>
+                    <th>설명</th>
+                    <th>비중 (한국 기준)</th>
+                </tr>
+                <tr>
+                    <td><strong>C (소비)</strong></td>
+                    <td>가계의 소비 지출</td>
+                    <td>약 48%</td>
+                </tr>
+                <tr>
+                    <td><strong>I (투자)</strong></td>
+                    <td>기업의 설비투자, 건설투자</td>
+                    <td>약 31%</td>
+                </tr>
+                <tr>
+                    <td><strong>G (정부지출)</strong></td>
+                    <td>정부의 소비와 투자</td>
+                    <td>약 18%</td>
+                </tr>
+                <tr>
+                    <td><strong>NX (순수출)</strong></td>
+                    <td>수출 - 수입</td>
+                    <td>약 3%</td>
+                </tr>
+            </table>
+
+            <h3>명목 GDP vs 실질 GDP</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #feca57;">
+                    <h4 style="color: #feca57;">명목 GDP</h4>
+                    <p>현재 시장가격으로 계산</p>
+                    <ul>
+                        <li>물가 상승분 포함</li>
+                        <li>인플레이션 반영</li>
+                        <li>명목상 성장</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #00ff88;">
+                    <h4 style="color: #00ff88;">실질 GDP</h4>
+                    <p>기준연도 가격으로 계산</p>
+                    <ul>
+                        <li>물가 변동 제거</li>
+                        <li>실제 생산량 증가 반영</li>
+                        <li>진짜 경제성장</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>인플레이션과 디플레이션</h3>
+            <table>
+                <tr>
+                    <th>구분</th>
+                    <th>인플레이션</th>
+                    <th>디플레이션</th>
+                </tr>
+                <tr>
+                    <td><strong>정의</strong></td>
+                    <td>물가가 지속적으로 상승</td>
+                    <td>물가가 지속적으로 하락</td>
+                </tr>
+                <tr>
+                    <td><strong>화폐가치</strong></td>
+                    <td style="color: #ff6b6b;">하락</td>
+                    <td style="color: #00ff88;">상승</td>
+                </tr>
+                <tr>
+                    <td><strong>채무자</strong></td>
+                    <td style="color: #00ff88;">유리 (빚 가치 하락)</td>
+                    <td style="color: #ff6b6b;">불리 (빚 부담 증가)</td>
+                </tr>
+                <tr>
+                    <td><strong>채권자</strong></td>
+                    <td style="color: #ff6b6b;">불리</td>
+                    <td style="color: #00ff88;">유리</td>
+                </tr>
+                <tr>
+                    <td><strong>자산</strong></td>
+                    <td>부동산, 주식 상승 경향</td>
+                    <td>현금 보유 유리</td>
+                </tr>
+            </table>
+
+            <h3>실업률</h3>
+            <div class="formula">
+                실업률 = (실업자 수 ÷ 경제활동인구) × 100%
+            </div>
+
+            <table>
+                <tr>
+                    <th>실업 유형</th>
+                    <th>설명</th>
+                    <th>해결 방법</th>
+                </tr>
+                <tr>
+                    <td><strong>마찰적 실업</strong></td>
+                    <td>이직 과정에서 발생</td>
+                    <td>구인구직 정보 제공</td>
+                </tr>
+                <tr>
+                    <td><strong>구조적 실업</strong></td>
+                    <td>산업 구조 변화로 발생</td>
+                    <td>직업 훈련, 교육</td>
+                </tr>
+                <tr>
+                    <td><strong>경기적 실업</strong></td>
+                    <td>경기 침체로 발생</td>
+                    <td>경기 부양 정책</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 5: 거시경제 심화 -->
+        <section>
+            <h2>5. 거시경제 심화 개념</h2>
+
+            <h3>경기변동 (Business Cycle)</h3>
+            <div class="definition-box">
+                <strong>경기변동</strong><br>
+                경제 활동 수준이 일정한 주기로 확장과 수축을 반복하는 현상
+            </div>
+
+            <table>
+                <tr>
+                    <th>국면</th>
+                    <th>특징</th>
+                    <th>투자 전략</th>
+                </tr>
+                <tr>
+                    <td><strong>회복기</strong></td>
+                    <td>바닥 통과, 서서히 상승</td>
+                    <td>주식 비중 확대, 성장주</td>
+                </tr>
+                <tr>
+                    <td><strong>확장기</strong></td>
+                    <td>성장 가속, 기업 실적 호조</td>
+                    <td>경기민감주, 원자재</td>
+                </tr>
+                <tr>
+                    <td><strong>후퇴기</strong></td>
+                    <td>성장 둔화, 금리 정점</td>
+                    <td>방어주, 채권 비중 확대</td>
+                </tr>
+                <tr>
+                    <td><strong>침체기</strong></td>
+                    <td>경기 바닥, 실업 증가</td>
+                    <td>현금, 국채, 금</td>
+                </tr>
+            </table>
+
+            <h3>통화정책 vs 재정정책</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #4facfe;">
+                    <h4 style="color: #4facfe;">통화정책 (Monetary Policy)</h4>
+                    <p><strong>주체:</strong> 중앙은행 (한국은행, 연준)</p>
+                    <ul>
+                        <li><strong>금리 조절:</strong> 기준금리 인상/인하</li>
+                        <li><strong>공개시장조작:</strong> 채권 매입/매도</li>
+                        <li><strong>지급준비율:</strong> 은행 의무 예치금</li>
+                        <li><strong>효과:</strong> 시중 통화량 조절</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #a259ff;">
+                    <h4 style="color: #a259ff;">재정정책 (Fiscal Policy)</h4>
+                    <p><strong>주체:</strong> 정부</p>
+                    <ul>
+                        <li><strong>정부지출:</strong> SOC 투자, 복지</li>
+                        <li><strong>세금:</strong> 증세/감세</li>
+                        <li><strong>재정적자:</strong> 국채 발행</li>
+                        <li><strong>효과:</strong> 총수요 직접 조절</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>두 가지 경제학파</h3>
+
+            <div class="theory-card classical">
+                <h4 style="color: #feca57;">고전학파 / 통화주의</h4>
+                <p><strong>핵심 주장:</strong> 시장은 스스로 균형을 찾는다 ("보이지 않는 손")</p>
+                <ul>
+                    <li>정부 개입은 경제를 왜곡시킨다</li>
+                    <li>인플레이션은 "언제나 화폐적 현상"</li>
+                    <li>장기적으로 시장이 효율적</li>
+                    <li>대표: 애덤 스미스, 밀턴 프리드먼</li>
+                </ul>
+            </div>
+
+            <div class="theory-card keynesian">
+                <h4 style="color: #4facfe;">케인즈학파</h4>
+                <p><strong>핵심 주장:</strong> 시장은 불완전하다, 정부 개입 필요</p>
+                <ul>
+                    <li>경기 침체 시 정부가 수요를 창출해야</li>
+                    <li>재정정책으로 경기 조절</li>
+                    <li>단기에는 가격/임금이 경직적</li>
+                    <li>대표: 존 메이너드 케인즈</li>
+                </ul>
+            </div>
+
+            <div class="economist-quote">
+                "장기적으로 우리는 모두 죽는다."
+                <div class="author">- 존 메이너드 케인즈</div>
+            </div>
+
+            <h3>필립스 곡선</h3>
+            <div class="definition-box">
+                <strong>필립스 곡선 (Phillips Curve)</strong><br>
+                인플레이션과 실업률 사이의 <strong>상충관계(Trade-off)</strong>를 나타내는 곡선<br>
+                → 실업률을 낮추려면 인플레이션을 감수해야 하고,<br>
+                → 인플레이션을 낮추려면 실업률 상승을 감수해야 한다.
+            </div>
+
+            <div class="warning-box">
+                <strong>스태그플레이션 (Stagflation)</strong><br><br>
+                인플레이션 + 경기침체가 <strong>동시에</strong> 발생하는 최악의 상황<br><br>
+                • 1970년대 오일쇼크 시 발생<br>
+                • 필립스 곡선의 예외<br>
+                • 정책 대응이 매우 어려움 (금리 올리면 경기 더 악화, 내리면 물가 폭등)<br>
+                • 대응: 금, 원자재, 물가연동채
+            </div>
+        </section>
+
+        <!-- Section 6: 투자에 활용하기 -->
+        <section>
+            <h2>6. 투자에 경제학 활용하기</h2>
+
+            <h3>주요 경제지표와 투자 전략</h3>
+            <table>
+                <tr>
+                    <th>경제지표</th>
+                    <th>상승 시</th>
+                    <th>투자 전략</th>
+                </tr>
+                <tr>
+                    <td><strong>기준금리</strong></td>
+                    <td>통화긴축, 경기억제</td>
+                    <td>채권 가격↓, 성장주↓, 금융주↑</td>
+                </tr>
+                <tr>
+                    <td><strong>GDP 성장률</strong></td>
+                    <td>경기 호황</td>
+                    <td>주식↑, 경기민감주↑</td>
+                </tr>
+                <tr>
+                    <td><strong>인플레이션</strong></td>
+                    <td>물가 상승</td>
+                    <td>금↑, 부동산↑, 채권↓</td>
+                </tr>
+                <tr>
+                    <td><strong>실업률</strong></td>
+                    <td>경기 악화 신호</td>
+                    <td>방어주↑, 채권↑</td>
+                </tr>
+                <tr>
+                    <td><strong>환율 (원/달러)</strong></td>
+                    <td>원화 약세</td>
+                    <td>수출주↑, 달러자산↑</td>
+                </tr>
+            </table>
+
+            <h3>미시경제 vs 거시경제 투자법</h3>
+            <div class="comparison-grid">
+                <div class="comparison-card" style="border: 2px solid #4facfe;">
+                    <h4 style="color: #4facfe;">바텀업 (Bottom-Up)</h4>
+                    <p>미시경제적 접근</p>
+                    <ul>
+                        <li>개별 기업 분석 중심</li>
+                        <li>재무제표, 경쟁력 분석</li>
+                        <li>좋은 기업을 찾아 투자</li>
+                        <li>대표: 워런 버핏</li>
+                    </ul>
+                </div>
+                <div class="comparison-card" style="border: 2px solid #a259ff;">
+                    <h4 style="color: #a259ff;">탑다운 (Top-Down)</h4>
+                    <p>거시경제적 접근</p>
+                    <ul>
+                        <li>경제 전체 분석 우선</li>
+                        <li>경기 사이클, 금리 방향</li>
+                        <li>유망 섹터/국가 선택 후 종목</li>
+                        <li>대표: 조지 소로스, 레이 달리오</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <strong>실전 활용 팁</strong><br><br>
+                1. <strong>경제지표 발표일 체크:</strong> FOMC(금리), 고용보고서, CPI 등<br>
+                2. <strong>선행지표 주목:</strong> PMI, 소비자심리지수가 경기보다 먼저 움직임<br>
+                3. <strong>시장 예상 vs 실제:</strong> 예상보다 좋으면 호재, 나쁘면 악재<br>
+                4. <strong>거시 + 미시:</strong> 둘 다 고려해야 완전한 투자 분석
+            </div>
+
+            <h3>경제 뉴스 읽는 법</h3>
+            <div class="example-box">
+                <strong>뉴스 예시 해석</strong><br><br>
+                <em>"연준, 기준금리 0.25%p 인상... 인플레 잡기 총력"</em><br><br>
+                <strong>해석:</strong><br>
+                • 금리 인상 → 대출 비용 증가 → 소비/투자 위축<br>
+                • 채권 가격 하락 (금리와 채권은 반비례)<br>
+                • 성장주 약세 (미래 현금흐름 할인율 증가)<br>
+                • 달러 강세 가능성<br>
+                • 은행주는 유리할 수 있음 (예대마진 확대)
+            </div>
+        </section>
+
+        <!-- Section 7: 주요 경제학자 -->
+        <section>
+            <h2>7. 알아두면 좋은 경제학자들</h2>
+
+            <table>
+                <tr>
+                    <th>경제학자</th>
+                    <th>주요 업적</th>
+                    <th>핵심 아이디어</th>
+                </tr>
+                <tr>
+                    <td><strong>애덤 스미스</strong></td>
+                    <td>국부론, 경제학의 아버지</td>
+                    <td>"보이지 않는 손" - 시장의 자율조절</td>
+                </tr>
+                <tr>
+                    <td><strong>존 메이너드 케인즈</strong></td>
+                    <td>거시경제학 창시</td>
+                    <td>정부의 적극적 개입 필요</td>
+                </tr>
+                <tr>
+                    <td><strong>밀턴 프리드먼</strong></td>
+                    <td>통화주의</td>
+                    <td>"인플레이션은 화폐적 현상"</td>
+                </tr>
+                <tr>
+                    <td><strong>폴 새뮤얼슨</strong></td>
+                    <td>현대 경제학 교과서</td>
+                    <td>수학적 경제학 체계화</td>
+                </tr>
+                <tr>
+                    <td><strong>대니얼 카너먼</strong></td>
+                    <td>행동경제학</td>
+                    <td>인간은 비합리적으로 행동한다</td>
+                </tr>
+            </table>
+
+            <div class="economist-quote">
+                "주식시장은 단기적으로는 투표기계이지만, 장기적으로는 저울이다."
+                <div class="author">- 벤저민 그레이엄 (가치투자의 아버지)</div>
+            </div>
+        </section>
+
+        <div class="home-link">
+            <a href="index.html">목차로 돌아가기</a>
+        </div>
+
+        <footer>
+            <p>본 자료는 교육 목적으로 제작되었습니다.</p>
+            <p style="margin-top: 20px;">고급 경제학 | v1.0</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -125,6 +125,22 @@ with col2:
     </a>
     """, unsafe_allow_html=True)
 
+    st.markdown(f"""
+    <a href="{BASE_URL}/7_advanced.html" target="_blank" style="
+        display: block;
+        background: rgba(233, 69, 96, 0.1);
+        border-left: 4px solid #e94560;
+        color: #e8e8e8;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        margin: 8px 0;
+    ">
+        <strong style="color: #e94560;">7. 고급 경제학</strong><br>
+        <span style="font-size: 0.9em; color: #a0a0a0;">거시경제, 미시경제</span>
+    </a>
+    """, unsafe_allow_html=True)
+
 st.divider()
 
 # 전체 보기 버튼
@@ -167,4 +183,4 @@ st.markdown("")
 st.info("👆 원하는 주제를 선택하거나, 전체 내용을 한 번에 볼 수 있습니다.")
 
 st.divider()
-st.caption("총 26개 섹션 | 6개 주제별 페이지 | v6.0")
+st.caption("총 33개 섹션 | 7개 주제별 페이지 | v7.0")
