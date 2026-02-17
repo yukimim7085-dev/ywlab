@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>투자 지식 퀴즈 — YW Finance Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #16161f;
+            --bg-card-hover: #1c1c28;
+            --accent-gold: #d4a853;
+            --accent-gold-dim: #b8923f;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a78bfa;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9ca3af;
+            --text-dim: #6b7280;
+            --border: #1f1f2e;
+            --border-light: #2a2a3a;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;min-height:100vh}
+        body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+        .bg-gradient{position:fixed;inset:0;z-index:-1;overflow:hidden}
+        .bg-gradient::before{content:'';position:absolute;width:800px;height:800px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(212,168,83,0.06) 0%,transparent 70%);animation:floatOrb 20s ease-in-out infinite}
+        .bg-gradient::after{content:'';position:absolute;width:600px;height:600px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(59,130,246,0.04) 0%,transparent 70%);animation:floatOrb 25s ease-in-out infinite reverse}
+        @keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.1)}66%{transform:translate(-40px,40px) scale(0.95)}}
+
+        /* HEADER */
+        header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        nav{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+        .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:var(--bg-primary)}
+        .logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text-primary)}
+        .logo-text span{color:var(--accent-gold)}
+        .back-link{color:var(--text-secondary);text-decoration:none;font-size:0.85rem;display:flex;align-items:center;gap:6px;transition:color 0.3s}
+        .back-link:hover{color:var(--accent-gold)}
+
+        /* MAIN */
+        main{max-width:800px;margin:0 auto;padding:100px 2rem 4rem}
+
+        /* HERO */
+        .quiz-hero{text-align:center;margin-bottom:3rem;animation:fadeUp 0.6s ease-out}
+        .quiz-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;margin-bottom:1rem;letter-spacing:-0.02em}
+        .quiz-hero h1 .gold{color:var(--accent-gold)}
+        .quiz-hero p{color:var(--text-secondary);font-size:1rem;line-height:1.7;font-weight:300}
+
+        /* CATEGORY SELECT */
+        .category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+        .category-card{padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all 0.3s;text-align:center}
+        .category-card:hover{border-color:var(--accent-gold-dim);transform:translateY(-2px)}
+        .category-card.selected{border-color:var(--accent-gold);background:rgba(212,168,83,0.06);box-shadow:0 0 20px rgba(212,168,83,0.1)}
+        .category-icon{font-size:2rem;margin-bottom:0.75rem}
+        .category-name{font-size:1rem;font-weight:600;margin-bottom:0.25rem}
+        .category-count{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+
+        /* DIFFICULTY */
+        .difficulty-bar{display:flex;justify-content:center;gap:0.75rem;margin-bottom:2.5rem;flex-wrap:wrap}
+        .diff-btn{padding:8px 20px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:0.8rem;font-family:'Noto Sans KR',sans-serif;transition:all 0.3s}
+        .diff-btn:hover{border-color:var(--accent-gold);color:var(--accent-gold)}
+        .diff-btn.active{border-color:var(--accent-gold);background:rgba(212,168,83,0.1);color:var(--accent-gold)}
+
+        /* START BTN */
+        .start-area{text-align:center;margin-top:2rem}
+        .start-btn{padding:14px 40px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));color:var(--bg-primary);border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.3s;font-family:'Noto Sans KR',sans-serif}
+        .start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,83,0.3)}
+        .start-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+        /* QUIZ AREA */
+        .quiz-area{display:none}
+
+        /* PROGRESS BAR */
+        .progress-wrap{margin-bottom:2rem}
+        .progress-header{display:flex;justify-content:space-between;margin-bottom:0.75rem;align-items:center}
+        .progress-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent-gold)}
+        .progress-score{font-size:0.8rem;color:var(--text-dim)}
+        .progress-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+        .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-gold),var(--accent-gold-dim));border-radius:4px;transition:width 0.5s cubic-bezier(0.16,1,0.3,1)}
+
+        /* TIMER */
+        .timer-bar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem}
+        .timer-icon{font-size:1rem}
+        .timer-track{flex:1;height:3px;background:var(--border);border-radius:3px;overflow:hidden}
+        .timer-fill{height:100%;background:var(--accent-green);border-radius:3px;transition:width 0.1s linear}
+        .timer-fill.warning{background:var(--accent-gold)}
+        .timer-fill.danger{background:var(--accent-red)}
+        .timer-text{font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--text-dim);min-width:35px;text-align:right}
+
+        /* QUESTION CARD */
+        .q-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:2.5rem;animation:slideIn 0.4s ease-out}
+        @keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .q-badge{display:inline-flex;align-items:center;gap:6px;margin-bottom:1.5rem}
+        .q-diff{font-size:0.65rem;padding:3px 10px;border-radius:100px;font-family:'JetBrains Mono',monospace}
+        .q-diff.easy{background:rgba(34,197,94,0.1);color:var(--accent-green);border:1px solid rgba(34,197,94,0.2)}
+        .q-diff.medium{background:rgba(212,168,83,0.1);color:var(--accent-gold);border:1px solid rgba(212,168,83,0.2)}
+        .q-diff.hard{background:rgba(239,68,68,0.1);color:var(--accent-red);border:1px solid rgba(239,68,68,0.2)}
+        .q-category{font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-left:8px}
+        .q-text{font-size:1.2rem;font-weight:500;line-height:1.6;margin-bottom:2rem}
+
+        .q-options{display:grid;gap:0.75rem}
+        .q-option{padding:1rem 1.5rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.3s;font-size:0.95rem;text-align:left;color:var(--text-secondary);font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:12px;position:relative}
+        .q-option:hover{border-color:var(--accent-gold);color:var(--text-primary);background:var(--bg-card-hover)}
+        .q-option .opt-num{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-dim);flex-shrink:0;transition:all 0.3s}
+        .q-option:hover .opt-num{border-color:var(--accent-gold);color:var(--accent-gold)}
+        .q-option.correct{border-color:var(--accent-green);background:rgba(34,197,94,0.06);color:var(--accent-green)}
+        .q-option.correct .opt-num{border-color:var(--accent-green);background:rgba(34,197,94,0.15);color:var(--accent-green)}
+        .q-option.wrong{border-color:var(--accent-red);background:rgba(239,68,68,0.06);color:var(--accent-red)}
+        .q-option.wrong .opt-num{border-color:var(--accent-red);background:rgba(239,68,68,0.15);color:var(--accent-red)}
+        .q-option.disabled{pointer-events:none;opacity:0.6}
+        .q-option.correct.disabled,.q-option.wrong.disabled{opacity:1}
+
+        /* FEEDBACK */
+        .q-feedback{margin-top:1.5rem;padding:1.25rem;border-radius:14px;font-size:0.9rem;line-height:1.7;display:none;animation:fadeUp 0.3s ease-out}
+        .q-feedback.show{display:block}
+        .q-feedback.correct-fb{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);color:var(--text-secondary)}
+        .q-feedback.correct-fb strong{color:var(--accent-green)}
+        .q-feedback.wrong-fb{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);color:var(--text-secondary)}
+        .q-feedback.wrong-fb strong{color:var(--accent-red)}
+        .q-feedback .tip{margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);font-size:0.8rem;color:var(--text-dim)}
+        .q-feedback .tip strong{color:var(--accent-gold)}
+
+        /* NAV BUTTONS */
+        .q-nav{display:flex;justify-content:flex-end;margin-top:1.5rem;gap:0.75rem}
+        .q-nav-btn{padding:10px 24px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;font-size:0.85rem;transition:all 0.3s;font-family:'Noto Sans KR',sans-serif;display:none}
+        .q-nav-btn.show{display:block}
+        .q-nav-btn:hover{border-color:var(--accent-gold);color:var(--accent-gold)}
+
+        /* RESULT */
+        .result-area{display:none;text-align:center;animation:fadeUp 0.6s ease-out}
+        .result-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:3rem;margin-bottom:2rem}
+        .result-score{font-family:'JetBrains Mono',monospace;font-size:4rem;font-weight:700;color:var(--accent-gold);line-height:1}
+        .result-label{color:var(--text-dim);margin-top:0.5rem;font-size:0.9rem;margin-bottom:1.5rem}
+        .result-grade{font-size:1.5rem;margin-bottom:0.5rem}
+        .result-msg{color:var(--text-secondary);font-size:1rem;line-height:1.6;max-width:500px;margin:0 auto}
+
+        /* RESULT STATS */
+        .result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0}
+        .result-stat{padding:1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:12px}
+        .result-stat-num{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:500;margin-bottom:0.25rem}
+        .result-stat-num.green{color:var(--accent-green)}
+        .result-stat-num.red{color:var(--accent-red)}
+        .result-stat-num.gold{color:var(--accent-gold)}
+        .result-stat-label{font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em}
+
+        /* RESULT REVIEW */
+        .result-review{text-align:left;margin-top:2rem}
+        .result-review h3{font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--text-secondary)}
+        .review-item{padding:1rem 1.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:0.75rem;display:flex;align-items:flex-start;gap:12px}
+        .review-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px}
+        .review-q{font-size:0.85rem;color:var(--text-secondary);line-height:1.5}
+        .review-q strong{color:var(--text-primary);font-weight:500}
+
+        .result-actions{display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap}
+        .retry-btn{padding:12px 32px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));color:var(--bg-primary);border:none;border-radius:12px;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.3s;font-family:'Noto Sans KR',sans-serif}
+        .retry-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,83,0.3)}
+        .home-btn{padding:12px 32px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--text-secondary);cursor:pointer;font-size:0.95rem;transition:all 0.3s;font-family:'Noto Sans KR',sans-serif;text-decoration:none;display:inline-flex;align-items:center}
+        .home-btn:hover{border-color:var(--accent-gold);color:var(--accent-gold)}
+
+        @media(max-width:768px){
+            main{padding:90px 1.5rem 3rem}
+            .q-card{padding:1.75rem}
+            .q-text{font-size:1.05rem}
+            .category-grid{grid-template-columns:1fr 1fr}
+            .result-stats{grid-template-columns:repeat(3,1fr);gap:0.5rem}
+            .result-score{font-size:3rem}
+        }
+        @media(max-width:480px){
+            .category-grid{grid-template-columns:1fr}
+            .result-actions{flex-direction:column;align-items:center}
+        }
+    </style>
+</head>
+<body>
+<div class="bg-gradient"></div>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">Y</div>
+            <div class="logo-text">YW <span>Finance Lab</span></div>
+        </a>
+        <a href="index.html" class="back-link">← 메인으로</a>
+    </nav>
+</header>
+
+<main>
+    <!-- SETUP SCREEN -->
+    <div id="setupArea">
+        <div class="quiz-hero">
+            <h1>투자 지식 <span class="gold">퀴즈</span></h1>
+            <p>카테고리와 난이도를 선택하고 실력을 테스트해보세요.<br>틀린 문제는 자세한 해설로 바로 학습할 수 있습니다.</p>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+
+        <div class="difficulty-bar">
+            <button class="diff-btn active" data-diff="all" onclick="setDiff(this)">전체</button>
+            <button class="diff-btn" data-diff="easy" onclick="setDiff(this)">🟢 초급</button>
+            <button class="diff-btn" data-diff="medium" onclick="setDiff(this)">🟡 중급</button>
+            <button class="diff-btn" data-diff="hard" onclick="setDiff(this)">🔴 고급</button>
+        </div>
+
+        <div class="start-area">
+            <button class="start-btn" id="startBtn" onclick="startQuiz()">퀴즈 시작 →</button>
+            <p style="margin-top:0.75rem;font-size:0.8rem;color:var(--text-dim)" id="questionCount"></p>
+        </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="quiz-area" id="quizArea">
+        <div class="progress-wrap">
+            <div class="progress-header">
+                <span class="progress-label" id="progressLabel">1 / 10</span>
+                <span class="progress-score" id="progressScore">0점</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+
+        <div class="timer-bar" id="timerBar">
+            <span class="timer-icon">⏱</span>
+            <div class="timer-track"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+            <span class="timer-text" id="timerText">20s</span>
+        </div>
+
+        <div class="q-card" id="qCard">
+            <div class="q-badge">
+                <span class="q-diff" id="qDiff"></span>
+                <span class="q-category" id="qCat"></span>
+            </div>
+            <div class="q-text" id="qText"></div>
+            <div class="q-options" id="qOptions"></div>
+            <div class="q-feedback" id="qFeedback"></div>
+            <div class="q-nav">
+                <button class="q-nav-btn" id="qNext" onclick="nextQ()">다음 문제 →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div class="result-area" id="resultArea">
+        <div class="result-card">
+            <div class="result-score" id="resScore">0%</div>
+            <div class="result-label">정답률</div>
+            <div class="result-grade" id="resGrade"></div>
+            <div class="result-msg" id="resMsg"></div>
+
+            <div class="result-stats">
+                <div class="result-stat"><div class="result-stat-num green" id="resCorrect">0</div><div class="result-stat-label">정답</div></div>
+                <div class="result-stat"><div class="result-stat-num red" id="resWrong">0</div><div class="result-stat-label">오답</div></div>
+                <div class="result-stat"><div class="result-stat-num gold" id="resTime">0s</div><div class="result-stat-label">평균 시간</div></div>
+            </div>
+        </div>
+
+        <div class="result-review" id="resReview">
+            <h3>📋 문제 리뷰</h3>
+            <div id="reviewList"></div>
+        </div>
+
+        <div class="result-actions">
+            <button class="retry-btn" onclick="resetAll()">다시 도전 ↻</button>
+            <a href="index.html" class="home-btn">← 메인으로</a>
+            <a href="education.html" class="home-btn">📚 교육 페이지</a>
+        </div>
+    </div>
+</main>
+
+<script>
+// === QUIZ DATA ===
+const allQuestions = [
+    // 기초경제 - easy
+    {cat:'기초경제',diff:'easy',q:'GDP가 2분기 연속 감소하면 일반적으로 무엇이라 부를까요?',opts:['인플레이션','경기침체(리세션)','스태그플레이션','디플레이션'],ans:1,explain:'GDP가 2분기 연속 마이너스 성장하면 기술적 경기침체(recession)로 분류합니다.',tip:'PART 4에서 경기 사이클을 자세히 다룹니다.'},
+    {cat:'기초경제',diff:'easy',q:'중앙은행이 기준금리를 올리는 주된 이유는?',opts:['경기 부양','물가 안정(인플레이션 억제)','실업률 증가','수출 촉진'],ans:1,explain:'금리 인상은 시중 유동성을 줄여 물가 상승을 억제하는 대표적 통화정책입니다.',tip:'PART 1에서 연준과 기준금리를 다룹니다.'},
+    {cat:'기초경제',diff:'easy',q:'인플레이션이란?',opts:['물가가 지속적으로 하락','물가가 지속적으로 상승','환율이 상승','금리가 하락'],ans:1,explain:'인플레이션은 전반적인 물가 수준이 지속적으로 오르는 현상입니다.',tip:'PART 1에서 물가와 통화정책의 관계를 학습할 수 있습니다.'},
+    {cat:'기초경제',diff:'medium',q:'스태그플레이션이란 무엇인가요?',opts:['고성장 + 저물가','저성장 + 고물가','고성장 + 고물가','저성장 + 저물가'],ans:1,explain:'스태그플레이션은 경기 침체(stagnation)와 물가 상승(inflation)이 동시에 발생하는 상황입니다.',tip:'PART 4의 경기 사이클에서 다양한 경제 상황을 다룹니다.'},
+    {cat:'기초경제',diff:'medium',q:'양적완화(QE)란?',opts:['금리를 올리는 정책','중앙은행이 채권을 매입해 유동성 공급','세금을 인하하는 재정정책','수출을 제한하는 무역정책'],ans:1,explain:'양적완화는 중앙은행이 국채 등을 매입해 시장에 돈을 풀어 경기를 부양하는 비전통적 통화정책입니다.',tip:'PART 1에서 연준의 통화정책 도구를 학습할 수 있습니다.'},
+    // 주식투자 - easy
+    {cat:'주식투자',diff:'easy',q:'PER(주가수익비율)이 낮다는 것은 일반적으로 무엇을 의미할까요?',opts:['주가가 고평가','주가가 저평가 가능성','기업 부채가 많음','배당금이 높음'],ans:1,explain:'PER = 주가 ÷ 주당순이익. PER이 낮으면 이익 대비 주가가 낮아 저평가 가능성이 있습니다.',tip:'PART 6에서 PER·PBR·ROE를 자세히 다룹니다.'},
+    {cat:'주식투자',diff:'easy',q:'주가가 전날 대비 상승하면 어떤 색으로 표시될까요? (한국 기준)',opts:['파란색','빨간색','초록색','노란색'],ans:1,explain:'한국 증시에서는 상승=빨간색, 하락=파란색입니다. 미국은 반대로 상승=초록, 하락=빨간입니다.',tip:'PART 5에서 주식시장 기본 용어를 정리합니다.'},
+    {cat:'주식투자',diff:'medium',q:'시가총액이란?',opts:['하루 거래 총금액','주가 × 발행주식수','기업의 총 자산','기업의 순이익'],ans:1,explain:'시가총액 = 현재 주가 × 총 발행주식수. 기업의 시장 가치를 나타내는 지표입니다.',tip:'PART 5에서 주식시장 지표를 다룹니다.'},
+    {cat:'주식투자',diff:'medium',q:'ROE(자기자본이익률)가 높다는 것은?',opts:['부채가 많다','자기자본 대비 순이익이 크다','주가가 비싸다','배당을 많이 준다'],ans:1,explain:'ROE = 순이익 ÷ 자기자본 × 100. 투자한 자본 대비 얼마나 효율적으로 이익을 내는지를 보여줍니다.',tip:'PART 6에서 가치 평가 지표를 학습할 수 있습니다.'},
+    {cat:'주식투자',diff:'hard',q:'공매도(Short Selling)의 수익 구조는?',opts:['주가 상승 시 수익','주가 하락 시 수익','배당금으로 수익','거래량으로 수익'],ans:1,explain:'공매도는 주식을 빌려 팔고, 가격 하락 후 다시 사서 갚는 전략입니다. 가격 차이가 수익이 됩니다.',tip:'PART 10에서 공매도와 IPO를 다룹니다.'},
+    // 채권·금리
+    {cat:'채권·금리',diff:'easy',q:'기준금리가 오르면 채권 가격은 일반적으로?',opts:['상승','하락','변동 없음','알 수 없음'],ans:1,explain:'금리와 채권 가격은 반비례합니다. 금리가 오르면 기존 채권의 가치가 떨어집니다.',tip:'PART 3에서 채권 투자 기초를 다룹니다.'},
+    {cat:'채권·금리',diff:'medium',q:'장단기 금리 역전(Inverted Yield Curve)은 무엇을 시사할까요?',opts:['경기 호황 신호','경기침체 가능성','인플레이션 급등','통화 강세'],ans:1,explain:'장기금리가 단기금리보다 낮아지면, 시장이 향후 경기침체를 예상한다는 신호입니다.',tip:'PART 3에서 수익률 곡선을 학습할 수 있습니다.'},
+    {cat:'채권·금리',diff:'medium',q:'미국 연준이 금리를 인상하면 일반적으로?',opts:['달러 약세','달러 강세','원화 강세','유로 강세'],ans:1,explain:'금리 인상 → 미국 자산 수익률 상승 → 달러 수요 증가 → 달러 강세 효과가 나타납니다.',tip:'PART 1, PART 4에서 금리와 환율의 관계를 다룹니다.'},
+    {cat:'채권·금리',diff:'hard',q:'듀레이션(Duration)이 긴 채권의 특징은?',opts:['금리 변동에 민감','금리 변동에 둔감','만기가 짧음','이자율이 높음'],ans:0,explain:'듀레이션이 길수록 금리 변동에 대한 채권 가격 민감도가 높아집니다.',tip:'PART 3에서 채권의 고급 개념을 다룹니다.'},
+    // 투자전략
+    {cat:'투자전략',diff:'easy',q:'ETF(상장지수펀드)의 가장 큰 장점은?',opts:['원금 보장','분산투자 + 낮은 수수료','높은 레버리지','세금 면제'],ans:1,explain:'ETF는 여러 종목에 분산투자하면서도 거래 수수료가 일반 펀드보다 낮습니다.',tip:'PART 8에서 ETF와 자산배분을 다룹니다.'},
+    {cat:'투자전략',diff:'easy',q:'72의 법칙에서 연 6% 수익률이면 원금 2배는 약 몇 년?',opts:['6년','10년','12년','15년'],ans:2,explain:'72 ÷ 6 = 12년. 복리로 원금이 2배 되는 시간을 간단히 계산하는 법칙입니다.',tip:'PART 2에서 복리의 마법을 다룹니다.'},
+    {cat:'투자전략',diff:'medium',q:'레이 달리오의 올웨더 포트폴리오에 포함되지 않는 자산은?',opts:['미국 장기채','금','원유 선물','비트코인'],ans:3,explain:'올웨더 포트폴리오는 주식 30%, 장기채 40%, 중기채 15%, 금 7.5%, 원자재 7.5%로 구성됩니다.',tip:'PART 8에서 올웨더 포트폴리오를 학습할 수 있습니다.'},
+    {cat:'투자전략',diff:'medium',q:'리밸런싱이란?',opts:['손실 종목 전량 매도','목표 비중에 맞춰 자산 재조정','레버리지를 높이는 전략','단기 매매 기법'],ans:1,explain:'포트폴리오가 목표 비중에서 벗어나면, 매매를 통해 원래 비중으로 되돌리는 것을 리밸런싱이라 합니다.',tip:'PART 8에서 자산배분과 리밸런싱을 다룹니다.'},
+    {cat:'투자전략',diff:'hard',q:'샤프 지수(Sharpe Ratio)가 높을수록?',opts:['위험 대비 수익이 좋음','절대 수익이 높음','변동성이 큼','손실 가능성이 큼'],ans:0,explain:'샤프 지수 = (수익률 - 무위험수익률) ÷ 변동성. 같은 위험을 감수하고 더 높은 수익을 낸다는 뜻입니다.',tip:'PART 11에서 리스크 관리를 다룹니다.'},
+    // 세금·절세
+    {cat:'세금·절세',diff:'easy',q:'ISA(개인종합자산관리계좌)의 일반형 비과세 한도는?',opts:['100만원','200만원','400만원','500만원'],ans:1,explain:'일반형 ISA는 순이익 200만원까지 비과세, 초과분은 9.9% 분리과세됩니다.',tip:'PART 11에서 절세계좌를 비교합니다.'},
+    {cat:'세금·절세',diff:'medium',q:'연금저축의 세액공제 한도(연간)는?',opts:['300만원','400만원','600만원','900만원'],ans:2,explain:'연금저축은 연 600만원까지 세액공제 대상이며, IRP 포함 시 900만원까지 가능합니다.',tip:'PART 11에서 ISA·IRP·연금저축을 비교 정리합니다.'},
+    {cat:'세금·절세',diff:'medium',q:'국내 주식 매매차익에 대한 세금은? (소액 개인투자자)',opts:['22% 과세','비과세','10% 과세','종합소득세 합산'],ans:1,explain:'국내 상장주식의 매매차익은 대주주가 아닌 이상 비과세입니다. 단, 해외주식은 250만원 초과분에 22% 양도세가 부과됩니다.',tip:'PART 4에서 배당소득세, PART 11에서 절세 전략을 다룹니다.'},
+    {cat:'세금·절세',diff:'hard',q:'금융소득종합과세 기준 금액은?',opts:['1,000만원','2,000만원','3,000만원','5,000만원'],ans:1,explain:'이자·배당 등 금융소득이 연 2,000만원을 초과하면 다른 소득과 합산하여 종합과세됩니다.',tip:'PART 11에서 세금과 절세 전략을 학습할 수 있습니다.'},
+];
+
+// === STATE ===
+let selectedCats = new Set();
+let selectedDiff = 'all';
+let questions = [];
+let qIdx = 0, score = 0, answered = false;
+let timerInterval = null;
+let timeLeft = 20;
+let totalTime = 0;
+let answers = []; // {correct, q, userAns, correctAns}
+
+// === CATEGORIES ===
+const categories = [
+    {id:'기초경제',icon:'🏦',name:'기초 경제'},
+    {id:'주식투자',icon:'📈',name:'주식 투자'},
+    {id:'채권·금리',icon:'💰',name:'채권·금리'},
+    {id:'투자전략',icon:'🧺',name:'투자 전략'},
+    {id:'세금·절세',icon:'🛡️',name:'세금·절세'},
+];
+
+function renderCategories() {
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = categories.map(c => {
+        const count = allQuestions.filter(q => q.cat === c.id).length;
+        return `<div class="category-card" data-cat="${c.id}" onclick="toggleCat(this)">
+            <div class="category-icon">${c.icon}</div>
+            <div class="category-name">${c.name}</div>
+            <div class="category-count">${count}문제</div>
+        </div>`;
+    }).join('');
+    updateCount();
+}
+
+function toggleCat(el) {
+    const cat = el.dataset.cat;
+    if (selectedCats.has(cat)) { selectedCats.delete(cat); el.classList.remove('selected'); }
+    else { selectedCats.add(cat); el.classList.add('selected'); }
+    updateCount();
+}
+
+function setDiff(btn) {
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedDiff = btn.dataset.diff;
+    updateCount();
+}
+
+function getFilteredQuestions() {
+    let qs = allQuestions;
+    if (selectedCats.size > 0) qs = qs.filter(q => selectedCats.has(q.cat));
+    if (selectedDiff !== 'all') qs = qs.filter(q => q.diff === selectedDiff);
+    return qs;
+}
+
+function updateCount() {
+    const qs = getFilteredQuestions();
+    const countEl = document.getElementById('questionCount');
+    const btn = document.getElementById('startBtn');
+    const n = Math.min(qs.length, 10);
+    if (qs.length === 0) {
+        countEl.textContent = '선택한 조건에 맞는 문제가 없습니다';
+        btn.disabled = true;
+    } else {
+        countEl.textContent = `총 ${qs.length}문제 중 ${n}문제 출제`;
+        btn.disabled = false;
+    }
+}
+
+// === START ===
+function startQuiz() {
+    const filtered = getFilteredQuestions();
+    questions = shuffle([...filtered]).slice(0, 10);
+    qIdx = 0; score = 0; answered = false; totalTime = 0; answers = [];
+    document.getElementById('setupArea').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.getElementById('resultArea').style.display = 'none';
+    renderQ();
+}
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+// === RENDER QUESTION ===
+function renderQ() {
+    answered = false;
+    const q = questions[qIdx];
+    const total = questions.length;
+
+    document.getElementById('progressLabel').textContent = `${qIdx + 1} / ${total}`;
+    document.getElementById('progressScore').textContent = `${score}점`;
+    document.getElementById('progressFill').style.width = `${((qIdx) / total) * 100}%`;
+
+    const diffMap = {easy:'초급',medium:'중급',hard:'고급'};
+    document.getElementById('qDiff').textContent = diffMap[q.diff];
+    document.getElementById('qDiff').className = `q-diff ${q.diff}`;
+    document.getElementById('qCat').textContent = q.cat;
+    document.getElementById('qText').textContent = q.q;
+
+    const labels = ['A','B','C','D'];
+    document.getElementById('qOptions').innerHTML = q.opts.map((o, i) =>
+        `<button class="q-option" onclick="checkAns(${i})"><span class="opt-num">${labels[i]}</span><span>${o}</span></button>`
+    ).join('');
+
+    document.getElementById('qFeedback').className = 'q-feedback';
+    document.getElementById('qFeedback').style.display = 'none';
+    document.getElementById('qNext').classList.remove('show');
+
+    // Animate card
+    document.getElementById('qCard').style.animation = 'none';
+    void document.getElementById('qCard').offsetHeight;
+    document.getElementById('qCard').style.animation = 'slideIn 0.4s ease-out';
+
+    startTimer();
+}
+
+// === TIMER ===
+function startTimer() {
+    timeLeft = 20;
+    clearInterval(timerInterval);
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+        timeLeft -= 0.1;
+        if (timeLeft <= 0) {
+            timeLeft = 0;
+            clearInterval(timerInterval);
+            if (!answered) timeoutAnswer();
+        }
+        updateTimerUI();
+    }, 100);
+}
+
+function updateTimerUI() {
+    const pct = (timeLeft / 20) * 100;
+    const fill = document.getElementById('timerFill');
+    fill.style.width = pct + '%';
+    fill.className = 'timer-fill' + (pct < 25 ? ' danger' : pct < 50 ? ' warning' : '');
+    document.getElementById('timerText').textContent = Math.ceil(timeLeft) + 's';
+}
+
+function timeoutAnswer() {
+    answered = true;
+    const q = questions[qIdx];
+    const btns = document.querySelectorAll('.q-option');
+    btns.forEach((b, i) => {
+        b.classList.add('disabled');
+        if (i === q.ans) b.classList.add('correct');
+    });
+    const fb = document.getElementById('qFeedback');
+    fb.className = 'q-feedback show wrong-fb';
+    fb.innerHTML = `<strong>⏰ 시간 초과!</strong> ${q.explain}<div class="tip"><strong>💡 학습 포인트:</strong> ${q.tip}</div>`;
+    fb.style.display = 'block';
+    document.getElementById('qNext').classList.add('show');
+    document.getElementById('qNext').textContent = qIdx < questions.length - 1 ? '다음 문제 →' : '결과 보기 →';
+    answers.push({correct:false, q:q.q, userAns:'시간 초과', correctAns:q.opts[q.ans]});
+    totalTime += 20;
+}
+
+// === CHECK ANSWER ===
+function checkAns(idx) {
+    if (answered) return;
+    answered = true;
+    clearInterval(timerInterval);
+    const elapsed = 20 - timeLeft;
+    totalTime += elapsed;
+
+    const q = questions[qIdx];
+    const btns = document.querySelectorAll('.q-option');
+    btns.forEach((b, i) => {
+        b.classList.add('disabled');
+        if (i === q.ans) b.classList.add('correct');
+        if (i === idx && idx !== q.ans) b.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('qFeedback');
+    if (idx === q.ans) {
+        score++;
+        fb.className = 'q-feedback show correct-fb';
+        fb.innerHTML = `<strong>✅ 정답!</strong> ${q.explain}<div class="tip"><strong>💡 학습 포인트:</strong> ${q.tip}</div>`;
+        answers.push({correct:true, q:q.q, userAns:q.opts[idx], correctAns:q.opts[q.ans]});
+    } else {
+        fb.className = 'q-feedback show wrong-fb';
+        fb.innerHTML = `<strong>❌ 오답!</strong> ${q.explain}<div class="tip"><strong>💡 학습 포인트:</strong> ${q.tip}</div>`;
+        answers.push({correct:false, q:q.q, userAns:q.opts[idx], correctAns:q.opts[q.ans]});
+    }
+    fb.style.display = 'block';
+    document.getElementById('progressScore').textContent = `${score}점`;
+    document.getElementById('qNext').classList.add('show');
+    document.getElementById('qNext').textContent = qIdx < questions.length - 1 ? '다음 문제 →' : '결과 보기 →';
+}
+
+// === NEXT ===
+function nextQ() {
+    qIdx++;
+    if (qIdx < questions.length) renderQ();
+    else showResult();
+}
+
+// === RESULT ===
+function showResult() {
+    clearInterval(timerInterval);
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'block';
+
+    const total = questions.length;
+    const pct = Math.round(score / total * 100);
+    document.getElementById('resScore').textContent = pct + '%';
+    document.getElementById('resCorrect').textContent = score;
+    document.getElementById('resWrong').textContent = total - score;
+    document.getElementById('resTime').textContent = Math.round(totalTime / total) + 's';
+
+    let grade, msg;
+    if (pct === 100) { grade = '🏆 S등급'; msg = '완벽합니다! 투자 지식이 매우 탄탄하시네요.'; }
+    else if (pct >= 80) { grade = '🥇 A등급'; msg = '훌륭해요! 몇 가지 부분만 보완하면 완벽합니다.'; }
+    else if (pct >= 60) { grade = '🥈 B등급'; msg = '좋은 실력이에요! 교육 페이지에서 부족한 부분을 보완해보세요.'; }
+    else if (pct >= 40) { grade = '🥉 C등급'; msg = '기초를 다지는 단계입니다. 교육 콘텐츠로 학습해보세요.'; }
+    else { grade = '📚 학습 필요'; msg = '지금이 시작하기 가장 좋은 때입니다! 교육 페이지에서 차근차근 배워보세요.'; }
+    document.getElementById('resGrade').textContent = grade;
+    document.getElementById('resMsg').textContent = msg;
+
+    // Review
+    document.getElementById('reviewList').innerHTML = answers.map((a, i) =>
+        `<div class="review-item">
+            <span class="review-icon">${a.correct ? '✅' : '❌'}</span>
+            <div class="review-q"><strong>Q${i+1}. ${a.q}</strong><br>내 답: ${a.userAns}${a.correct ? '' : ` → 정답: ${a.correctAns}`}</div>
+        </div>`
+    ).join('');
+
+    document.getElementById('progressFill').style.width = '100%';
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// === RESET ===
+function resetAll() {
+    document.getElementById('setupArea').style.display = 'block';
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('resultArea').style.display = 'none';
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// INIT
+renderCategories();
+</script>
+</body>
+</html>

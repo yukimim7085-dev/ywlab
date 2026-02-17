@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YW Finance Lab — 경제·투자·리서치</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #16161f;
+            --bg-card-hover: #1c1c28;
+            --accent-gold: #d4a853;
+            --accent-gold-dim: #b8923f;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a78bfa;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9ca3af;
+            --text-dim: #6b7280;
+            --border: #1f1f2e;
+            --border-light: #2a2a3a;
+            --glow-gold: rgba(212,168,83,0.15);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;min-height:100vh}
+
+        /* LOADER */
+        .loader{position:fixed;inset:0;background:var(--bg-primary);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity 0.6s,visibility 0.6s}
+        .loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-logo{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--accent-gold);animation:loaderPulse 1.5s ease-in-out infinite}
+        .loader-bar{width:120px;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+        .loader-bar-inner{width:0%;height:100%;background:var(--accent-gold);border-radius:2px;animation:loaderFill 1.2s ease-out forwards}
+        @keyframes loaderPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+        @keyframes loaderFill{0%{width:0%}100%{width:100%}}
+
+        body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+        .bg-gradient{position:fixed;inset:0;z-index:-1;overflow:hidden}
+        .bg-gradient::before{content:'';position:absolute;width:800px;height:800px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(212,168,83,0.06) 0%,transparent 70%);animation:floatOrb 20s ease-in-out infinite}
+        .bg-gradient::after{content:'';position:absolute;width:600px;height:600px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(59,130,246,0.04) 0%,transparent 70%);animation:floatOrb 25s ease-in-out infinite reverse}
+        @keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.1)}66%{transform:translate(-40px,40px) scale(0.95)}}
+
+        header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;transition:all 0.4s cubic-bezier(0.16,1,0.3,1)}
+        header.scrolled{background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        nav{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:72px}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+        .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:18px;color:var(--bg-primary)}
+        .logo-text{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em}
+        .logo-text span{color:var(--accent-gold)}
+        .nav-right{display:flex;align-items:center;gap:1.5rem}
+        .nav-links{display:flex;gap:2rem;list-style:none}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:0.875rem;font-weight:400;letter-spacing:0.02em;transition:color 0.3s;position:relative}
+        .nav-links a:hover{color:var(--accent-gold)}
+        .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent-gold);transition:width 0.3s}
+        .nav-links a:hover::after{width:100%}
+        .search-toggle{background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-dim);cursor:pointer;padding:6px 12px;font-size:0.8rem;display:flex;align-items:center;gap:6px;transition:all 0.3s;font-family:'JetBrains Mono',monospace}
+        .search-toggle:hover{border-color:var(--accent-gold);color:var(--accent-gold)}
+        .search-toggle kbd{font-size:0.65rem;padding:1px 5px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+        .hamburger span{width:24px;height:2px;background:var(--text-secondary);transition:all 0.3s}
+
+        /* SEARCH */
+        .search-overlay{position:fixed;inset:0;background:rgba(10,10,15,0.92);backdrop-filter:blur(30px);z-index:2000;display:none;align-items:flex-start;justify-content:center;padding-top:20vh}
+        .search-overlay.active{display:flex}
+        .search-box{width:90%;max-width:600px;animation:fadeUp 0.3s ease-out}
+        .search-input-wrap{position:relative}
+        .search-input{width:100%;padding:1.2rem 1.5rem 1.2rem 3rem;background:var(--bg-card);border:1px solid var(--border-light);border-radius:16px;color:var(--text-primary);font-size:1.1rem;font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color 0.3s}
+        .search-input:focus{border-color:var(--accent-gold)}
+        .search-input::placeholder{color:var(--text-dim)}
+        .search-icon{position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:1rem}
+        .search-hint{margin-top:1rem;text-align:center;font-size:0.8rem;color:var(--text-dim)}
+        .search-hint kbd{padding:2px 6px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.7rem}
+        .search-results{margin-top:1rem;max-height:300px;overflow-y:auto}
+        .search-result-item{padding:1rem 1.5rem;border-radius:12px;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:12px}
+        .search-result-item:hover{background:var(--bg-card-hover)}
+        .search-result-icon{font-size:1.2rem}
+        .search-result-text{font-size:0.95rem;flex:1}
+        .search-result-tag{font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+
+        /* HERO */
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:6rem 2rem 4rem;position:relative}
+        .hero-content{max-width:900px;text-align:center}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:100px;font-size:0.8rem;color:var(--text-secondary);margin-bottom:2rem;animation:fadeUp 0.8s ease-out both}
+        .dot{width:6px;height:6px;background:var(--accent-green);border-radius:50%;animation:pulse 2s ease-in-out infinite;display:inline-block}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+        .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1.5rem;animation:fadeUp 0.8s ease-out 0.1s both}
+        .hero h1 .gold{color:var(--accent-gold)}
+        .hero h1 .outline{-webkit-text-stroke:1.5px var(--text-secondary);color:transparent}
+        .hero-desc{font-size:1.1rem;color:var(--text-secondary);line-height:1.7;max-width:600px;margin:0 auto 2.5rem;font-weight:300;animation:fadeUp 0.8s ease-out 0.2s both}
+        .hero-cta{display:flex;justify-content:center;gap:1rem;margin-bottom:3rem;animation:fadeUp 0.8s ease-out 0.25s both;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:12px;font-size:0.95rem;font-weight:500;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none;font-family:'Noto Sans KR',sans-serif}
+        .btn-primary{background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));color:var(--bg-primary)}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,83,0.3)}
+        .btn-secondary{background:transparent;color:var(--text-secondary);border:1px solid var(--border-light)}
+        .btn-secondary:hover{border-color:var(--accent-gold);color:var(--accent-gold)}
+        .hero-stats{display:flex;justify-content:center;gap:3rem;animation:fadeUp 0.8s ease-out 0.3s both}
+        .hero-stat{text-align:center}
+        .hero-stat-num{font-family:'JetBrains Mono',monospace;font-size:1.8rem;font-weight:500;color:var(--accent-gold)}
+        .hero-stat-label{font-size:0.75rem;color:var(--text-dim);margin-top:4px;letter-spacing:0.05em;text-transform:uppercase}
+        .scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 0.8s ease-out 0.5s both}
+        .scroll-indicator span{font-size:0.7rem;color:var(--text-dim);letter-spacing:0.1em;text-transform:uppercase}
+        .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent-gold),transparent);animation:scrollPulse 2s ease-in-out infinite}
+        @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+        /* TICKER */
+        .ticker-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1rem 0;overflow:hidden}
+        .ticker-track{display:flex;gap:3rem;animation:tickerScroll 30s linear infinite;width:max-content}
+        @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+        .ticker-item{display:flex;align-items:center;gap:0.75rem;white-space:nowrap;font-family:'JetBrains Mono',monospace;font-size:0.8rem}
+        .ticker-symbol{color:var(--text-secondary);font-weight:500}
+        .ticker-price{color:var(--text-primary)}
+        .ticker-change.up{color:var(--accent-green)}
+        .ticker-change.down{color:var(--accent-red)}
+
+        /* MARKET CLOCKS */
+        .market-clocks{display:flex;justify-content:center;gap:2rem;padding:1.5rem 2rem;flex-wrap:wrap}
+        .market-clock{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;font-size:0.8rem;min-width:180px}
+        .market-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+        .market-dot.open{background:var(--accent-green);box-shadow:0 0 8px rgba(34,197,94,0.5)}
+        .market-dot.closed{background:var(--accent-red)}
+        .market-dot.pre{background:var(--accent-gold);animation:pulse 2s ease-in-out infinite}
+        .market-name{color:var(--text-secondary);font-weight:500}
+        .market-time{color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:0.75rem;margin-left:auto}
+
+        section{max-width:1200px;margin:0 auto;padding:6rem 2rem}
+        .section-label{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent-gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1rem}
+        .section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:1rem}
+        .section-desc{color:var(--text-secondary);font-size:1rem;line-height:1.7;max-width:600px;margin-bottom:3rem;font-weight:300}
+
+        /* CARDS - 5개 (교육, 퀴즈, 리서치, 계산기, 인사이트) */
+        .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+        /* 퀴즈 카드를 가로로 넓게 */
+        .cards-grid .feature-card.wide{grid-column:span 2}
+        .feature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-decoration:none;color:inherit;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);cursor:pointer;display:block}
+        .feature-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,var(--glow-gold));opacity:0;transition:opacity 0.4s}
+        .feature-card:hover{border-color:var(--accent-gold-dim);transform:translateY(-4px);background:var(--bg-card-hover)}
+        .feature-card:hover::before{opacity:1}
+        .card-icon{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.5rem}
+        .card-icon.edu{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2)}
+        .card-icon.quiz{background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2)}
+        .card-icon.research{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)}
+        .card-icon.tools{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.2)}
+        .card-icon.news{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2)}
+        .card-status{display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;padding:3px 10px;border-radius:100px;margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+        .card-status.live{background:rgba(34,197,94,0.1);color:var(--accent-green);border:1px solid rgba(34,197,94,0.2)}
+        .card-status.new{background:rgba(212,168,83,0.1);color:var(--accent-gold);border:1px solid rgba(212,168,83,0.2)}
+        .card-status.soon{background:rgba(59,130,246,0.1);color:var(--accent-blue);border:1px solid rgba(59,130,246,0.2)}
+        .card-status.dev{background:rgba(107,114,128,0.1);color:var(--text-dim);border:1px solid rgba(107,114,128,0.2)}
+        .card-title{font-size:1.25rem;font-weight:700;margin-bottom:0.75rem}
+        .card-desc{font-size:0.9rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.5rem;font-weight:300}
+        .card-tags{display:flex;flex-wrap:wrap;gap:6px}
+        .card-tag{font-size:0.7rem;padding:3px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:100px;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+        .card-arrow{position:absolute;top:2rem;right:2rem;width:32px;height:32px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:0.9rem;transition:all 0.3s}
+        .feature-card:hover .card-arrow{border-color:var(--accent-gold);color:var(--accent-gold);transform:translate(2px,-2px)}
+
+        /* ROADMAP */
+        .roadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2rem}
+        .roadmap-item{padding:1.5rem;border-left:2px solid var(--border);transition:border-color 0.3s}
+        .roadmap-item:hover{border-color:var(--accent-gold)}
+        .roadmap-quarter{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent-gold);letter-spacing:0.1em;margin-bottom:0.75rem}
+        .roadmap-title{font-size:1rem;font-weight:500;margin-bottom:0.5rem}
+        .roadmap-desc{font-size:0.8rem;color:var(--text-dim);line-height:1.5}
+
+        footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+        .footer-inner{max-width:1200px;margin:0 auto}
+        .footer-logo{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1rem}
+        .footer-logo span{color:var(--accent-gold)}
+        .footer-links{display:flex;justify-content:center;gap:2rem;margin-bottom:1.5rem;flex-wrap:wrap}
+        .footer-links a{color:var(--text-dim);text-decoration:none;font-size:0.8rem;transition:color 0.3s}
+        .footer-links a:hover{color:var(--accent-gold)}
+        .footer-copy{font-size:0.75rem;color:var(--text-dim)}
+
+        .back-to-top{position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;background:var(--bg-card);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-dim);cursor:pointer;z-index:999;opacity:0;visibility:hidden;transition:all 0.3s;font-size:1.1rem}
+        .back-to-top.visible{opacity:1;visibility:visible}
+        .back-to-top:hover{border-color:var(--accent-gold);color:var(--accent-gold);transform:translateY(-2px)}
+
+        .mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,15,0.98);backdrop-filter:blur(20px);z-index:1500;flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+        .mobile-menu.active{display:flex}
+        .mobile-menu a{color:var(--text-primary);text-decoration:none;font-size:1.5rem;font-weight:500;transition:color 0.3s}
+        .mobile-menu a:hover{color:var(--accent-gold)}
+        .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer}
+
+        .reveal{opacity:0;transform:translateY(40px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+
+        @media(max-width:768px){
+            .nav-links{display:none}.search-toggle kbd{display:none}.hamburger{display:flex}
+            .hero{padding:5rem 1.5rem 3rem}.hero-stats{gap:1.5rem}.hero-stat-num{font-size:1.4rem}
+            section{padding:4rem 1.5rem}.cards-grid{grid-template-columns:1fr}
+            .cards-grid .feature-card.wide{grid-column:span 1}
+            .roadmap{grid-template-columns:1fr 1fr}.footer-links{gap:1rem}
+            .market-clocks{gap:0.75rem}.market-clock{min-width:150px;padding:8px 12px;font-size:0.75rem}
+        }
+        @media(max-width:480px){
+            .hero h1{font-size:2.2rem}.hero-desc{font-size:0.95rem}
+            .hero-stats{flex-direction:column;gap:1rem}.hero-cta{flex-direction:column;align-items:center}
+            .roadmap{grid-template-columns:1fr}.market-clocks{flex-direction:column;align-items:center}
+        }
+    </style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="loader-logo">YW</div><div class="loader-bar"><div class="loader-bar-inner"></div></div></div>
+<div class="bg-gradient"></div>
+
+<!-- SEARCH -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+        <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="무엇을 배우고 싶으세요?" autocomplete="off">
+        </div>
+        <div class="search-hint"><kbd>ESC</kbd> 로 닫기</div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header id="header">
+    <nav>
+        <a href="#" class="logo"><div class="logo-icon">Y</div><div class="logo-text">YW <span>Finance Lab</span></div></a>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#features">서비스</a></li>
+                <li><a href="#roadmap">로드맵</a></li>
+                <li><a href="education.html">경제교육</a></li>
+                <li><a href="quiz.html">퀴즈</a></li>
+            </ul>
+            <button class="search-toggle" onclick="openSearch()">🔍 검색 <kbd>/</kbd></button>
+            <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="toggleMenu()">✕</button>
+    <a href="#features" onclick="toggleMenu()">서비스</a>
+    <a href="#roadmap" onclick="toggleMenu()">로드맵</a>
+    <a href="education.html" onclick="toggleMenu()">경제교육</a>
+    <a href="quiz.html" onclick="toggleMenu()">퀴즈</a>
+</div>
+
+<div style="height:72px"></div>
+
+<!-- TICKER -->
+<div class="ticker-section">
+    <div class="ticker-track">
+        <div class="ticker-item"><span class="ticker-symbol">KOSPI</span><span class="ticker-price">2,612.34</span><span class="ticker-change up">+1.24%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">KOSDAQ</span><span class="ticker-price">742.18</span><span class="ticker-change down">-0.38%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">S&P 500</span><span class="ticker-price">6,114.52</span><span class="ticker-change up">+0.67%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">NASDAQ</span><span class="ticker-price">19,945.64</span><span class="ticker-change up">+1.02%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">USD/KRW</span><span class="ticker-price">1,442.30</span><span class="ticker-change down">-0.15%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">BTC</span><span class="ticker-price">$97,420</span><span class="ticker-change up">+2.31%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">GOLD</span><span class="ticker-price">$2,928.40</span><span class="ticker-change up">+0.45%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">WTI</span><span class="ticker-price">$71.24</span><span class="ticker-change down">-1.12%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">KOSPI</span><span class="ticker-price">2,612.34</span><span class="ticker-change up">+1.24%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">KOSDAQ</span><span class="ticker-price">742.18</span><span class="ticker-change down">-0.38%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">S&P 500</span><span class="ticker-price">6,114.52</span><span class="ticker-change up">+0.67%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">NASDAQ</span><span class="ticker-price">19,945.64</span><span class="ticker-change up">+1.02%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">USD/KRW</span><span class="ticker-price">1,442.30</span><span class="ticker-change down">-0.15%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">BTC</span><span class="ticker-price">$97,420</span><span class="ticker-change up">+2.31%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">GOLD</span><span class="ticker-price">$2,928.40</span><span class="ticker-change up">+0.45%</span></div>
+        <div class="ticker-item"><span class="ticker-symbol">WTI</span><span class="ticker-price">$71.24</span><span class="ticker-change down">-1.12%</span></div>
+    </div>
+</div>
+
+<!-- MARKET CLOCKS -->
+<div class="market-clocks" id="marketClocks"></div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge"><span class="dot"></span> v6.0 — 2026년 2월 업데이트</div>
+        <h1><span class="gold">경제</span>를 읽고<br><span class="outline">투자</span>를 설계하다</h1>
+        <p class="hero-desc">주식 입문부터 논문 리서치까지.<br>체계적인 금융 교육과 분석 도구를 한 곳에서.</p>
+        <div class="hero-cta">
+            <a href="education.html" class="btn btn-primary">📚 교육 시작하기</a>
+            <a href="quiz.html" class="btn btn-secondary">🧠 실력 테스트</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat"><div class="hero-stat-num" id="stat1">0</div><div class="hero-stat-label">교육 섹션</div></div>
+            <div class="hero-stat"><div class="hero-stat-num" id="stat2">0</div><div class="hero-stat-label">파트 구성</div></div>
+            <div class="hero-stat"><div class="hero-stat-num">∞</div><div class="hero-stat-label">무료 이용</div></div>
+        </div>
+    </div>
+    <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="reveal">
+        <div class="section-label">// Services</div>
+        <h2 class="section-title">무엇을 할 수 있나요?</h2>
+        <p class="section-desc">금융 교육, 퀴즈, 논문 리서치, 투자 도구까지 — 당신의 투자 여정을 위한 모든 것.</p>
+    </div>
+    <div class="cards-grid">
+        <!-- 경제교육 -->
+        <a href="education.html" class="feature-card reveal">
+            <div class="card-arrow">→</div>
+            <div class="card-icon edu">📚</div>
+            <div class="card-status live"><span class="dot" style="width:5px;height:5px"></span> LIVE</div>
+            <div class="card-title">경제 기초교육</div>
+            <div class="card-desc">중앙은행부터 리스크관리까지, 주식 입문자를 위한 26개 섹션의 체계적인 교육 콘텐츠.</div>
+            <div class="card-tags"><span class="card-tag">금리·환율</span><span class="card-tag">기술적분석</span><span class="card-tag">ETF·자산배분</span><span class="card-tag">세금·절세</span></div>
+        </a>
+        <!-- 퀴즈 -->
+        <a href="quiz.html" class="feature-card reveal">
+            <div class="card-arrow">→</div>
+            <div class="card-icon quiz">🧠</div>
+            <div class="card-status new"><span style="width:5px;height:5px;background:var(--accent-gold);border-radius:50%;display:inline-block"></span> NEW</div>
+            <div class="card-title">투자 지식 퀴즈</div>
+            <div class="card-desc">5개 카테고리, 3단계 난이도의 퀴즈로 투자 실력을 테스트하고 부족한 부분을 파악하세요.</div>
+            <div class="card-tags"><span class="card-tag">기초경제</span><span class="card-tag">주식투자</span><span class="card-tag">채권·금리</span><span class="card-tag">투자전략</span><span class="card-tag">세금·절세</span></div>
+        </a>
+        <!-- 리서치 -->
+        <a href="#" class="feature-card reveal" onclick="event.preventDefault()">
+            <div class="card-arrow">→</div>
+            <div class="card-icon research">🔬</div>
+            <div class="card-status soon"><span style="width:5px;height:5px;background:var(--accent-blue);border-radius:50%;display:inline-block"></span> COMING SOON</div>
+            <div class="card-title">논문 리서치 허브</div>
+            <div class="card-desc">경제·금융 논문을 검색하고 핵심을 요약. AI 기반 논문 분석 도구로 리서치 효율을 극대화.</div>
+            <div class="card-tags"><span class="card-tag">논문검색</span><span class="card-tag">AI요약</span><span class="card-tag">트렌드분석</span></div>
+        </a>
+        <!-- 계산기 -->
+        <a href="#" class="feature-card reveal" onclick="event.preventDefault()">
+            <div class="card-arrow">→</div>
+            <div class="card-icon tools">🧮</div>
+            <div class="card-status dev"><span style="width:5px;height:5px;background:var(--text-dim);border-radius:50%;display:inline-block"></span> IN DEV</div>
+            <div class="card-title">투자 계산기</div>
+            <div class="card-desc">복리 계산, 배당수익률, PER·ROE 분석, 포트폴리오 시뮬레이션 등 실전 투자 계산 도구.</div>
+            <div class="card-tags"><span class="card-tag">복리계산</span><span class="card-tag">배당분석</span><span class="card-tag">포트폴리오</span></div>
+        </a>
+        <!-- 인사이트 -->
+        <a href="#" class="feature-card reveal" onclick="event.preventDefault()">
+            <div class="card-arrow">→</div>
+            <div class="card-icon news">📡</div>
+            <div class="card-status dev"><span style="width:5px;height:5px;background:var(--text-dim);border-radius:50%;display:inline-block"></span> IN DEV</div>
+            <div class="card-title">시장 인사이트</div>
+            <div class="card-desc">국내외 주요 경제 이벤트, FOMC 일정, 실적 발표 캘린더 및 시장 동향 대시보드.</div>
+            <div class="card-tags"><span class="card-tag">FOMC일정</span><span class="card-tag">어닝캘린더</span><span class="card-tag">경제지표</span></div>
+        </a>
+    </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+    <div class="reveal">
+        <div class="section-label">// Roadmap</div>
+        <h2 class="section-title">개발 로드맵</h2>
+        <p class="section-desc">YW Finance Lab은 계속 성장합니다.</p>
+    </div>
+    <div class="roadmap reveal">
+        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q1 ✅</div><div class="roadmap-title">경제 기초교육 v5.0</div><div class="roadmap-desc">26개 섹션 완성. 재무제표, 공매도, IPO, 절세계좌, 리스크관리 추가.</div></div>
+        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q1 ✅</div><div class="roadmap-title">메인 포털 & 퀴즈</div><div class="roadmap-desc">다크모드 포털, 5개 카테고리 퀴즈 시스템, 검색, 마켓 시계.</div></div>
+        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q2</div><div class="roadmap-title">논문 리서치 허브</div><div class="roadmap-desc">경제 논문 검색·요약 기능. Streamlit 기반 AI 분석 도구 연동.</div></div>
+        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q3</div><div class="roadmap-title">투자 계산기 & 대시보드</div><div class="roadmap-desc">복리·배당 계산, 포트폴리오 시뮬레이션, 실시간 시장 데이터.</div></div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-logo">YW <span>Finance Lab</span></div>
+        <div class="footer-links">
+            <a href="education.html">경제교육</a>
+            <a href="quiz.html">퀴즈</a>
+            <a href="#">논문 리서치</a>
+            <a href="#">투자 계산기</a>
+        </div>
+        <div class="footer-copy">© 2026 YW Finance Lab. 교육 목적으로 제작되었습니다.<br>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</div>
+    </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>document.getElementById('loader').classList.add('hidden'),1300)});
+const header=document.getElementById('header'),backToTop=document.getElementById('backToTop');
+window.addEventListener('scroll',()=>{header.classList.toggle('scrolled',window.scrollY>50);backToTop.classList.toggle('visible',window.scrollY>500)});
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('active')}
+
+// SEARCH
+const searchData=[
+    {icon:'🏦',text:'중앙은행과 기준금리',tag:'PART 1',url:'education.html'},
+    {icon:'💰',text:'복리의 마법',tag:'PART 2',url:'education.html'},
+    {icon:'📊',text:'채권 투자 기초',tag:'PART 3',url:'education.html'},
+    {icon:'🔄',text:'경기 사이클과 투자',tag:'PART 4',url:'education.html'},
+    {icon:'📈',text:'주식시장 용어 정리',tag:'PART 5',url:'education.html'},
+    {icon:'🔢',text:'PER·PBR·ROE 지표',tag:'PART 6',url:'education.html'},
+    {icon:'📉',text:'기술적 분석 (차트)',tag:'PART 7',url:'education.html'},
+    {icon:'🧺',text:'ETF와 자산배분',tag:'PART 8',url:'education.html'},
+    {icon:'📋',text:'재무제표 읽는 법',tag:'PART 9',url:'education.html'},
+    {icon:'🔻',text:'공매도와 IPO',tag:'PART 10',url:'education.html'},
+    {icon:'🛡️',text:'절세계좌와 리스크관리',tag:'PART 11',url:'education.html'},
+    {icon:'🧠',text:'투자 지식 퀴즈',tag:'QUIZ',url:'quiz.html'},
+];
+function openSearch(){document.getElementById('searchOverlay').classList.add('active');setTimeout(()=>document.getElementById('searchInput').focus(),100)}
+function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML=''}
+document.getElementById('searchOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeSearch()});
+document.getElementById('searchInput').addEventListener('input',e=>{
+    const q=e.target.value.toLowerCase().trim(),results=document.getElementById('searchResults');
+    if(!q){results.innerHTML='';return}
+    const filtered=searchData.filter(d=>d.text.toLowerCase().includes(q)||d.tag.toLowerCase().includes(q));
+    results.innerHTML=filtered.map(d=>`<div class="search-result-item" onclick="location.href='${d.url}'"><span class="search-result-icon">${d.icon}</span><span class="search-result-text">${d.text}</span><span class="search-result-tag">${d.tag}</span></div>`).join('')||'<div style="padding:1rem;color:var(--text-dim);text-align:center">검색 결과가 없습니다</div>';
+});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!document.getElementById('searchOverlay').classList.contains('active')){e.preventDefault();openSearch()}if(e.key==='Escape')closeSearch()});
+
+// MARKET CLOCKS
+function updateMarketClocks(){
+    const now=new Date();
+    const markets=[{name:'🇰🇷 한국',tz:'Asia/Seoul',open:9,close:15.5},{name:'🇺🇸 미국',tz:'America/New_York',open:9.5,close:16},{name:'🇯🇵 일본',tz:'Asia/Tokyo',open:9,close:15},{name:'🇬🇧 영국',tz:'Europe/London',open:8,close:16.5}];
+    document.getElementById('marketClocks').innerHTML=markets.map(m=>{
+        const lt=new Date(now.toLocaleString('en-US',{timeZone:m.tz})),h=lt.getHours()+lt.getMinutes()/60,d=lt.getDay(),we=d===0||d===6;
+        let s='closed',l='휴장';if(!we){if(h>=m.open&&h<m.close){s='open';l='개장'}else if(h>=m.open-1&&h<m.open){s='pre';l='프리마켓'}}
+        return`<div class="market-clock"><div class="market-dot ${s}"></div><span class="market-name">${m.name}</span><span style="font-size:0.7rem;color:${s==='open'?'var(--accent-green)':s==='pre'?'var(--accent-gold)':'var(--text-dim)'}">${l}</span><span class="market-time">${lt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})}</span></div>`;
+    }).join('');
+}
+updateMarketClocks();setInterval(updateMarketClocks,60000);
+
+// STAT COUNTER
+function animateValue(el,end,dur){const st=performance.now();function u(t){const p=Math.min((t-st)/dur,1);el.textContent=Math.floor(end*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(u)}requestAnimationFrame(u)}
+const ho=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){animateValue(document.getElementById('stat1'),26,1500);animateValue(document.getElementById('stat2'),11,1200);ho.unobserve(en.target)}})},{threshold:0.5});
+ho.observe(document.querySelector('.hero'));
+
+// REVEAL
+const reveals=document.querySelectorAll('.reveal');
+const ro=new IntersectionObserver(e=>{e.forEach((en,i)=>{if(en.isIntersecting){setTimeout(()=>en.target.classList.add('visible'),i*80);ro.unobserve(en.target)}})},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+reveals.forEach(el=>ro.observe(el));
+</script>
+</body>
+</html>
