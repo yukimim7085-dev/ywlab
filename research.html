@@ -229,6 +229,26 @@
 const FRED_KEY = '4fb5dac909861e78d5e76dadeb5cf9d7';
 const ECOS_KEY = 'QZIGLKAE4NXE2AH490NG';
 
+// CORS 프록시 목록 (순차 시도)
+const PROXIES = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => url  // 직접 시도 (CORS 지원하는 경우)
+];
+
+async function fetchWithProxy(url) {
+    for (const proxy of PROXIES) {
+        try {
+            const resp = await fetch(proxy(url), { signal: AbortSignal.timeout(8000) });
+            if (resp.ok) {
+                const text = await resp.text();
+                return JSON.parse(text);
+            }
+        } catch (e) { /* 다음 프록시 시도 */ }
+    }
+    return null;
+}
+
 // ════════════════════════════════════════
 //  REVEAL ANIMATION
 // ════════════════════════════════════════
@@ -260,8 +280,8 @@ async function fetchFRED(seriesId) {
     const start = new Date(Date.now() - 400 * 86400000).toISOString().slice(0, 10);
     const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=2&observation_start=${start}`;
     try {
-        const resp = await fetch(url);
-        const data = await resp.json();
+        const data = await fetchWithProxy(url);
+        if (!data) return null;
         const obs = data.observations?.filter(o => o.value !== '.');
         if (obs && obs.length >= 2) {
             const current = parseFloat(obs[0].value);
@@ -284,8 +304,8 @@ async function fetchECOS(statCode, itemCode) {
     const start = startD.getFullYear() + String(startD.getMonth() + 1).padStart(2, '0');
     const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_KEY}/json/kr/1/5/${statCode}/M/${start}/${end}/${itemCode}`;
     try {
-        const resp = await fetch(url);
-        const data = await resp.json();
+        const data = await fetchWithProxy(url);
+        if (!data) return null;
         const rows = data?.StatisticSearch?.row;
         if (rows && rows.length >= 2) {
             const current = parseFloat(rows[rows.length - 1].DATA_VALUE);
@@ -310,9 +330,58 @@ function formatValue(val, unit, id) {
     return val.toFixed(2);
 }
 
+let loadedCount = 0;
+let totalCount = indicators.length;
+
+async function loadSingleIndicator(ind) {
+    let result = null;
+    if (ind.type === 'fred') {
+        result = await fetchFRED(ind.id);
+    } else if (ind.type === 'ecos') {
+        result = await fetchECOS(ind.stat, ind.item);
+    }
+    const card = document.getElementById(`ind-${ind.id}`);
+    if (!card) return;
+    loadedCount++;
+    if (result) {
+        const dir = result.change > 0 ? 'up' : result.change < 0 ? 'down' : 'neutral';
+        const sign = result.change > 0 ? '+' : '';
+        card.innerHTML = `
+            <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
+            <div class="indicator-value">${formatValue(result.value, ind.unit, ind.id)}</div>
+            <div class="indicator-change ${dir}">${sign}${result.pct.toFixed(2)}%</div>
+            <div class="indicator-source">${ind.source} · ${result.date}</div>
+        `;
+        card.style.borderColor = 'var(--border-light)';
+    } else {
+        card.innerHTML = `
+            <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
+            <div class="indicator-value" style="font-size:0.85rem;color:var(--text-dim)">연결 실패</div>
+            <div class="indicator-source">${ind.source} · <span onclick="retryIndicator('${ind.id}')" style="color:var(--accent-gold);cursor:pointer;text-decoration:underline">재시도</span></div>
+        `;
+    }
+    // 진행 상태 표시
+    document.getElementById('loadProgress').textContent = `${loadedCount}/${totalCount} 지표 로드됨`;
+}
+
+function retryIndicator(id) {
+    const ind = indicators.find(i => i.id === id);
+    if (ind) {
+        const card = document.getElementById(`ind-${ind.id}`);
+        card.innerHTML = `
+            <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
+            <div class="indicator-value indicator-loading">재시도 중...</div>
+            <div class="indicator-source">${ind.source}</div>
+        `;
+        loadedCount--;
+        loadSingleIndicator(ind);
+    }
+}
+
 async function loadIndicators() {
     const grid = document.getElementById('indicatorsGrid');
-    grid.innerHTML = indicators.map(ind => `
+    grid.innerHTML = `<div id="loadProgress" style="grid-column:1/-1;font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace">0/${totalCount} 지표 로드 중...</div>` +
+        indicators.map(ind => `
         <div class="indicator-card" id="ind-${ind.id}">
             <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
             <div class="indicator-value indicator-loading">로딩 중...</div>
@@ -320,28 +389,14 @@ async function loadIndicators() {
         </div>
     `).join('');
 
-    for (const ind of indicators) {
-        let result = null;
-        if (ind.type === 'fred') {
-            result = await fetchFRED(ind.id);
-        } else if (ind.type === 'ecos') {
-            result = await fetchECOS(ind.stat, ind.item);
-        }
-        const card = document.getElementById(`ind-${ind.id}`);
-        if (result) {
-            const dir = result.change > 0 ? 'up' : result.change < 0 ? 'down' : 'neutral';
-            const sign = result.change > 0 ? '+' : '';
-            card.innerHTML = `
-                <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
-                <div class="indicator-value">${formatValue(result.value, ind.unit, ind.id)}</div>
-                <div class="indicator-change ${dir}">${sign}${result.pct.toFixed(2)}%</div>
-                <div class="indicator-source">${ind.source} · ${result.date}</div>
-            `;
-        } else {
-            card.querySelector('.indicator-value').textContent = '--';
-            card.querySelector('.indicator-value').classList.remove('indicator-loading');
-        }
+    // 병렬로 3개씩 로드 (API 부하 분산)
+    const batchSize = 3;
+    for (let i = 0; i < indicators.length; i += batchSize) {
+        const batch = indicators.slice(i, i + batchSize);
+        await Promise.all(batch.map(ind => loadSingleIndicator(ind)));
     }
+    const progress = document.getElementById('loadProgress');
+    if (progress) progress.textContent = `✓ ${loadedCount}/${totalCount} 지표 로드 완료`;
 }
 
 // ════════════════════════════════════════
