@@ -229,6 +229,7 @@
                 <li><a href="#roadmap">로드맵</a></li>
                 <li><a href="education.html">경제교육</a></li>
                 <li><a href="quiz.html">퀴즈</a></li>
+                <li><a href="research.html">리서치</a></li>
             </ul>
             <button class="search-toggle" onclick="openSearch()">🔍 검색 <kbd>/</kbd></button>
             <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
@@ -243,6 +244,7 @@
     <a href="#roadmap" onclick="toggleMenu()">로드맵</a>
     <a href="education.html" onclick="toggleMenu()">경제교육</a>
     <a href="quiz.html" onclick="toggleMenu()">퀴즈</a>
+    <a href="research.html" onclick="toggleMenu()">리서치</a>
 </div>
 
 <div style="height:72px"></div>
@@ -318,13 +320,13 @@
             <div class="card-tags"><span class="card-tag">기초경제</span><span class="card-tag">주식투자</span><span class="card-tag">채권·금리</span><span class="card-tag">투자전략</span><span class="card-tag">세금·절세</span></div>
         </a>
         <!-- 리서치 -->
-        <a href="#" class="feature-card reveal" onclick="event.preventDefault()">
+        <a href="research.html" class="feature-card reveal">
             <div class="card-arrow">→</div>
             <div class="card-icon research">🔬</div>
-            <div class="card-status soon"><span style="width:5px;height:5px;background:var(--accent-blue);border-radius:50%;display:inline-block"></span> COMING SOON</div>
+            <div class="card-status live"><span class="dot" style="width:5px;height:5px"></span> LIVE</div>
             <div class="card-title">논문 리서치 허브</div>
-            <div class="card-desc">경제·금융 논문을 검색하고 핵심을 요약. AI 기반 논문 분석 도구로 리서치 효율을 극대화.</div>
-            <div class="card-tags"><span class="card-tag">논문검색</span><span class="card-tag">AI요약</span><span class="card-tag">트렌드분석</span></div>
+            <div class="card-desc">한국은행·연준·IMF·BIS 연구 자료와 실시간 경제 지표. 데이터 기반 투자 인사이트.</div>
+            <div class="card-tags"><span class="card-tag">논문검색</span><span class="card-tag">ECOS·FRED</span><span class="card-tag">실시간지표</span></div>
         </a>
         <!-- 계산기 -->
         <a href="#" class="feature-card reveal" onclick="event.preventDefault()">
@@ -357,7 +359,7 @@
     <div class="roadmap reveal">
         <div class="roadmap-item"><div class="roadmap-quarter">2026 Q1 ✅</div><div class="roadmap-title">경제 기초교육 v5.0</div><div class="roadmap-desc">26개 섹션 완성. 재무제표, 공매도, IPO, 절세계좌, 리스크관리 추가.</div></div>
         <div class="roadmap-item"><div class="roadmap-quarter">2026 Q1 ✅</div><div class="roadmap-title">메인 포털 & 퀴즈</div><div class="roadmap-desc">다크모드 포털, 5개 카테고리 퀴즈 시스템, 검색, 마켓 시계.</div></div>
-        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q2</div><div class="roadmap-title">논문 리서치 허브</div><div class="roadmap-desc">경제 논문 검색·요약 기능. Streamlit 기반 AI 분석 도구 연동.</div></div>
+        <div class="roadmap-item"><div class="roadmap-quarter">2026 Q1 ✅</div><div class="roadmap-title">논문 리서치 허브</div><div class="roadmap-desc">한국은행·연준·IMF·BIS 연구 자료 허브. ECOS·FRED API 실시간 지표 연동.</div></div>
         <div class="roadmap-item"><div class="roadmap-quarter">2026 Q3</div><div class="roadmap-title">투자 계산기 & 대시보드</div><div class="roadmap-desc">복리·배당 계산, 포트폴리오 시뮬레이션, 실시간 시장 데이터.</div></div>
     </div>
 </section>
@@ -368,7 +370,7 @@
         <div class="footer-links">
             <a href="education.html">경제교육</a>
             <a href="quiz.html">퀴즈</a>
-            <a href="#">논문 리서치</a>
+            <a href="research.html">논문 리서치</a>
             <a href="#">투자 계산기</a>
         </div>
         <div class="footer-copy">© 2026 YW Finance Lab. 교육 목적으로 제작되었습니다.<br>투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다.</div>
@@ -397,6 +399,9 @@ const searchData=[
     {icon:'🔻',text:'공매도와 IPO',tag:'PART 10',url:'education.html'},
     {icon:'🛡️',text:'절세계좌와 리스크관리',tag:'PART 11',url:'education.html'},
     {icon:'🧠',text:'투자 지식 퀴즈',tag:'QUIZ',url:'quiz.html'},
+    {icon:'🔬',text:'논문 리서치 허브',tag:'RESEARCH',url:'research.html'},
+    {icon:'🏛️',text:'한국은행 경제연구',tag:'BOK',url:'research.html'},
+    {icon:'🇺🇸',text:'연준·FRED 리서치',tag:'FED',url:'research.html'},
 ];
 function openSearch(){document.getElementById('searchOverlay').classList.add('active');setTimeout(()=>document.getElementById('searchInput').focus(),100)}
 function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML=''}

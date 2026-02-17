@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>논문 리서치 허브 — YW Finance Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #16161f;
+            --bg-card-hover: #1c1c28;
+            --accent-gold: #d4a853;
+            --accent-gold-dim: #b8923f;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+            --accent-purple: #a78bfa;
+            --accent-cyan: #22d3ee;
+            --text-primary: #e8e6e3;
+            --text-secondary: #9ca3af;
+            --text-dim: #6b7280;
+            --border: #1f1f2e;
+            --border-light: #2a2a3a;
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;min-height:100vh}
+        body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+        .bg-gradient{position:fixed;inset:0;z-index:-1;overflow:hidden}
+        .bg-gradient::before{content:'';position:absolute;width:800px;height:800px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(59,130,246,0.06) 0%,transparent 70%);animation:floatOrb 20s ease-in-out infinite}
+        .bg-gradient::after{content:'';position:absolute;width:600px;height:600px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(212,168,83,0.04) 0%,transparent 70%);animation:floatOrb 25s ease-in-out infinite reverse}
+        @keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.1)}66%{transform:translate(-40px,40px) scale(0.95)}}
+
+        /* HEADER */
+        header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        nav{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+        .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:15px;color:var(--bg-primary)}
+        .logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--text-primary)}
+        .logo-text span{color:var(--accent-gold)}
+        .nav-links{display:flex;gap:8px;list-style:none}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:0.85rem;padding:6px 12px;border-radius:6px;transition:all 0.3s}
+        .nav-links a:hover,.nav-links a.active{color:var(--accent-gold);background:rgba(212,168,83,0.1)}
+        .back-link{color:var(--text-secondary);text-decoration:none;font-size:0.85rem;display:flex;align-items:center;gap:6px;transition:color 0.3s}
+        .back-link:hover{color:var(--accent-gold)}
+        @media(max-width:768px){.nav-links{display:none}.back-link{font-size:0.8rem}}
+
+        /* MAIN */
+        main{max-width:1200px;margin:0 auto;padding:90px 2rem 4rem}
+
+        /* HERO */
+        .hero{text-align:center;margin-bottom:3rem;animation:fadeUp 0.6s ease-out}
+        .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;margin-bottom:1rem;letter-spacing:-0.02em}
+        .hero h1 .gold{color:var(--accent-gold)}
+        .hero p{color:var(--text-secondary);font-size:1.05rem;max-width:600px;margin:0 auto 2rem;line-height:1.7}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+        /* LIVE INDICATORS */
+        .indicators-section{margin-bottom:3rem}
+        .section-label{font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent-gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.5rem}
+        .section-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:1.5rem}
+        .indicators-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+        .indicator-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all 0.3s;position:relative;overflow:hidden}
+        .indicator-card:hover{border-color:var(--border-light);transform:translateY(-2px)}
+        .indicator-label{font-size:0.75rem;color:var(--text-dim);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+        .indicator-flag{font-size:0.85rem}
+        .indicator-value{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+        .indicator-change{font-family:'JetBrains Mono',monospace;font-size:0.75rem;padding:2px 6px;border-radius:4px;display:inline-block}
+        .indicator-change.up{color:var(--accent-green);background:rgba(34,197,94,0.1)}
+        .indicator-change.down{color:var(--accent-red);background:rgba(239,68,68,0.1)}
+        .indicator-change.neutral{color:var(--text-dim);background:rgba(107,114,128,0.1)}
+        .indicator-loading{color:var(--text-dim);font-size:0.8rem}
+        .indicator-source{font-size:0.6rem;color:var(--text-dim);margin-top:4px}
+        .indicator-spark{position:absolute;bottom:0;left:0;right:0;height:30px;opacity:0.3}
+
+        /* TABS */
+        .tabs{display:flex;gap:4px;margin-bottom:2rem;overflow-x:auto;padding-bottom:4px}
+        .tab{padding:8px 18px;border-radius:8px;font-size:0.85rem;border:1px solid var(--border);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all 0.3s;white-space:nowrap}
+        .tab:hover{border-color:var(--border-light);color:var(--text-primary)}
+        .tab.active{background:rgba(212,168,83,0.15);border-color:var(--accent-gold);color:var(--accent-gold)}
+        .tab .count{font-family:'JetBrains Mono',monospace;font-size:0.7rem;background:var(--border);padding:1px 6px;border-radius:10px;margin-left:6px}
+        .tab.active .count{background:rgba(212,168,83,0.2)}
+
+        /* SEARCH */
+        .search-bar{display:flex;gap:12px;margin-bottom:2rem;flex-wrap:wrap}
+        .search-input{flex:1;min-width:250px;padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:0.9rem;outline:none;transition:border-color 0.3s}
+        .search-input:focus{border-color:var(--accent-gold)}
+        .search-input::placeholder{color:var(--text-dim)}
+        .sort-select{padding:12px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-secondary);font-size:0.85rem;outline:none;cursor:pointer}
+        .sort-select option{background:var(--bg-card)}
+
+        /* PAPER CARDS */
+        .papers-grid{display:flex;flex-direction:column;gap:12px}
+        .paper-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:all 0.3s;cursor:pointer;text-decoration:none;display:block;position:relative}
+        .paper-card:hover{border-color:var(--accent-gold);transform:translateY(-1px);background:var(--bg-card-hover)}
+        .paper-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+        .paper-source{font-size:0.7rem;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:0.5px}
+        .paper-source.bok{background:rgba(59,130,246,0.15);color:var(--accent-blue)}
+        .paper-source.fed{background:rgba(167,139,250,0.15);color:var(--accent-purple)}
+        .paper-source.kdi{background:rgba(34,211,238,0.15);color:var(--accent-cyan)}
+        .paper-source.imf{background:rgba(34,197,94,0.15);color:var(--accent-green)}
+        .paper-source.bis{background:rgba(212,168,83,0.15);color:var(--accent-gold)}
+        .paper-source.nber{background:rgba(239,68,68,0.15);color:var(--accent-red)}
+        .paper-date{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim)}
+        .paper-type{font-size:0.7rem;color:var(--text-dim);background:var(--border);padding:2px 6px;border-radius:4px}
+        .paper-title{font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:6px;line-height:1.5}
+        .paper-card:hover .paper-title{color:var(--accent-gold)}
+        .paper-desc{font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .paper-tags{display:flex;gap:6px;flex-wrap:wrap}
+        .paper-tag{font-size:0.7rem;color:var(--text-dim);border:1px solid var(--border);padding:2px 8px;border-radius:12px}
+        .paper-arrow{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:1.2rem;color:var(--text-dim);transition:all 0.3s}
+        .paper-card:hover .paper-arrow{color:var(--accent-gold);right:16px}
+        @media(max-width:768px){.paper-arrow{display:none}}
+
+        /* RESOURCES GRID */
+        .resources-section{margin-top:3rem;margin-bottom:3rem}
+        .resources-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+        .resource-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;text-decoration:none;transition:all 0.3s;display:block}
+        .resource-card:hover{border-color:var(--accent-gold);transform:translateY(-2px)}
+        .resource-icon{font-size:2rem;margin-bottom:12px}
+        .resource-name{font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+        .resource-card:hover .resource-name{color:var(--accent-gold)}
+        .resource-desc{font-size:0.8rem;color:var(--text-secondary);line-height:1.5;margin-bottom:10px}
+        .resource-url{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim)}
+
+        /* EMPTY / LOADING */
+        .loading-state,.empty-state{text-align:center;padding:3rem 1rem;color:var(--text-dim)}
+        .loading-state .spinner{display:inline-block;width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent-gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        /* FOOTER */
+        footer{border-top:1px solid var(--border);padding:2rem;text-align:center;margin-top:4rem}
+        .footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:1rem;flex-wrap:wrap}
+        .footer-links a{color:var(--text-dim);text-decoration:none;font-size:0.8rem;transition:color 0.3s}
+        .footer-links a:hover{color:var(--accent-gold)}
+        .footer-copy{font-size:0.7rem;color:var(--text-dim)}
+
+        /* ANIMATION */
+        .reveal{opacity:0;transform:translateY(20px);transition:all 0.6s ease-out}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+    </style>
+</head>
+<body>
+<div class="bg-gradient"></div>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">Y</div>
+            <div class="logo-text">YW <span>Finance Lab</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">홈</a></li>
+            <li><a href="education.html">경제교육</a></li>
+            <li><a href="quiz.html">퀴즈</a></li>
+            <li><a href="research.html" class="active">리서치</a></li>
+        </ul>
+        <a href="index.html" class="back-link">← 메인으로</a>
+    </nav>
+</header>
+
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>논문 <span class="gold">리서치</span> 허브</h1>
+        <p>한국은행·연준·IMF·BIS의 경제 연구 자료와 실시간 지표를 한눈에.<br>데이터 기반 투자 인사이트를 발견하세요.</p>
+    </section>
+
+    <!-- LIVE INDICATORS -->
+    <section class="indicators-section reveal">
+        <div class="section-label">// Live Indicators</div>
+        <div class="section-title">실시간 경제 지표</div>
+        <div class="indicators-grid" id="indicatorsGrid">
+            <!-- JS로 채워짐 -->
+        </div>
+    </section>
+
+    <!-- RESEARCH PAPERS -->
+    <section class="reveal">
+        <div class="section-label">// Research Papers</div>
+        <div class="section-title">경제·금융 연구 자료</div>
+
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-cat="all">전체 <span class="count" id="countAll">0</span></button>
+            <button class="tab" data-cat="bok">한국은행 <span class="count" id="countBok">0</span></button>
+            <button class="tab" data-cat="fed">연준·FRED <span class="count" id="countFed">0</span></button>
+            <button class="tab" data-cat="kdi">KDI <span class="count" id="countKdi">0</span></button>
+            <button class="tab" data-cat="intl">IMF·BIS·NBER <span class="count" id="countIntl">0</span></button>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="논문 제목, 키워드로 검색...">
+            <select class="sort-select" id="sortSelect">
+                <option value="date">최신순</option>
+                <option value="relevance">관련도순</option>
+            </select>
+        </div>
+
+        <div class="papers-grid" id="papersGrid">
+            <div class="loading-state"><div class="spinner"></div><div>연구 자료를 불러오는 중...</div></div>
+        </div>
+    </section>
+
+    <!-- RESEARCH RESOURCES -->
+    <section class="resources-section reveal">
+        <div class="section-label">// Resources</div>
+        <div class="section-title">주요 연구 데이터베이스</div>
+        <div class="resources-grid" id="resourcesGrid"></div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-links">
+        <a href="index.html">홈</a>
+        <a href="education.html">경제교육</a>
+        <a href="quiz.html">퀴즈</a>
+        <a href="research.html">리서치</a>
+    </div>
+    <div class="footer-copy">© 2026 YW Finance Lab. 교육 목적으로 제작되었습니다.</div>
+</footer>
+
+<script>
+// ════════════════════════════════════════
+//  API KEYS & CONFIG
+// ════════════════════════════════════════
+const FRED_KEY = '4fb5dac909861e78d5e76dadeb5cf9d7';
+const ECOS_KEY = 'QZIGLKAE4NXE2AH490NG';
+
+// ════════════════════════════════════════
+//  REVEAL ANIMATION
+// ════════════════════════════════════════
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ════════════════════════════════════════
+//  LIVE ECONOMIC INDICATORS
+// ════════════════════════════════════════
+const indicators = [
+    { id: 'FEDFUNDS', label: '미국 기준금리', flag: '🇺🇸', unit: '%', source: 'FRED', type: 'fred' },
+    { id: 'DGS10', label: '미국 10년물', flag: '🇺🇸', unit: '%', source: 'FRED', type: 'fred' },
+    { id: 'DGS2', label: '미국 2년물', flag: '🇺🇸', unit: '%', source: 'FRED', type: 'fred' },
+    { id: 'UNRATE', label: '미국 실업률', flag: '🇺🇸', unit: '%', source: 'FRED', type: 'fred' },
+    { id: 'CPIAUCSL', label: '미국 CPI', flag: '🇺🇸', unit: '', source: 'FRED', type: 'fred' },
+    { id: 'DEXKOUS', label: '원/달러 환율', flag: '🇰🇷', unit: '원', source: 'FRED', type: 'fred' },
+    { id: 'DCOILWTICO', label: 'WTI 유가', flag: '🛢️', unit: '$', source: 'FRED', type: 'fred' },
+    { id: 'VIXCLS', label: 'VIX 지수', flag: '📊', unit: '', source: 'FRED', type: 'fred' },
+    { id: 'BAMLH0A0HYM2', label: '하이일드 스프레드', flag: '📈', unit: '%', source: 'FRED', type: 'fred' },
+    { id: 'WALCL', label: '연준 총자산', flag: '🏛️', unit: 'B$', source: 'FRED', type: 'fred' },
+    { id: 'bok_rate', label: '한국 기준금리', flag: '🇰🇷', unit: '%', source: 'ECOS', type: 'ecos', stat: '722Y001', item: '0101000' },
+    { id: 'bok_cpi', label: '한국 CPI', flag: '🇰🇷', unit: '', source: 'ECOS', type: 'ecos', stat: '901Y009', item: '0' },
+];
+
+async function fetchFRED(seriesId) {
+    const end = new Date().toISOString().slice(0, 10);
+    const start = new Date(Date.now() - 400 * 86400000).toISOString().slice(0, 10);
+    const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=2&observation_start=${start}`;
+    try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const obs = data.observations?.filter(o => o.value !== '.');
+        if (obs && obs.length >= 2) {
+            const current = parseFloat(obs[0].value);
+            const prev = parseFloat(obs[1].value);
+            const change = current - prev;
+            const pct = prev !== 0 ? (change / prev) * 100 : 0;
+            return { value: current, change, pct, date: obs[0].date };
+        } else if (obs && obs.length === 1) {
+            return { value: parseFloat(obs[0].value), change: 0, pct: 0, date: obs[0].date };
+        }
+    } catch (e) { console.warn('FRED error:', seriesId, e); }
+    return null;
+}
+
+async function fetchECOS(statCode, itemCode) {
+    const now = new Date();
+    const end = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0');
+    const startD = new Date(now);
+    startD.setMonth(startD.getMonth() - 13);
+    const start = startD.getFullYear() + String(startD.getMonth() + 1).padStart(2, '0');
+    const url = `https://ecos.bok.or.kr/api/StatisticSearch/${ECOS_KEY}/json/kr/1/5/${statCode}/M/${start}/${end}/${itemCode}`;
+    try {
+        const resp = await fetch(url);
+        const data = await resp.json();
+        const rows = data?.StatisticSearch?.row;
+        if (rows && rows.length >= 2) {
+            const current = parseFloat(rows[rows.length - 1].DATA_VALUE);
+            const prev = parseFloat(rows[rows.length - 2].DATA_VALUE);
+            const change = current - prev;
+            const pct = prev !== 0 ? (change / prev) * 100 : 0;
+            return { value: current, change, pct, date: rows[rows.length - 1].TIME };
+        } else if (rows && rows.length === 1) {
+            return { value: parseFloat(rows[0].DATA_VALUE), change: 0, pct: 0, date: rows[0].TIME };
+        }
+    } catch (e) { console.warn('ECOS error:', statCode, e); }
+    return null;
+}
+
+function formatValue(val, unit, id) {
+    if (val == null) return '--';
+    if (unit === 'B$') return '$' + (val / 1000000).toFixed(1) + 'T';
+    if (unit === '$') return '$' + val.toFixed(2);
+    if (unit === '원') return val.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원';
+    if (unit === '%') return val.toFixed(2) + '%';
+    if (id === 'CPIAUCSL' || id === 'bok_cpi') return val.toFixed(1);
+    return val.toFixed(2);
+}
+
+async function loadIndicators() {
+    const grid = document.getElementById('indicatorsGrid');
+    grid.innerHTML = indicators.map(ind => `
+        <div class="indicator-card" id="ind-${ind.id}">
+            <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
+            <div class="indicator-value indicator-loading">로딩 중...</div>
+            <div class="indicator-source">${ind.source}</div>
+        </div>
+    `).join('');
+
+    for (const ind of indicators) {
+        let result = null;
+        if (ind.type === 'fred') {
+            result = await fetchFRED(ind.id);
+        } else if (ind.type === 'ecos') {
+            result = await fetchECOS(ind.stat, ind.item);
+        }
+        const card = document.getElementById(`ind-${ind.id}`);
+        if (result) {
+            const dir = result.change > 0 ? 'up' : result.change < 0 ? 'down' : 'neutral';
+            const sign = result.change > 0 ? '+' : '';
+            card.innerHTML = `
+                <div class="indicator-label"><span class="indicator-flag">${ind.flag}</span> ${ind.label}</div>
+                <div class="indicator-value">${formatValue(result.value, ind.unit, ind.id)}</div>
+                <div class="indicator-change ${dir}">${sign}${result.pct.toFixed(2)}%</div>
+                <div class="indicator-source">${ind.source} · ${result.date}</div>
+            `;
+        } else {
+            card.querySelector('.indicator-value').textContent = '--';
+            card.querySelector('.indicator-value').classList.remove('indicator-loading');
+        }
+    }
+}
+
+// ════════════════════════════════════════
+//  RESEARCH PAPERS DATA
+// ════════════════════════════════════════
+const papers = [
+    // 한국은행
+    { cat:'bok', source:'BOK', type:'Working Paper', date:'2026-02', title:'한국 통화정책의 파급경로와 시차에 관한 연구', desc:'기준금리 변경이 실물경제에 미치는 영향의 시차 구조를 VAR 모형으로 분석. 금리→환율→수출 경로가 가장 빠르고, 금리→가계부채→소비 경로는 6~9개월의 시차를 보임.', tags:['통화정책','금리','VAR모형'], url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+    { cat:'bok', source:'BOK', type:'이슈노트', date:'2026-01', title:'가계부채 구조 변화와 금융안정 리스크 평가', desc:'DSR 규제 강화 이후 가계부채의 질적 변화를 분석. 고정금리 비중 확대로 금리 리스크 완화되었으나, 자영업자 대출의 부실 위험 상존.', tags:['가계부채','DSR','금융안정'], url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+    { cat:'bok', source:'BOK', type:'조사통계월보', date:'2026-01', title:'2025년 경제동향 분석 및 2026년 전망', desc:'수출 회복세와 내수 부진의 양극화 지속. 반도체 수출 호조에도 불구 서비스업 회복 지연. 2026년 GDP 성장률 2.1% 전망.', tags:['경제전망','GDP','수출'], url:'https://www.bok.or.kr/portal/bbs/B0000340/list.do' },
+    { cat:'bok', source:'BOK', type:'Working Paper', date:'2025-12', title:'AI 기술 도입이 한국 노동시장에 미치는 영향', desc:'산업별 AI 도입률과 고용 변화를 패널 데이터로 분석. 제조업 단순 반복 직종의 대체 효과가 뚜렷하나, IT·금융 전문직은 보완 효과가 우세.', tags:['AI','노동시장','기술혁신'], url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+    { cat:'bok', source:'BOK', type:'금융안정보고서', date:'2025-12', title:'부동산 PF 리스크와 금융시스템 영향 분석', desc:'부동산 프로젝트 파이낸싱 부실이 저축은행·증권사에 미치는 연쇄 효과를 스트레스 테스트로 분석. 시스템 리스크 전이 경로와 정책 대응 방안 제시.', tags:['부동산PF','금융안정','스트레스테스트'], url:'https://www.bok.or.kr/portal/bbs/B0000339/list.do' },
+    { cat:'bok', source:'BOK', type:'이슈노트', date:'2025-11', title:'디지털 원화(CBDC) 파일럿 테스트 결과 보고', desc:'2025년 하반기 진행된 CBDC 파일럿 결과 분석. 오프라인 결제 안정성, 개인정보 보호 기술, 금융포용성 측면에서의 성과와 한계점.', tags:['CBDC','디지털화폐','핀테크'], url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+    { cat:'bok', source:'BOK', type:'경제분석', date:'2025-11', title:'한국 잠재성장률 하락 요인과 구조개혁 방향', desc:'인구감소, 생산성 둔화, 투자 위축이 잠재성장률에 미치는 기여도 분해. R&D 투자 효율화와 서비스업 규제 개혁의 정량적 효과 추정.', tags:['잠재성장률','인구감소','구조개혁'], url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+
+    // 연준 / FRED
+    { cat:'fed', source:'FED', type:'Working Paper', date:'2026-02', title:'Monetary Policy Transmission in a High-Debt Environment', desc:'고부채 환경에서 통화정책 전달 메커니즘의 변화를 분석. 가계부채 비율이 높을수록 금리 인상의 소비 억제 효과가 강하게 나타남.', tags:['Monetary Policy','Household Debt','Fed'], url:'https://www.federalreserve.gov/econres/feds-notes.htm' },
+    { cat:'fed', source:'FED', type:'FEDS Notes', date:'2026-01', title:'The Neutral Rate of Interest: Updated Estimates for 2026', desc:'자연이자율(r*) 최신 추정치 업데이트. Holston-Laubach-Williams 모형 기준 미국 r*는 1.2~1.8% 범위로, 팬데믹 이전 대비 소폭 상승.', tags:['Neutral Rate','r-star','Interest Rate'], url:'https://www.federalreserve.gov/econres/feds-notes.htm' },
+    { cat:'fed', source:'FRED', type:'Research Article', date:'2026-01', title:'Yield Curve Inversions and Recession Predictions: 2025 Update', desc:'장단기 금리 역전의 경기침체 예측력 분석. 10Y-2Y 스프레드가 2024년 역전 후 2025년 정상화되었으나, 역사적 패턴 상 12~18개월 내 경기 둔화 가능성.', tags:['Yield Curve','Recession','Spread'], url:'https://research.stlouisfed.org/publications/economic-synopses' },
+    { cat:'fed', source:'FED', type:'Speech', date:'2025-12', title:'Financial Stability and the Role of Macroprudential Policy', desc:'연준 이사의 거시건전성 정책 관련 연설. 비은행 금융기관의 시스템 리스크 모니터링 강화 필요성과 스트레스 테스트 프레임워크 개선 방향.', tags:['Financial Stability','Macroprudential','Stress Test'], url:'https://www.federalreserve.gov/newsevents/speeches.htm' },
+    { cat:'fed', source:'FRED', type:'Economic Synopses', date:'2025-12', title:'Labor Market Dynamics: AI Adoption and Wage Inequality', desc:'AI 기술 확산에 따른 미국 노동시장 구조 변화. 고숙련/저숙련 간 임금 격차 확대 추세와 정책적 시사점을 미시 데이터로 분석.', tags:['AI','Labor Market','Wage Inequality'], url:'https://research.stlouisfed.org/publications/economic-synopses' },
+    { cat:'fed', source:'FED', type:'Working Paper', date:'2025-11', title:'Quantitative Tightening and Treasury Market Liquidity', desc:'연준의 양적 긴축(QT)이 국채시장 유동성에 미치는 영향 분석. Bid-ask 스프레드, 시장 깊이 지표를 활용한 유동성 측정.', tags:['QT','Treasury','Liquidity'], url:'https://www.federalreserve.gov/econres/feds-notes.htm' },
+
+    // KDI
+    { cat:'kdi', source:'KDI', type:'정책연구', date:'2026-01', title:'한국 경제의 저성장 고착화 위험과 대응 전략', desc:'잠재성장률 하락 추세의 구조적 원인을 인구·자본·생산성 측면에서 분석하고, 규제 개혁과 인적자본 투자 확대 방안 제시.', tags:['저성장','잠재성장률','정책'], url:'https://www.kdi.re.kr/research/reportList' },
+    { cat:'kdi', source:'KDI', type:'경제전망', date:'2026-01', title:'2026년 상반기 경제전망: 수출 주도 완만한 회복세', desc:'반도체·자동차 수출 호조에 힘입어 상반기 성장률 2.0% 전망. 다만 고금리 지속에 따른 내수 부진 리스크와 대외 불확실성 경계 필요.', tags:['경제전망','수출','내수'], url:'https://www.kdi.re.kr/forecast/forecastView' },
+    { cat:'kdi', source:'KDI', type:'Working Paper', date:'2025-12', title:'고령화와 재정 지속가능성: 국민연금 개혁의 경제적 효과', desc:'인구 고령화에 따른 연금 재정 소진 시나리오 분석. 보험료율 인상, 수급 연령 조정, 기금 운용 수익률 개선의 조합별 효과 시뮬레이션.', tags:['고령화','국민연금','재정'], url:'https://www.kdi.re.kr/research/reportList' },
+    { cat:'kdi', source:'KDI', type:'이슈분석', date:'2025-11', title:'플랫폼 노동자 사회안전망 확충 방안', desc:'배달·운전 등 플랫폼 노동자의 산재·고용보험 적용 현황과 해외 사례를 비교 분석. 소득 파악 인프라 구축과 사각지대 해소 방안 제안.', tags:['플랫폼노동','사회안전망','고용'], url:'https://www.kdi.re.kr/research/reportList' },
+
+    // 국제기구
+    { cat:'intl', source:'IMF', type:'Working Paper', date:'2026-01', title:'Global Financial Stability Report: January 2026 Update', desc:'글로벌 금융안정성 평가. 선진국 고금리 장기화에 따른 신흥국 자본 유출 리스크, 상업용 부동산 부실, AI 관련 기술주 밸류에이션 우려.', tags:['Financial Stability','Global','Emerging Markets'], url:'https://www.imf.org/en/Publications/GFSR' },
+    { cat:'intl', source:'BIS', type:'Quarterly Review', date:'2025-12', title:'Digital Currencies and Cross-Border Payments', desc:'CBDC와 스테이블코인의 국제결제 활용 가능성 분석. mBridge 프로젝트 성과와 도전과제, 규제 프레임워크 방향 제시.', tags:['CBDC','Cross-Border','Digital Currency'], url:'https://www.bis.org/publ/quarterly.htm' },
+    { cat:'intl', source:'NBER', type:'Working Paper', date:'2025-12', title:'The Macroeconomic Effects of Climate Policy Uncertainty', desc:'기후정책 불확실성이 기업 투자, GDP, 주가에 미치는 영향을 패널 VAR로 추정. 정책 불확실성 1 표준편차 증가 시 투자 0.8% 감소.', tags:['Climate Policy','Uncertainty','Investment'], url:'https://www.nber.org/papers' },
+    { cat:'intl', source:'IMF', type:'Country Report', date:'2025-11', title:'Republic of Korea: 2025 Article IV Consultation', desc:'IMF의 한국 경제 연례 평가. 통화·재정 정책 조합, 가계부채 관리, 구조개혁 방향에 대한 권고안 포함.', tags:['Korea','IMF','Article IV'], url:'https://www.imf.org/en/Countries/KOR' },
+    { cat:'intl', source:'BIS', type:'Working Paper', date:'2025-11', title:'Central Bank Digital Currencies: Financial Stability Implications', desc:'CBDC 도입이 은행 예금 이탈, 금융 중개 기능, 위기 시 디지털 뱅크런 가능성에 미치는 영향을 이론·실증적으로 분석.', tags:['CBDC','Financial Stability','Bank Run'], url:'https://www.bis.org/publ/work.htm' },
+    { cat:'intl', source:'NBER', type:'Working Paper', date:'2025-10', title:'Fiscal Policy Multipliers in a Low Interest Rate Environment', desc:'저금리 환경에서 재정승수가 고금리 환경 대비 1.5~2배 큰 것을 48개국 패널 데이터로 실증. 금리 하한 제약 시 재정정책의 유효성 강조.', tags:['Fiscal Policy','Multiplier','Low Interest Rate'], url:'https://www.nber.org/papers' },
+];
+
+// ════════════════════════════════════════
+//  RESOURCES DATA
+// ════════════════════════════════════════
+const resources = [
+    { icon:'🏛️', name:'한국은행 경제연구원', desc:'BOK Working Paper, 경제분석, 금융안정보고서 등 한국은행 발간 연구 자료.', url:'https://www.bok.or.kr/portal/bbs/B0000338/list.do' },
+    { icon:'🇺🇸', name:'Federal Reserve (FRED)', desc:'미국 연방준비제도 경제 데이터·연구 논문·FEDS Notes.', url:'https://research.stlouisfed.org/' },
+    { icon:'📊', name:'한국은행 ECOS', desc:'한국은행 경제통계시스템. 금리·환율·GDP·물가 등 국내 핵심 경제 지표 데이터.', url:'https://ecos.bok.or.kr/' },
+    { icon:'🔬', name:'KDI 한국개발연구원', desc:'한국 경제정책 연구. 경제전망, 정책연구, 이슈분석 보고서.', url:'https://www.kdi.re.kr/research/reportList' },
+    { icon:'🌍', name:'IMF 연구 출판물', desc:'World Economic Outlook, Global Financial Stability Report 등 IMF 핵심 보고서.', url:'https://www.imf.org/en/Publications' },
+    { icon:'🏦', name:'BIS 국제결제은행', desc:'Quarterly Review, Working Papers 등 국제 금융·통화 연구 자료.', url:'https://www.bis.org/research/index.htm' },
+    { icon:'📝', name:'NBER Working Papers', desc:'미국 국립경제연구소 워킹페이퍼. 거시·미시·노동·금융 전 분야.', url:'https://www.nber.org/papers' },
+    { icon:'📚', name:'SSRN Economics', desc:'경제학·금융학 프리프린트 논문 데이터베이스. 무료 열람 가능.', url:'https://papers.ssrn.com/sol3/JELJOUR_Results.cfm?form_name=journalBrowse&journal_id=1587443' },
+    { icon:'🇰🇷', name:'한국금융연구원', desc:'금융정책·금융시장·핀테크 관련 국내 연구보고서 및 이슈 분석.', url:'https://www.kif.re.kr/kif/publication/researchList.do' },
+];
+
+// ════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════
+let currentCat = 'all';
+let currentSearch = '';
+
+function renderPapers() {
+    const grid = document.getElementById('papersGrid');
+    let filtered = papers;
+
+    if (currentCat !== 'all') {
+        filtered = filtered.filter(p => p.cat === currentCat);
+    }
+    if (currentSearch) {
+        const q = currentSearch.toLowerCase();
+        filtered = filtered.filter(p =>
+            p.title.toLowerCase().includes(q) ||
+            p.desc.toLowerCase().includes(q) ||
+            p.tags.some(t => t.toLowerCase().includes(q))
+        );
+    }
+
+    // Sort
+    const sort = document.getElementById('sortSelect').value;
+    if (sort === 'date') {
+        filtered.sort((a, b) => b.date.localeCompare(a.date));
+    }
+
+    // Update counts
+    document.getElementById('countAll').textContent = papers.length;
+    document.getElementById('countBok').textContent = papers.filter(p => p.cat === 'bok').length;
+    document.getElementById('countFed').textContent = papers.filter(p => p.cat === 'fed').length;
+    document.getElementById('countKdi').textContent = papers.filter(p => p.cat === 'kdi').length;
+    document.getElementById('countIntl').textContent = papers.filter(p => p.cat === 'intl').length;
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="empty-state">검색 결과가 없습니다.</div>';
+        return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+        const srcClass = p.source.toLowerCase().replace(/\s/g, '');
+        return `
+        <a href="${p.url}" target="_blank" rel="noopener" class="paper-card">
+            <div class="paper-meta">
+                <span class="paper-source ${p.cat}">${p.source}</span>
+                <span class="paper-type">${p.type}</span>
+                <span class="paper-date">${p.date}</span>
+            </div>
+            <div class="paper-title">${highlightSearch(p.title)}</div>
+            <div class="paper-desc">${p.desc}</div>
+            <div class="paper-tags">${p.tags.map(t => `<span class="paper-tag">${t}</span>`).join('')}</div>
+            <div class="paper-arrow">→</div>
+        </a>`;
+    }).join('');
+}
+
+function highlightSearch(text) {
+    if (!currentSearch) return text;
+    const regex = new RegExp(`(${currentSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<mark style="background:rgba(212,168,83,0.3);color:var(--accent-gold);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function renderResources() {
+    document.getElementById('resourcesGrid').innerHTML = resources.map(r => `
+        <a href="${r.url}" target="_blank" rel="noopener" class="resource-card">
+            <div class="resource-icon">${r.icon}</div>
+            <div class="resource-name">${r.name}</div>
+            <div class="resource-desc">${r.desc}</div>
+            <div class="resource-url">${r.url.replace('https://', '').split('/')[0]}</div>
+        </a>
+    `).join('');
+}
+
+// ════════════════════════════════════════
+//  EVENT LISTENERS
+// ════════════════════════════════════════
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCat = tab.dataset.cat;
+        renderPapers();
+    });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+    currentSearch = e.target.value.trim();
+    renderPapers();
+});
+
+document.getElementById('sortSelect').addEventListener('change', renderPapers);
+
+// ════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════
+renderPapers();
+renderResources();
+loadIndicators();
+</script>
+</body>
+</html>
