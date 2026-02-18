@@ -407,6 +407,7 @@ footer { visibility: hidden !important; display: none !important; }
 .viewerBadge_container__r5tak { display: none !important; }
 div[data-testid="stDecoration"] { display: none !important; }
 div[data-testid="stStatusWidget"] { visibility: hidden; }
+button[data-testid="stSidebarCollapseButton"] { display: none !important; }
 header[data-testid="stHeader"] {
     background: rgba(244,245,247,0.85);
     backdrop-filter: blur(12px);
