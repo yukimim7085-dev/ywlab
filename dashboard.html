@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경제 대시보드 — YW Finance Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);overflow-x:hidden;min-height:100vh}
+        body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9998}
+        .bg-gradient{position:fixed;inset:0;z-index:-1;overflow:hidden}
+        .bg-gradient::before{content:'';position:absolute;width:800px;height:800px;top:-200px;right:-200px;background:radial-gradient(circle,rgba(212,168,83,0.05) 0%,transparent 70%);animation:floatOrb 20s ease-in-out infinite}
+        .bg-gradient::after{content:'';position:absolute;width:600px;height:600px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(59,130,246,0.03) 0%,transparent 70%);animation:floatOrb 25s ease-in-out infinite reverse}
+        @keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(80px,-60px) scale(1.1)}66%{transform:translate(-40px,40px) scale(0.95)}}
+
+        /* HEADER */
+        header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;background:rgba(10,10,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        nav{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+        .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-gold-dim));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-weight:900;font-size:15px;color:var(--bg-primary)}
+        .logo-text{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;color:var(--text-primary)}
+        .logo-text span{color:var(--accent-gold)}
+        .nav-links{display:flex;gap:8px;list-style:none}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:0.85rem;padding:6px 12px;border-radius:6px;transition:all 0.3s}
+        .nav-links a:hover,.nav-links a.active{color:var(--accent-gold);background:rgba(212,168,83,0.1)}
+        .back-link{color:var(--text-secondary);text-decoration:none;font-size:0.85rem;display:flex;align-items:center;gap:6px;transition:color 0.3s}
+        .back-link:hover{color:var(--accent-gold)}
+        @media(max-width:768px){.nav-links{display:none}.back-link{font-size:0.8rem}}
+
+        /* MAIN */
+        main{max-width:1400px;margin:0 auto;padding:80px 2rem 4rem}
+
+        /* FOOTER */
+        footer{border-top:1px solid var(--border);padding:2rem;text-align:center;margin-top:2rem}
+        .footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:1rem;flex-wrap:wrap}
+        .footer-links a{color:var(--text-dim);text-decoration:none;font-size:0.8rem;transition:color 0.3s}
+        .footer-links a:hover{color:var(--accent-gold)}
+        .footer-copy{font-size:0.7rem;color:var(--text-dim)}
+    </style>
+</head>
+<body>
+<div class="bg-gradient"></div>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">Y</div>
+            <div class="logo-text">YW <span>Finance Lab</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">홈</a></li>
+            <li><a href="education.html">경제교육</a></li>
+            <li><a href="quiz.html">퀴즈</a></li>
+            <li><a href="research.html">리서치</a></li>
+            <li><a href="dashboard.html" class="active">대시보드</a></li>
+        </ul>
+        <a href="index.html" class="back-link">← 메인으로</a>
+    </nav>
+</header>
+
+<main>
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <div class="toolbar-status">
+                <span class="dot-live"></span>
+                <span id="toolbarLastUpdate">로딩 중...</span>
+            </div>
+            <div class="toolbar-progress" id="toolbarProgress">0/0</div>
+        </div>
+        <div class="toolbar-right">
+            <button class="toolbar-btn" onclick="refreshDashboard()">🔄 새로고침</button>
+            <button class="toolbar-btn" onclick="openSettings()">⚙ 설정</button>
+        </div>
+    </div>
+
+    <!-- PANEL GRID -->
+    <div class="panel-grid" id="panelGrid">
+        <!-- Rendered by JS -->
+    </div>
+</main>
+
+<!-- ANALYSIS DRAWER -->
+<div class="analysis-overlay" id="analysisOverlay">
+    <div class="analysis-drawer" id="analysisDrawer">
+        <!-- Rendered by JS -->
+    </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="settings-overlay" id="settingsOverlay">
+    <div class="settings-modal">
+        <div class="settings-header">
+            <span class="settings-title">⚙ 설정</span>
+            <button class="settings-close" onclick="closeSettings()">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">// Panel Settings</div>
+            <div class="settings-toggle-list" id="settingsToggles">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">// Language</div>
+            <div class="settings-lang-btns">
+                <button class="settings-lang-btn" id="langBtnKo" onclick="switchLang('ko')">🇰🇷 한국어</button>
+                <button class="settings-lang-btn" id="langBtnEn" onclick="switchLang('en')">🇺🇸 English</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-title">// Watchlist Presets</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+                <button class="watchlist-preset-btn" style="padding:8px 12px;font-size:0.8rem" onclick="onApplyPreset('korean');closeSettings()">🇰🇷 한국 투자자</button>
+                <button class="watchlist-preset-btn" style="padding:8px 12px;font-size:0.8rem" onclick="onApplyPreset('usmarket');closeSettings()">🇺🇸 US Market</button>
+                <button class="watchlist-preset-btn" style="padding:8px 12px;font-size:0.8rem" onclick="onApplyPreset('crypto');closeSettings()">₿ Crypto Tracker</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="index.html">홈</a>
+        <a href="education.html">경제교육</a>
+        <a href="quiz.html">퀴즈</a>
+        <a href="research.html">리서치</a>
+        <a href="dashboard.html">대시보드</a>
+    </div>
+    <div class="footer-copy">© 2026 YW Finance Lab. 교육 목적으로 제작되었습니다.</div>
+</footer>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+<!-- App Modules -->
+<script src="js/core.js"></script>
+<script src="js/data-service.js"></script>
+<script src="js/chart-engine.js"></script>
+<script src="js/panel-system.js"></script>
+<script src="js/watchlist.js"></script>
+
+<script>
+// ═══════════════════════════════════════════
+//  Dashboard Controller v2
+//  - Parallel loading + skeleton UI
+//  - Analysis drawer with impact map
+//  - Comparison tool
+//  - Asset analyzer
+// ═══════════════════════════════════════════
+
+let totalTasks = 0;
+let completedTasks = 0;
+let autoRefreshTimer = null;
+
+// ─── Skeleton HTML Generator ───
+function skeletonRows(count) {
+    return Array.from({length: count}, () =>
+        `<div class="skeleton-row"><div class="skeleton skeleton-bar w60" style="height:12px"></div><div class="skeleton skeleton-bar w20" style="height:12px"></div></div>`
+    ).join('');
+}
+
+// ─── Init ───
+function initDashboard() {
+    initChartDefaults();
+    renderPanelGrid();
+    applyLayout();
+    updateLangButtons();
+    showSkeletons();
+    showCachedDataFirst();
+    loadAllData();
+    startAutoRefresh();
+}
+
+// ─── Show skeletons in all panels immediately ───
+function showSkeletons() {
+    const panelSkeletons = {
+        'market-overview': `<div class="market-mini-grid">${Array.from({length:4}, () => `<div class="market-mini-card"><div class="skeleton skeleton-bar w40" style="height:10px;margin-bottom:8px"></div><div class="skeleton skeleton-bar w60" style="height:18px;margin-bottom:6px"></div><div class="skeleton skeleton-bar w30" style="height:10px"></div></div>`).join('')}</div>`,
+        'us-indicators': `<div class="indicator-rows">${skeletonRows(6)}</div>`,
+        'kr-indicators': `<div class="indicator-rows">${skeletonRows(3)}</div>`,
+        'crypto': skeletonRows(6),
+        'forex': `<div class="forex-grid">${Array.from({length:6}, () => `<div class="forex-card"><div class="skeleton skeleton-bar w40" style="height:10px;margin-bottom:6px"></div><div class="skeleton skeleton-bar w60" style="height:16px"></div></div>`).join('')}</div>`,
+        'fear-greed': `<div style="text-align:center;padding:2rem"><div class="skeleton" style="width:120px;height:120px;border-radius:50%;margin:0 auto 12px"></div><div class="skeleton skeleton-bar w30" style="height:20px;margin:0 auto"></div></div>`,
+        'news-feed': skeletonRows(5),
+        'calendar': skeletonRows(4),
+    };
+    Object.entries(panelSkeletons).forEach(([id, html]) => {
+        const body = document.getElementById(`body-${id}`);
+        if (body && body.querySelector('.panel-loading')) body.innerHTML = html;
+    });
+}
+
+// ─── Show cached data instantly (stale-while-revalidate) ───
+function showCachedDataFirst() {
+    // Market Overview
+    const moCache = buildMarketOverviewFromCache();
+    if (moCache) {
+        const body = document.getElementById('body-market-overview');
+        if (body) { body.innerHTML = moCache; setBadge('market-overview', 'cached'); }
+    }
+    // US Indicators
+    showCachedIndicators('body-us-indicators', INDICATORS_US, 'us-indicators');
+    // KR Indicators
+    showCachedIndicators('body-kr-indicators', INDICATORS_KR, 'kr-indicators');
+    // Watchlist + Calendar (instant, no API)
+    renderWatchlistPanel();
+    renderCalendarPanel();
+    // Chart workspace
+    initChartWorkspace();
+}
+
+function showCachedIndicators(bodyId, indicators, panelId) {
+    const body = document.getElementById(bodyId);
+    if (!body) return;
+    let hasAny = false;
+    const rows = indicators.map(ind => {
+        const cacheKey = ind.source === 'ECOS' ? `ecos_${ind.stat}_${ind.item}` : `fred_${ind.id}`;
+        const data = DataCache.getStale(cacheKey);
+        if (data) hasAny = true;
+        return buildIndicatorRowHTML(ind, data);
+    }).join('');
+    if (hasAny) {
+        body.innerHTML = `<div class="indicator-rows">${rows}</div>`;
+        setBadge(panelId, 'cached');
+    }
+}
+
+// ─── Settings ───
+function openSettings() {
+    renderSettingsToggles();
+    document.getElementById('settingsOverlay').classList.add('active');
+}
+function closeSettings() {
+    document.getElementById('settingsOverlay').classList.remove('active');
+}
+document.getElementById('settingsOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeSettings();
+});
+
+function switchLang(lang) {
+    setLang(lang);
+    updateLangButtons();
+    renderPanelGrid();
+    applyLayout();
+    showSkeletons();
+    showCachedDataFirst();
+    loadAllData();
+}
+function updateLangButtons() {
+    const lang = getLang();
+    document.getElementById('langBtnKo').classList.toggle('active', lang === 'ko');
+    document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+}
+
+// ─── Progress Tracking ───
+function updateProgress() {
+    completedTasks++;
+    const el = document.getElementById('toolbarProgress');
+    if (el) el.textContent = `${completedTasks}/${totalTasks} ${t('loaded')}`;
+}
+function updateLastRefresh() {
+    const el = document.getElementById('toolbarLastUpdate');
+    if (el) {
+        const now = new Date();
+        el.textContent = `${t('lastUpdate')}: ${now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
+    }
+}
+
+// ─── Data Loading — ALL PARALLEL ───
+async function loadAllData() {
+    completedTasks = 0;
+    totalTasks = 7;
+    const el = document.getElementById('toolbarProgress');
+    if (el) el.textContent = `0/${totalTasks} ${t('loading')}`;
+
+    // Fire ALL at once — no more sequential phases
+    await Promise.all([
+        loadCryptoPanel(),
+        loadForexPanel(),
+        loadFearGreedPanel(),
+        loadMarketOverview(),
+        loadUSIndicators(),
+        loadKRIndicators(),
+        loadNewsPanel(),
+    ]);
+
+    // Dependent data (instant, no API calls)
+    renderWatchlistPanel();
+    loadWatchlistData();
+    renderCalendarPanel();
+    updateLastRefresh();
+}
+
+async function refreshDashboard() { loadAllData(); }
+
+function startAutoRefresh() {
+    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = setInterval(() => loadAllData(), 5 * 60 * 1000);
+}
+
+// ─── Indicator Row HTML Builder (shared) ───
+function buildIndicatorRowHTML(ind, data) {
+    const val = data ? formatValue(data.value, ind.unit, ind.id) : '--';
+    const dir = data ? (data.change > 0 ? 'up' : data.change < 0 ? 'down' : 'neutral') : 'neutral';
+    const pct = data ? formatPercent(data.pct) : '--';
+    const date = data ? data.date : '';
+    const label = getLang() === 'en' ? (ind.labelEn || ind.label) : ind.label;
+    return `
+    <div class="indicator-row" onclick="openAnalysis('${ind.id}')" title="클릭하여 상세 분석">
+        <div class="indicator-row-label"><span class="indicator-row-flag">${ind.flag}</span> ${label}</div>
+        <div class="indicator-row-right">
+            <span class="indicator-row-value">${val}</span>
+            <span class="indicator-row-change ${dir}">${pct}</span>
+            <span class="indicator-row-date">${date}</span>
+        </div>
+    </div>`;
+}
+
+// ─── Market Overview Panel ───
+async function loadMarketOverview() {
+    const body = document.getElementById('body-market-overview');
+    if (!body) return;
+    const results = {};
+    await loadBatch(MARKET_OVERVIEW_ITEMS.map(item => async () => {
+        results[item.id] = await fetchFRED(item.id);
+    }), 4);
+    body.innerHTML = buildMarketOverviewHTML(results);
+    setBadge('market-overview', 'live');
+    updateProgress();
+}
+function buildMarketOverviewHTML(results) {
+    return '<div class="market-mini-grid">' +
+        MARKET_OVERVIEW_ITEMS.map(item => {
+            const data = results[item.id];
+            const val = data ? formatValue(data.value, item.unit, item.id) : '--';
+            const dir = data ? (data.change > 0 ? 'up' : data.change < 0 ? 'down' : 'neutral') : 'neutral';
+            const pct = data ? formatPercent(data.pct) : '--';
+            const label = getLang() === 'en' ? item.labelEn : item.label;
+            return `
+            <div class="market-mini-card" onclick="openAnalysis('${item.id}')" style="cursor:pointer" title="클릭하여 상세 분석">
+                <div class="market-mini-label">${item.flag} ${label}</div>
+                <div class="market-mini-value">${val}</div>
+                <div class="market-mini-change ${dir}">${pct}</div>
+            </div>`;
+        }).join('') + '</div>';
+}
+function buildMarketOverviewFromCache() {
+    const results = {};
+    let hasAny = false;
+    MARKET_OVERVIEW_ITEMS.forEach(item => {
+        const stale = DataCache.getStale(`fred_${item.id}`);
+        if (stale) { results[item.id] = stale; hasAny = true; }
+    });
+    return hasAny ? buildMarketOverviewHTML(results) : null;
+}
+
+// ─── US Indicators Panel ───
+async function loadUSIndicators() {
+    const body = document.getElementById('body-us-indicators');
+    if (!body) return;
+    const results = {};
+    await loadBatch(INDICATORS_US.map(ind => async () => {
+        results[ind.id] = await fetchFRED(ind.id);
+    }), 4);
+    body.innerHTML = '<div class="indicator-rows">' + INDICATORS_US.map(ind => buildIndicatorRowHTML(ind, results[ind.id])).join('') + '</div>';
+    setBadge('us-indicators', 'live');
+    updateProgress();
+}
+
+// ─── KR Indicators Panel ───
+async function loadKRIndicators() {
+    const body = document.getElementById('body-kr-indicators');
+    if (!body) return;
+    const results = {};
+    await loadBatch(INDICATORS_KR.map(ind => async () => {
+        if (ind.source === 'ECOS') results[ind.id] = await fetchECOS(ind.stat, ind.item);
+        else results[ind.id] = await fetchFRED(ind.id);
+    }), 4);
+    body.innerHTML = '<div class="indicator-rows">' + INDICATORS_KR.map(ind => buildIndicatorRowHTML(ind, results[ind.id])).join('') + '</div>';
+    setBadge('kr-indicators', 'live');
+    updateProgress();
+}
+
+// ─── Crypto Panel ───
+async function loadCryptoPanel() {
+    const body = document.getElementById('body-crypto');
+    if (!body) return;
+    const data = await fetchCrypto();
+    if (!data || data.length === 0) {
+        body.innerHTML = '<div class="panel-error">암호화폐 데이터를 불러올 수 없습니다.<br><span class="panel-error-retry" onclick="loadCryptoPanel()">재시도</span></div>';
+        updateProgress(); return;
+    }
+    body.innerHTML = `<table class="crypto-table"><thead><tr><th>코인</th><th>가격</th><th>24h</th></tr></thead><tbody>
+    ${data.slice(0, 8).map(c => {
+        const dir = c.change24h > 0 ? 'up' : c.change24h < 0 ? 'down' : 'neutral';
+        return `<tr style="cursor:pointer" onclick="openCryptoAnalysis('${c.id}')">
+            <td><div class="crypto-name"><img src="${c.image}" width="20" height="20" style="border-radius:50%" alt="">${c.name} <span class="crypto-symbol">${c.symbol}</span></div></td>
+            <td class="crypto-price">$${c.price.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>
+            <td><span class="market-mini-change ${dir}">${formatPercent(c.change24h)}</span></td></tr>`;
+    }).join('')}</tbody></table>`;
+    setBadge('crypto', 'live'); updateProgress();
+}
+
+// ─── Forex Panel ───
+async function loadForexPanel() {
+    const body = document.getElementById('body-forex');
+    if (!body) return;
+    const data = await fetchForex();
+    if (!data) {
+        body.innerHTML = '<div class="panel-error">환율 데이터를 불러올 수 없습니다.<br><span class="panel-error-retry" onclick="loadForexPanel()">재시도</span></div>';
+        updateProgress(); return;
+    }
+    const pairs = [
+        { pair:'USD/KRW', flag:'🇰🇷', rate:data.rates.KRW },{ pair:'USD/EUR', flag:'🇪🇺', rate:data.rates.EUR },
+        { pair:'USD/GBP', flag:'🇬🇧', rate:data.rates.GBP },{ pair:'USD/JPY', flag:'🇯🇵', rate:data.rates.JPY },
+        { pair:'USD/CNY', flag:'🇨🇳', rate:data.rates.CNY },{ pair:'USD/CHF', flag:'🇨🇭', rate:data.rates.CHF },
+    ];
+    body.innerHTML = `<div class="forex-grid">${pairs.map(p => `
+        <div class="forex-card"><div class="forex-pair">${p.flag} ${p.pair}</div>
+        <div class="forex-rate">${p.rate ? p.rate.toLocaleString('en-US', { maximumFractionDigits: 4 }) : '--'}</div></div>`).join('')}
+    </div><div style="margin-top:8px;font-size:0.65rem;color:var(--text-dim);font-family:var(--font-mono)">Frankfurter · ${data.date || ''}</div>`;
+    setBadge('forex', 'live'); updateProgress();
+}
+
+// ─── Fear & Greed Panel ───
+async function loadFearGreedPanel() {
+    const body = document.getElementById('body-fear-greed');
+    if (!body) return;
+    const data = await fetchFearGreed();
+    if (!data || data.length === 0) {
+        body.innerHTML = '<div class="panel-error">Fear & Greed 데이터를 불러올 수 없습니다.<br><span class="panel-error-retry" onclick="loadFearGreedPanel()">재시도</span></div>';
+        updateProgress(); return;
+    }
+    const current = data[0];
+    const gaugeInfo = getGaugeLabel(current.value);
+    body.innerHTML = `<div class="gauge-container"><div class="gauge-canvas-wrap"><canvas id="gaugeChart"></canvas></div>
+        <div class="gauge-value">${current.value}</div><div class="gauge-label ${gaugeInfo.cls}">${gaugeInfo.text}</div></div>
+        <div style="margin-top:8px"><canvas id="fgHistoryChart" height="60"></canvas></div>`;
+    createGauge('gaugeChart', current.value);
+    const historyData = data.slice(0, 14).reverse().map(d => d.value);
+    if (historyData.length > 1) createSparkline('fgHistoryChart', historyData, getGaugeColor(current.value));
+    setBadge('fear-greed', 'live'); updateProgress();
+}
+
+// ─── Chart Workspace + Comparison Tool ───
+let currentChartDays = 90;
+let compareSeries = []; // [{id, label, color}]
+const COMPARE_COLORS = ['#d4a853', '#3b82f6', '#22c55e', '#ef4444', '#a78bfa', '#22d3ee'];
+
+function initChartWorkspace() {
+    const body = document.getElementById('body-chart-workspace');
+    if (!body) return;
+    body.innerHTML = `
+    <div class="chart-controls">
+        <select class="chart-select" id="chartSeriesSelect" onchange="loadChartData()">
+            ${CHART_SERIES_OPTIONS.map(s => `<option value="${s.id}">${s.label}</option>`).join('')}
+        </select>
+        <div class="chart-period-btns">
+            <button class="chart-period-btn active" onclick="selectPeriod(this,90)">3M</button>
+            <button class="chart-period-btn" onclick="selectPeriod(this,180)">6M</button>
+            <button class="chart-period-btn" onclick="selectPeriod(this,365)">1Y</button>
+            <button class="chart-period-btn" onclick="selectPeriod(this,730)">2Y</button>
+        </div>
+        <button class="toolbar-btn" onclick="addCompare()" title="비교 지표 추가" style="font-size:0.75rem">+ 비교</button>
+    </div>
+    <div class="compare-controls" id="compareChips"></div>
+    <div class="chart-canvas-wrap"><canvas id="mainChart"></canvas></div>`;
+    renderCompareChips();
+    loadChartData();
+}
+
+function selectPeriod(btn, days) {
+    currentChartDays = days;
+    document.querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadChartData();
+}
+
+function addCompare() {
+    const select = document.getElementById('chartSeriesSelect');
+    if (!select) return;
+    const id = select.value;
+    if (compareSeries.some(s => s.id === id)) return;
+    if (compareSeries.length >= 5) return;
+    const opt = CHART_SERIES_OPTIONS.find(s => s.id === id);
+    compareSeries.push({ id, label: opt?.label || id, color: COMPARE_COLORS[(compareSeries.length + 1) % COMPARE_COLORS.length] });
+    renderCompareChips();
+    loadChartData();
+}
+
+function removeCompare(id) {
+    compareSeries = compareSeries.filter(s => s.id !== id);
+    renderCompareChips();
+    loadChartData();
+}
+
+function renderCompareChips() {
+    const container = document.getElementById('compareChips');
+    if (!container) return;
+    if (compareSeries.length === 0) { container.innerHTML = ''; return; }
+    container.innerHTML = compareSeries.map(s =>
+        `<div class="compare-chip"><span class="color-dot" style="background:${s.color}"></span>${s.label}
+        <button class="compare-chip-remove" onclick="removeCompare('${s.id}')">✕</button></div>`
+    ).join('');
+}
+
+async function loadChartData() {
+    const select = document.getElementById('chartSeriesSelect');
+    if (!select) return;
+    const mainId = select.value;
+    const mainOpt = CHART_SERIES_OPTIONS.find(s => s.id === mainId);
+
+    if (compareSeries.length === 0) {
+        // Single series mode
+        const series = await fetchFREDSeries(mainId, currentChartDays);
+        if (!series || series.length === 0) return;
+        createTimeSeries('mainChart', {
+            labels: series.map(s => s.date), data: series.map(s => s.value),
+            label: mainOpt?.label || mainId, color: '#d4a853', yUnit: guessUnit(mainId)
+        });
+    } else {
+        // Multi-series comparison mode
+        const allIds = [mainId, ...compareSeries.map(s => s.id)];
+        const allSeries = await Promise.all(allIds.map(id => fetchFREDSeries(id, currentChartDays)));
+        const seriesArray = allIds.map((id, i) => {
+            const data = allSeries[i];
+            if (!data) return null;
+            const opt = CHART_SERIES_OPTIONS.find(s => s.id === id);
+            return { labels: data.map(d => d.date), data: data.map(d => d.value), label: opt?.label || id };
+        }).filter(Boolean);
+        if (seriesArray.length > 0) createMultiSeries('mainChart', seriesArray);
+    }
+}
+
+// ─── News Panel ───
+let currentNewsTab = 'all';
+let allNewsData = [];
+async function loadNewsPanel() {
+    const body = document.getElementById('body-news-feed');
+    if (!body) return;
+    allNewsData = [];
+    const feedResults = await Promise.all(NEWS_FEEDS.map(feed => fetchNews(feed.url, feed.tag)));
+    feedResults.forEach(items => { if (items) allNewsData.push(...items); });
+    allNewsData.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+    renderNewsHTML();
+    setBadge('news-feed', 'live'); updateProgress();
+}
+function renderNewsHTML() {
+    const body = document.getElementById('body-news-feed');
+    if (!body) return;
+    const filtered = currentNewsTab === 'all' ? allNewsData : allNewsData.filter(n => n.tag === currentNewsTab);
+    body.innerHTML = `<div class="news-tabs">
+        <button class="news-tab ${currentNewsTab==='all'?'active':''}" onclick="switchNewsTab('all')">${t('all')}</button>
+        <button class="news-tab ${currentNewsTab==='korea'?'active':''}" onclick="switchNewsTab('korea')">${t('korea')}</button>
+        <button class="news-tab ${currentNewsTab==='global'?'active':''}" onclick="switchNewsTab('global')">${t('global')}</button>
+    </div><div class="news-list">${filtered.length === 0 ? `<div style="text-align:center;padding:1.5rem;color:var(--text-dim)">${t('noData')}</div>` :
+        filtered.slice(0, 15).map(item => {
+            const date = item.pubDate ? new Date(item.pubDate).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' }) : '';
+            return `<a href="${escapeAttr(item.link)}" target="_blank" rel="noopener" class="news-item">
+                <div class="news-item-title">${escapeHtml(item.title)}</div>
+                <div class="news-item-meta"><span class="news-item-source">${escapeHtml(item.source)}</span><span>${date}</span></div></a>`;
+        }).join('')}</div>`;
+}
+function switchNewsTab(tab) { currentNewsTab = tab; renderNewsHTML(); }
+
+// ─── Calendar Panel ───
+function renderCalendarPanel() {
+    const body = document.getElementById('body-calendar');
+    if (!body) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const upcoming = CALENDAR_EVENTS.filter(e => e.date >= today).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 6);
+    if (upcoming.length === 0) { body.innerHTML = `<div style="text-align:center;padding:1.5rem;color:var(--text-dim)">${t('noData')}</div>`; return; }
+    body.innerHTML = '<div class="calendar-list">' + upcoming.map(e => {
+        const d = new Date(e.date + 'T00:00:00');
+        return `<div class="calendar-item"><div class="calendar-date"><div class="calendar-date-day">${d.getDate()}</div>
+            <div class="calendar-date-month">${d.toLocaleDateString('en-US',{month:'short'})}</div></div>
+            <div class="calendar-info"><div class="calendar-info-title">${escapeHtml(e.title)}</div>
+            <div class="calendar-info-detail">${escapeHtml(e.detail)}</div></div>
+            <span class="calendar-importance ${e.importance}">${e.importance.toUpperCase()}</span></div>`;
+    }).join('') + '</div>';
+}
+
+// ═══════════════════════════════════════════
+//  ANALYSIS DRAWER — Detail + Impact Map
+// ═══════════════════════════════════════════
+
+function openAnalysis(indicatorId) {
+    const overlay = document.getElementById('analysisOverlay');
+    const drawer = document.getElementById('analysisDrawer');
+    overlay.classList.add('active');
+
+    const impact = INDICATOR_IMPACT[indicatorId];
+    const allInds = [...INDICATORS_US, ...INDICATORS_KR, ...MARKET_OVERVIEW_ITEMS];
+    const ind = allInds.find(i => i.id === indicatorId);
+    const cachedData = DataCache.getStale(`fred_${indicatorId}`) || DataCache.getStale(`ecos_${indicatorId}`);
+
+    const name = impact?.name || ind?.label || indicatorId;
+    const desc = impact?.description || '';
+    const val = cachedData ? formatValue(cachedData.value, ind?.unit, indicatorId) : '--';
+    const dir = cachedData ? (cachedData.change > 0 ? 'up' : cachedData.change < 0 ? 'down' : 'neutral') : 'neutral';
+    const pct = cachedData ? formatPercent(cachedData.pct) : '--';
+
+    drawer.innerHTML = `
+    <div class="analysis-drawer-header">
+        <div>
+            <div class="analysis-drawer-title">${escapeHtml(name)}</div>
+            <div class="analysis-drawer-subtitle">${escapeHtml(indicatorId)} · ${ind?.source || 'FRED'}</div>
+        </div>
+        <button class="analysis-drawer-close" onclick="closeAnalysis()">✕ ESC</button>
+    </div>
+
+    ${desc ? `<p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:20px">${escapeHtml(desc)}</p>` : ''}
+
+    <!-- Current Value -->
+    <div class="analysis-section">
+        <div class="analysis-section-title">📊 현재 값</div>
+        <div class="analysis-stat-grid">
+            <div class="analysis-stat-card"><div class="analysis-stat-label">현재</div><div class="analysis-stat-value">${val}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">변동</div><div class="analysis-stat-value" style="color:${dir==='up'?'var(--accent-green)':dir==='down'?'var(--accent-red)':'var(--text-dim)'}">${pct}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">일자</div><div class="analysis-stat-value" style="font-size:0.8rem">${cachedData?.date || '--'}</div></div>
+            <div class="analysis-stat-card" id="analysisStatExtra"><div class="analysis-stat-label">로딩</div><div class="analysis-stat-value">...</div></div>
+        </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="analysis-section">
+        <div class="analysis-section-title">📈 시계열 차트</div>
+        <div class="analysis-period-btns">
+            <button class="chart-period-btn active" onclick="loadAnalysisChart('${indicatorId}',90,this)">3M</button>
+            <button class="chart-period-btn" onclick="loadAnalysisChart('${indicatorId}',180,this)">6M</button>
+            <button class="chart-period-btn" onclick="loadAnalysisChart('${indicatorId}',365,this)">1Y</button>
+            <button class="chart-period-btn" onclick="loadAnalysisChart('${indicatorId}',730,this)">2Y</button>
+            <button class="chart-period-btn" onclick="loadAnalysisChart('${indicatorId}',1825,this)">5Y</button>
+        </div>
+        <div class="analysis-chart-wrap"><canvas id="analysisChart"></canvas></div>
+    </div>
+
+    <!-- Impact Map -->
+    ${impact ? `
+    <div class="analysis-section">
+        <div class="analysis-section-title">🎯 섹터/종목 임팩트 (상승 시)</div>
+        <div class="impact-list">
+        ${impact.upImpact.map(item => `
+            <div class="impact-item">
+                <div class="impact-direction ${item.direction}">
+                    ${item.direction === 'positive' ? '📈' : item.direction === 'negative' ? '📉' : '↔️'}
+                </div>
+                <div class="impact-info">
+                    <div class="impact-sector">${escapeHtml(item.sector)}</div>
+                    <div class="impact-reason">${escapeHtml(item.reason)}</div>
+                    ${item.tickers.length > 0 ? `<div class="impact-tickers">${item.tickers.map(t => `<span class="impact-ticker">${t}</span>`).join('')}</div>` : ''}
+                </div>
+            </div>`).join('')}
+        </div>
+    </div>` : ''}
+
+    <!-- Related Indicators -->
+    ${impact?.relatedFRED ? `
+    <div class="analysis-section">
+        <div class="analysis-section-title">🔗 연관 지표</div>
+        <div class="related-indicators">
+        ${impact.relatedFRED.map(id => {
+            const relOpt = CHART_SERIES_OPTIONS.find(s => s.id === id);
+            return `<div class="related-indicator-chip" onclick="closeAnalysis();setTimeout(()=>openAnalysis('${id}'),300)">
+                ${relOpt?.label || id}
+            </div>`;
+        }).join('')}
+        </div>
+    </div>` : ''}
+
+    <!-- Recent Data Table -->
+    <div class="analysis-section">
+        <div class="analysis-section-title">📋 최근 데이터</div>
+        <div id="analysisDataTable"><div class="panel-loading"><div class="spinner"></div></div></div>
+    </div>`;
+
+    // Load chart + data
+    loadAnalysisChart(indicatorId, 90);
+    loadAnalysisData(indicatorId, ind?.unit);
+}
+
+async function loadAnalysisChart(indicatorId, days, btn) {
+    if (btn) {
+        btn.closest('.analysis-period-btns').querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    const series = await fetchFREDSeries(indicatorId, days);
+    if (!series || series.length === 0) return;
+    const yUnit = guessUnit(indicatorId);
+    createTimeSeries('analysisChart', {
+        labels: series.map(s => s.date), data: series.map(s => s.value),
+        label: indicatorId, color: '#d4a853', yUnit
+    });
+    // Update stats
+    const values = series.map(s => s.value);
+    const statEl = document.getElementById('analysisStatExtra');
+    if (statEl) {
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const avg = values.reduce((a,b) => a+b, 0) / values.length;
+        statEl.innerHTML = `
+            <div class="analysis-stat-label">범위</div>
+            <div class="analysis-stat-value" style="font-size:0.7rem">${min.toFixed(2)} ~ ${max.toFixed(2)}</div>`;
+    }
+}
+
+async function loadAnalysisData(indicatorId, unit) {
+    const container = document.getElementById('analysisDataTable');
+    if (!container) return;
+    const series = await fetchFREDSeries(indicatorId, 180);
+    if (!series || series.length === 0) { container.innerHTML = '<div style="color:var(--text-dim);font-size:0.8rem">데이터 없음</div>'; return; }
+    const recent = series.slice(-10).reverse();
+    container.innerHTML = `<table class="data-table"><thead><tr><th>날짜</th><th>값</th><th>변동</th></tr></thead><tbody>
+    ${recent.map((r, i) => {
+        const prev = i < recent.length - 1 ? recent[i + 1].value : r.value;
+        const change = r.value - prev;
+        const dir = change > 0 ? 'up' : change < 0 ? 'down' : 'neutral';
+        return `<tr><td>${r.date}</td><td>${formatValue(r.value, unit, indicatorId)}</td>
+            <td><span class="market-mini-change ${dir}">${change > 0 ? '+' : ''}${change.toFixed(2)}</span></td></tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+function closeAnalysis() {
+    document.getElementById('analysisOverlay').classList.remove('active');
+}
+document.getElementById('analysisOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeAnalysis();
+});
+
+// ─── Crypto Analysis ───
+async function openCryptoAnalysis(coinId) {
+    const overlay = document.getElementById('analysisOverlay');
+    const drawer = document.getElementById('analysisDrawer');
+    overlay.classList.add('active');
+
+    drawer.innerHTML = `<div class="analysis-drawer-header">
+        <div><div class="analysis-drawer-title">로딩 중...</div></div>
+        <button class="analysis-drawer-close" onclick="closeAnalysis()">✕ ESC</button>
+    </div><div class="panel-loading"><div class="spinner"></div></div>`;
+
+    const data = await fetchCryptoDetail(coinId);
+    if (!data) { drawer.innerHTML = `<div class="panel-error">데이터를 불러올 수 없습니다.</div>`; return; }
+
+    const dir24 = (data.change24h||0) > 0 ? 'up' : (data.change24h||0) < 0 ? 'down' : 'neutral';
+    const dir7d = (data.change7d||0) > 0 ? 'up' : (data.change7d||0) < 0 ? 'down' : 'neutral';
+    const dir30d = (data.change30d||0) > 0 ? 'up' : (data.change30d||0) < 0 ? 'down' : 'neutral';
+
+    drawer.innerHTML = `
+    <div class="analysis-drawer-header">
+        <div>
+            <div class="analysis-drawer-title">${escapeHtml(data.name)} (${data.symbol})</div>
+            <div class="analysis-drawer-subtitle">CoinGecko · ${coinId}</div>
+        </div>
+        <button class="analysis-drawer-close" onclick="closeAnalysis()">✕ ESC</button>
+    </div>
+    <div class="analysis-section">
+        <div class="analysis-stat-grid">
+            <div class="analysis-stat-card"><div class="analysis-stat-label">현재가</div><div class="analysis-stat-value">$${data.price?.toLocaleString('en-US',{maximumFractionDigits:2}) || '--'}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">24H</div><div class="analysis-stat-value" style="color:${dir24==='up'?'var(--accent-green)':'var(--accent-red)'}">${formatPercent(data.change24h)}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">7D</div><div class="analysis-stat-value" style="color:${dir7d==='up'?'var(--accent-green)':'var(--accent-red)'}">${formatPercent(data.change7d)}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">30D</div><div class="analysis-stat-value" style="color:${dir30d==='up'?'var(--accent-green)':'var(--accent-red)'}">${formatPercent(data.change30d)}</div></div>
+        </div>
+    </div>
+    <div class="analysis-section">
+        <div class="analysis-section-title">📈 7일 차트</div>
+        <div class="analysis-chart-wrap"><canvas id="analysisChart"></canvas></div>
+    </div>
+    <div class="analysis-section">
+        <div class="analysis-stat-grid">
+            <div class="analysis-stat-card"><div class="analysis-stat-label">시가총액</div><div class="analysis-stat-value" style="font-size:0.8rem">${formatCompact(data.marketCap)}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">24H 거래량</div><div class="analysis-stat-value" style="font-size:0.8rem">${formatCompact(data.volume24h)}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">24H 고가</div><div class="analysis-stat-value" style="font-size:0.8rem">$${data.high24h?.toLocaleString() || '--'}</div></div>
+            <div class="analysis-stat-card"><div class="analysis-stat-label">24H 저가</div><div class="analysis-stat-value" style="font-size:0.8rem">$${data.low24h?.toLocaleString() || '--'}</div></div>
+        </div>
+    </div>
+    ${data.ath ? `<div class="analysis-section"><div class="analysis-stat-grid">
+        <div class="analysis-stat-card" style="grid-column:span 2"><div class="analysis-stat-label">역대 최고가 (ATH)</div><div class="analysis-stat-value">$${data.ath.toLocaleString()}</div></div>
+        <div class="analysis-stat-card" style="grid-column:span 2"><div class="analysis-stat-label">ATH 일자</div><div class="analysis-stat-value" style="font-size:0.8rem">${data.athDate ? new Date(data.athDate).toLocaleDateString() : '--'}</div></div>
+    </div></div>` : ''}`;
+
+    // Sparkline chart
+    if (data.sparkline && data.sparkline.length > 0) {
+        const sparkColor = (data.change7d || 0) >= 0 ? '#22c55e' : '#ef4444';
+        createTimeSeries('analysisChart', {
+            labels: data.sparkline.map((_, i) => { const h = data.sparkline.length - i; return h > 24 ? `${Math.floor(h/24)}d` : `${h}h`; }),
+            data: data.sparkline, label: data.name, color: sparkColor, yUnit: '$'
+        });
+    }
+}
+
+// ─── Helpers ───
+function setBadge(panelId, type) {
+    const badge = document.getElementById(`badge-${panelId}`);
+    if (!badge) return;
+    badge.className = `panel-badge ${type}`;
+    badge.textContent = type === 'live' ? 'LIVE' : 'CACHED';
+}
+function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+function escapeAttr(str) {
+    if (!str) return '';
+    return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ─── Keyboard Shortcuts ───
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAnalysis(); closeSettings(); }
+    if (e.key === 'r' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
+        e.preventDefault(); refreshDashboard();
+    }
+});
+
+// ─── Boot ───
+document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+</body>
+</html>

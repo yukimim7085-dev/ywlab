@@ -1,0 +1,51 @@
+/* ═══════════════════════════════════════════
+   YW Finance Lab — Design Tokens
+   Shared CSS variables for all pages
+   SaaS theming ready (override :root vars)
+   ═══════════════════════════════════════════ */
+
+:root {
+    /* Backgrounds */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: #16161f;
+    --bg-card-hover: #1c1c28;
+
+    /* Accent Colors */
+    --accent-gold: #d4a853;
+    --accent-gold-dim: #b8923f;
+    --accent-green: #22c55e;
+    --accent-red: #ef4444;
+    --accent-blue: #3b82f6;
+    --accent-purple: #a78bfa;
+    --accent-cyan: #22d3ee;
+    --accent-orange: #f59e0b;
+
+    /* Text */
+    --text-primary: #e8e6e3;
+    --text-secondary: #9ca3af;
+    --text-dim: #6b7280;
+
+    /* Borders */
+    --border: #1f1f2e;
+    --border-light: #2a2a3a;
+
+    /* Glow */
+    --glow-gold: rgba(212, 168, 83, 0.15);
+
+    /* Panel System (SaaS customizable) */
+    --panel-gap: 16px;
+    --panel-radius: 14px;
+    --panel-padding: 20px;
+    --panel-border: var(--border);
+    --panel-bg: var(--bg-card);
+    --panel-bg-hover: var(--bg-card-hover);
+
+    /* Typography */
+    --font-sans: 'Noto Sans KR', sans-serif;
+    --font-serif: 'Playfair Display', serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Transitions */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
