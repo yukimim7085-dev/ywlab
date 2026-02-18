@@ -13,227 +13,213 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='96' fill='url(%23g)'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='260' fill='white'%3EA%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='96' fill='url(%23g)'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='260' fill='white'%3EA%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background: #0d1117;
-            font-family: 'Noto Sans KR', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+        *{margin:0;padding:0;box-sizing:border-box}
+        html,body{
+            width:100%;height:100%;
+            background:#0d1117;
+            font-family:'Noto Sans KR',sans-serif;
+            color:#e8e6e3;
+            -webkit-tap-highlight-color:transparent;
+            overflow-x:hidden;
         }
-        body {
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-        }
-
-        /* Splash Screen */
-        .splash {
-            position: fixed; inset: 0;
-            background: #0d1117;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 1000;
+        body{
+            padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            min-height:100vh;min-height:100dvh;
         }
 
-        .splash-wrap {
-            display: flex; flex-direction: column;
-            align-items: center; gap: 1.5rem;
-            animation: fadeInUp 0.8s ease-out;
+        /* Background effects */
+        body::before{
+            content:'';position:fixed;top:-30%;right:-20%;
+            width:600px;height:600px;
+            background:radial-gradient(circle,rgba(59,130,246,0.08) 0%,transparent 70%);
+            pointer-events:none;animation:drift 20s ease-in-out infinite;
+        }
+        body::after{
+            content:'';position:fixed;bottom:-20%;left:-15%;
+            width:500px;height:500px;
+            background:radial-gradient(circle,rgba(99,102,241,0.06) 0%,transparent 70%);
+            pointer-events:none;animation:drift 25s ease-in-out infinite reverse;
+        }
+        @keyframes drift{
+            0%,100%{transform:translate(0,0)}
+            50%{transform:translate(40px,-30px)}
         }
 
-        .splash-icon {
-            width: 88px; height: 88px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.8rem;
-            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.35);
-            animation: iconPulse 2s ease-in-out infinite;
+        .container{
+            display:flex;flex-direction:column;align-items:center;
+            gap:2rem;padding:2rem;max-width:420px;width:100%;
+            position:relative;z-index:1;
+            animation:fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+        /* App Icon */
+        .app-icon{
+            width:96px;height:96px;border-radius:24px;
+            background:linear-gradient(135deg,#3b82f6,#6366f1);
+            display:flex;align-items:center;justify-content:center;
+            font-size:3rem;
+            box-shadow:0 16px 48px rgba(59,130,246,0.3),0 0 0 1px rgba(59,130,246,0.15);
         }
 
-        .splash-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem; font-weight: 700;
-            background: linear-gradient(135deg, #e2e8f0, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.02em;
+        /* Title */
+        .title{
+            text-align:center;
         }
-        .splash-title em {
-            font-style: normal;
-            background: linear-gradient(135deg, #3b82f6, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .title h1{
+            font-family:'JetBrains Mono',monospace;
+            font-size:2rem;font-weight:700;
+            letter-spacing:-0.03em;margin-bottom:0.4rem;
         }
-
-        .splash-spinner {
-            width: 36px; height: 36px;
-            border: 2.5px solid rgba(59, 130, 246, 0.15);
-            border-top-color: #3b82f6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .title h1 em{
+            font-style:normal;
+            background:linear-gradient(135deg,#3b82f6,#818cf8);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        }
+        .title p{
+            font-size:0.85rem;color:#6b7280;
+            font-family:'JetBrains Mono',monospace;
+            letter-spacing:0.02em;
         }
 
-        .splash-status {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: #484f58;
-            letter-spacing: 0.03em;
+        /* Launch Button */
+        .launch-btn{
+            display:flex;align-items:center;justify-content:center;gap:10px;
+            width:100%;padding:16px 28px;
+            background:linear-gradient(135deg,#3b82f6,#6366f1);
+            color:#fff;border:none;border-radius:16px;
+            font-size:1.05rem;font-weight:700;
+            font-family:'Noto Sans KR',sans-serif;
+            cursor:pointer;
+            text-decoration:none;
+            box-shadow:0 8px 32px rgba(59,130,246,0.3);
+            transition:transform 0.15s,box-shadow 0.15s;
+        }
+        .launch-btn:active{
+            transform:scale(0.97);
+            box-shadow:0 4px 16px rgba(59,130,246,0.25);
         }
 
-        .splash-bar {
-            width: 180px; height: 2px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            margin-top: 0.8rem;
+        /* Feature chips */
+        .features{
+            display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
         }
-        .splash-bar-inner {
-            width: 0%; height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-            border-radius: 2px;
-            animation: barFill 1.8s ease-out forwards;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 12px 40px rgba(59,130,246,0.35); }
-            50% { transform: scale(1.05); box-shadow: 0 16px 50px rgba(59,130,246,0.45); }
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes barFill {
-            0% { width: 0%; }
-            60% { width: 70%; }
-            100% { width: 100%; }
+        .chip{
+            padding:6px 14px;
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:100px;
+            font-size:0.75rem;color:#9ca3af;
+            display:flex;align-items:center;gap:6px;
+            white-space:nowrap;
         }
 
-        /* Offline Screen */
-        .offline {
-            position: fixed; inset: 0;
-            background: #0d1117;
-            display: none; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 1.5rem; z-index: 2000;
-            padding: 2rem;
+        /* Stats row */
+        .stats{
+            display:flex;gap:2rem;text-align:center;
         }
-        .offline.active { display: flex; }
+        .stat-num{
+            font-family:'JetBrains Mono',monospace;
+            font-size:1.4rem;font-weight:700;
+            background:linear-gradient(135deg,#60a5fa,#a78bfa);
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        }
+        .stat-label{
+            font-size:0.65rem;color:#484f58;
+            letter-spacing:0.04em;margin-top:2px;
+        }
 
-        .offline-icon {
-            width: 64px; height: 64px;
-            border-radius: 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem;
+        /* Divider */
+        .divider{
+            width:40px;height:1px;
+            background:linear-gradient(90deg,transparent,rgba(59,130,246,0.3),transparent);
         }
-        .offline-title {
-            font-size: 1.2rem; font-weight: 700;
-            color: #e8e6e3;
+
+        /* Home link */
+        .home-link{
+            font-size:0.8rem;color:#484f58;
+            text-decoration:none;transition:color 0.2s;
+            font-family:'JetBrains Mono',monospace;
         }
-        .offline-desc {
-            font-size: 0.9rem; color: #6b7280;
-            text-align: center; line-height: 1.6;
-            max-width: 300px;
+        .home-link:active{color:#60a5fa}
+
+        /* Version */
+        .version{
+            position:fixed;bottom:1.2rem;
+            font-family:'JetBrains Mono',monospace;
+            font-size:0.6rem;color:#2d333b;
+            letter-spacing:0.05em;
         }
-        .offline-btn {
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #3b82f6, #6366f1);
-            color: #fff; border: none; border-radius: 12px;
-            font-size: 0.9rem; font-weight: 600;
-            font-family: 'Noto Sans KR', sans-serif;
-            cursor: pointer; transition: transform 0.2s;
+
+        /* Offline banner */
+        .offline-banner{
+            display:none;
+            width:100%;padding:10px;
+            background:rgba(239,68,68,0.1);
+            border:1px solid rgba(239,68,68,0.2);
+            border-radius:12px;
+            text-align:center;
+            font-size:0.82rem;color:#f87171;
         }
-        .offline-btn:active { transform: scale(0.97); }
+        .offline-banner.active{display:block}
     </style>
 </head>
 <body>
-    <!-- Splash Screen -->
-    <div class="splash" id="splash">
-        <div class="splash-wrap">
-            <div class="splash-icon">&#9889;</div>
-            <div class="splash-title">Alpha<em>Scope</em></div>
-            <div class="splash-spinner"></div>
-            <div class="splash-status" id="splashStatus">Initializing...</div>
-            <div class="splash-bar"><div class="splash-bar-inner"></div></div>
+    <div class="container">
+        <div class="app-icon">&#9889;</div>
+
+        <div class="title">
+            <h1>Alpha<em>Scope</em></h1>
+            <p>AI Investment Research Terminal</p>
         </div>
+
+        <div class="stats">
+            <div><div class="stat-num">995</div><div class="stat-label">GLOBAL STOCKS</div></div>
+            <div><div class="stat-num">6</div><div class="stat-label">MODULES</div></div>
+            <div><div class="stat-num">AI</div><div class="stat-label">REPORT</div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <a class="launch-btn" id="launchBtn" href="https://yukimim7085-dev-ywlab-app-kimin70.streamlit.app" target="_blank" rel="noopener">
+            &#9889; 터미널 실행하기
+        </a>
+
+        <div class="offline-banner" id="offlineBanner">
+            &#128268; 오프라인 상태 — 인터넷 연결 필요
+        </div>
+
+        <div class="features">
+            <div class="chip">&#128200; 캔들차트</div>
+            <div class="chip">&#128203; 재무제표</div>
+            <div class="chip">&#127973; 헬스스코어</div>
+            <div class="chip">&#129302; AI 리포트</div>
+            <div class="chip">&#127758; 매크로</div>
+        </div>
+
+        <a class="home-link" href="./index.html">&#8592; YW Finance Lab</a>
     </div>
 
-    <!-- Offline Screen -->
-    <div class="offline" id="offlineScreen">
-        <div class="offline-icon">&#128268;</div>
-        <div class="offline-title">오프라인 상태입니다</div>
-        <div class="offline-desc">
-            AlphaScope는 인터넷 연결이 필요합니다.<br>
-            네트워크 연결을 확인한 후 다시 시도해 주세요.
-        </div>
-        <button class="offline-btn" onclick="retryConnection()">다시 연결</button>
-    </div>
+    <div class="version">AlphaScope v2.0</div>
 
     <script>
-        const STREAMLIT_URL = 'https://yukimim7085-dev-ywlab-app-kimin70.streamlit.app';
-        const splashStatus = document.getElementById('splashStatus');
-        const offlineScreen = document.getElementById('offlineScreen');
-
-        // Status messages during splash
-        const msgs = [
-            'Initializing...',
-            'Connecting to server...',
-            'Loading AlphaScope...',
-            'Launching terminal...'
-        ];
-        let i = 0;
-        const interval = setInterval(() => {
-            i++;
-            if (i < msgs.length) splashStatus.textContent = msgs[i];
-        }, 500);
-
-        // Check online & redirect
-        function launch() {
-            if (!navigator.onLine) {
-                clearInterval(interval);
-                offlineScreen.classList.add('active');
-                return;
-            }
-            // Show splash for ~2s then navigate to Streamlit
-            setTimeout(() => {
-                clearInterval(interval);
-                splashStatus.textContent = 'Launching...';
-                window.location.href = STREAMLIT_URL;
-            }, 2000);
+        // Offline detection
+        function updateOnline() {
+            document.getElementById('offlineBanner').classList.toggle('active', !navigator.onLine);
+            document.getElementById('launchBtn').style.pointerEvents = navigator.onLine ? 'auto' : 'none';
+            document.getElementById('launchBtn').style.opacity = navigator.onLine ? '1' : '0.4';
         }
-
-        function retryConnection() {
-            if (navigator.onLine) {
-                offlineScreen.classList.remove('active');
-                splashStatus.textContent = 'Reconnecting...';
-                launch();
-            }
-        }
-
-        window.addEventListener('online', () => {
-            offlineScreen.classList.remove('active');
-            launch();
-        });
-        window.addEventListener('offline', () => {
-            offlineScreen.classList.add('active');
-        });
+        window.addEventListener('online', updateOnline);
+        window.addEventListener('offline', updateOnline);
+        updateOnline();
 
         // Register Service Worker
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('SW registered:', reg.scope))
-                .catch(err => console.log('SW registration failed:', err));
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
         }
-
-        // Start
-        launch();
     </script>
 </body>
 </html>
