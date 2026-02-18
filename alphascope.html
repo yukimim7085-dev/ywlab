@@ -10,7 +10,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>AlphaScope</title>
     <link rel="manifest" href="./manifest.json">
-    <!-- Apple Touch Icon (SVG inline fallback via JS below) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='96' fill='url(%23g)'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='260' fill='white'%3EA%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%236366f1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='96' fill='url(%23g)'/%3E%3Ctext x='256' y='340' text-anchor='middle' font-family='system-ui,-apple-system,sans-serif' font-weight='900' font-size='260' fill='white'%3EA%3C/text%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,8 +23,6 @@
             font-family: 'Noto Sans KR', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-
-        /* Safe area for notch devices */
         body {
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
@@ -33,79 +30,73 @@
             padding-right: env(safe-area-inset-right);
         }
 
-        /* Loading Screen */
-        .loading-screen {
+        /* Splash Screen */
+        .splash {
             position: fixed; inset: 0;
             background: #0d1117;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             z-index: 1000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .loading-screen.hidden {
-            opacity: 0; visibility: hidden; pointer-events: none;
         }
 
-        .loading-logo-wrap {
+        .splash-wrap {
             display: flex; flex-direction: column;
             align-items: center; gap: 1.5rem;
             animation: fadeInUp 0.8s ease-out;
         }
 
-        .loading-icon {
-            width: 80px; height: 80px;
-            border-radius: 20px;
+        .splash-icon {
+            width: 88px; height: 88px;
+            border-radius: 22px;
             background: linear-gradient(135deg, #3b82f6, #6366f1);
             display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             box-shadow: 0 12px 40px rgba(59, 130, 246, 0.35);
             animation: iconPulse 2s ease-in-out infinite;
         }
 
-        .loading-text {
+        .splash-title {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.6rem; font-weight: 700;
+            font-size: 1.8rem; font-weight: 700;
             background: linear-gradient(135deg, #e2e8f0, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.02em;
         }
-        .loading-text em {
+        .splash-title em {
             font-style: normal;
             background: linear-gradient(135deg, #3b82f6, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .loading-spinner {
+        .splash-spinner {
             width: 36px; height: 36px;
             border: 2.5px solid rgba(59, 130, 246, 0.15);
             border-top-color: #3b82f6;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
-            margin-top: 0.5rem;
         }
 
-        .loading-status {
+        .splash-status {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.72rem;
             color: #484f58;
-            margin-top: 0.5rem;
             letter-spacing: 0.03em;
         }
 
-        .loading-bar {
+        .splash-bar {
             width: 180px; height: 2px;
             background: rgba(59, 130, 246, 0.1);
             border-radius: 2px;
             overflow: hidden;
-            margin-top: 1.2rem;
+            margin-top: 0.8rem;
         }
-        .loading-bar-inner {
+        .splash-bar-inner {
             width: 0%; height: 100%;
             background: linear-gradient(90deg, #3b82f6, #6366f1);
             border-radius: 2px;
-            animation: barFill 2s ease-out forwards;
+            animation: barFill 1.8s ease-out forwards;
         }
 
         @keyframes fadeInUp {
@@ -119,21 +110,12 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes barFill {
             0% { width: 0%; }
-            50% { width: 60%; }
+            60% { width: 70%; }
             100% { width: 100%; }
         }
 
-        /* Streamlit iframe */
-        .app-frame {
-            position: fixed; inset: 0;
-            width: 100%; height: 100%;
-            border: none;
-            background: #0d1117;
-            padding-top: env(safe-area-inset-top);
-        }
-
         /* Offline Screen */
-        .offline-screen {
+        .offline {
             position: fixed; inset: 0;
             background: #0d1117;
             display: none; flex-direction: column;
@@ -141,7 +123,7 @@
             gap: 1.5rem; z-index: 2000;
             padding: 2rem;
         }
-        .offline-screen.active { display: flex; }
+        .offline.active { display: flex; }
 
         .offline-icon {
             width: 64px; height: 64px;
@@ -169,53 +151,22 @@
             cursor: pointer; transition: transform 0.2s;
         }
         .offline-btn:active { transform: scale(0.97); }
-
-        /* Back to home link */
-        .back-home {
-            position: fixed; bottom: 1.5rem; right: 1.5rem;
-            width: 44px; height: 44px;
-            background: rgba(13, 17, 23, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 1.1rem;
-            z-index: 500;
-            transition: all 0.3s;
-            opacity: 0; pointer-events: none;
-        }
-        .back-home.visible {
-            opacity: 1; pointer-events: auto;
-        }
-        .back-home:active {
-            transform: scale(0.92);
-            border-color: rgba(59, 130, 246, 0.5);
-        }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-logo-wrap">
-            <div class="loading-icon">&#9889;</div>
-            <div class="loading-text">Alpha<em>Scope</em></div>
-            <div class="loading-spinner"></div>
-            <div class="loading-status" id="loadingStatus">Initializing...</div>
-            <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+    <!-- Splash Screen -->
+    <div class="splash" id="splash">
+        <div class="splash-wrap">
+            <div class="splash-icon">&#9889;</div>
+            <div class="splash-title">Alpha<em>Scope</em></div>
+            <div class="splash-spinner"></div>
+            <div class="splash-status" id="splashStatus">Initializing...</div>
+            <div class="splash-bar"><div class="splash-bar-inner"></div></div>
         </div>
     </div>
 
-    <!-- Streamlit App -->
-    <iframe
-        class="app-frame"
-        id="appFrame"
-        src="https://yukimim7085-dev-ywlab-app-kimin70.streamlit.app"
-        allow="clipboard-read; clipboard-write; fullscreen"
-        loading="eager"
-    ></iframe>
-
     <!-- Offline Screen -->
-    <div class="offline-screen" id="offlineScreen">
+    <div class="offline" id="offlineScreen">
         <div class="offline-icon">&#128268;</div>
         <div class="offline-title">오프라인 상태입니다</div>
         <div class="offline-desc">
@@ -225,80 +176,54 @@
         <button class="offline-btn" onclick="retryConnection()">다시 연결</button>
     </div>
 
-    <!-- Back to YW Lab Home -->
-    <a class="back-home" id="backHome" href="./index.html" title="YW Finance Lab 홈">&#127968;</a>
-
     <script>
-        const appFrame = document.getElementById('appFrame');
-        const loadingScreen = document.getElementById('loadingScreen');
+        const STREAMLIT_URL = 'https://yukimim7085-dev-ywlab-app-kimin70.streamlit.app';
+        const splashStatus = document.getElementById('splashStatus');
         const offlineScreen = document.getElementById('offlineScreen');
-        const loadingStatus = document.getElementById('loadingStatus');
-        const backHome = document.getElementById('backHome');
 
-        // Loading status messages
-        const statusMessages = [
+        // Status messages during splash
+        const msgs = [
             'Initializing...',
             'Connecting to server...',
             'Loading AlphaScope...',
-            'Preparing dashboard...',
-            'Almost ready...'
+            'Launching terminal...'
         ];
-        let msgIdx = 0;
-        const statusInterval = setInterval(() => {
-            msgIdx++;
-            if (msgIdx < statusMessages.length) {
-                loadingStatus.textContent = statusMessages[msgIdx];
-            }
-        }, 600);
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            if (i < msgs.length) splashStatus.textContent = msgs[i];
+        }, 500);
 
-        // iframe loaded
-        appFrame.addEventListener('load', () => {
-            clearInterval(statusInterval);
-            loadingStatus.textContent = 'Ready!';
-            setTimeout(() => {
-                loadingScreen.classList.add('hidden');
-                // Show back-home button if not in standalone PWA
-                if (!window.matchMedia('(display-mode: standalone)').matches &&
-                    !window.navigator.standalone) {
-                    backHome.classList.add('visible');
-                }
-            }, 400);
-        });
-
-        // Timeout fallback — hide loading after 8s even if iframe doesn't fire load
-        setTimeout(() => {
-            if (!loadingScreen.classList.contains('hidden')) {
-                clearInterval(statusInterval);
-                loadingScreen.classList.add('hidden');
-            }
-        }, 8000);
-
-        // Offline detection
-        function checkOffline() {
+        // Check online & redirect
+        function launch() {
             if (!navigator.onLine) {
+                clearInterval(interval);
                 offlineScreen.classList.add('active');
-            } else {
-                offlineScreen.classList.remove('active');
+                return;
             }
+            // Show splash for ~2s then navigate to Streamlit
+            setTimeout(() => {
+                clearInterval(interval);
+                splashStatus.textContent = 'Launching...';
+                window.location.href = STREAMLIT_URL;
+            }, 2000);
         }
 
         function retryConnection() {
             if (navigator.onLine) {
                 offlineScreen.classList.remove('active');
-                loadingScreen.classList.remove('hidden');
-                appFrame.src = appFrame.src;
+                splashStatus.textContent = 'Reconnecting...';
+                launch();
             }
         }
 
         window.addEventListener('online', () => {
             offlineScreen.classList.remove('active');
-            appFrame.src = appFrame.src;
+            launch();
         });
         window.addEventListener('offline', () => {
             offlineScreen.classList.add('active');
         });
-
-        checkOffline();
 
         // Register Service Worker
         if ('serviceWorker' in navigator) {
@@ -306,6 +231,9 @@
                 .then(reg => console.log('SW registered:', reg.scope))
                 .catch(err => console.log('SW registration failed:', err));
         }
+
+        // Start
+        launch();
     </script>
 </body>
 </html>
